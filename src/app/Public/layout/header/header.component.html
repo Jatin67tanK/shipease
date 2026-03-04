@@ -1,0 +1,123 @@
+<header class="bg-white border-b sticky top-0 z-30">
+
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+
+        <!-- LOGO -->
+        <div class="text-xl font-semibold text-green-600">
+            ShipEase
+        </div>
+
+        <!-- DESKTOP NAV -->
+        <nav class="hidden md:flex items-center space-x-10 text-sm text-gray-700">
+
+            <!-- NORMAL LINKS -->
+            <a
+                *ngFor="let link of navLinks"
+                [routerLink]="link.path"
+                routerLinkActive="text-green-600 font-medium"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="cursor-pointer hover:text-green-600 transition"
+            >
+                {{ link.label }}
+            </a>
+
+            <!-- LOGIN / REGISTER -->
+            <div class="flex items-center gap-2">
+
+                <a
+                    routerLink="/login"
+                    routerLinkActive="text-green-600 font-medium"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    class="cursor-pointer hover:text-green-600 transition"
+                >
+                    Login
+                </a>
+
+                <!-- <span class="text-gray-400">/</span> -->
+
+                <!-- <a
+                    routerLink="/register"
+                    routerLinkActive="text-green-600 font-medium"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    class="cursor-pointer hover:text-green-600 transition"
+                >
+                    Register
+                </a> -->
+
+            </div>
+
+        </nav>
+
+        <!-- MOBILE HAMBURGER -->
+        <button
+            class="md:hidden text-2xl text-gray-700"
+            (click)="toggleSidebar()"
+        >
+            ☰
+        </button>
+
+    </div>
+
+    <!-- BACKDROP -->
+    <div
+        class="fixed inset-0 bg-black/40 z-40 md:hidden"
+        *ngIf="sidebarOpen"
+        (click)="toggleSidebar()"
+    ></div>
+
+    <!-- SIDEBAR -->
+    <div
+        class="fixed top-0 right-0 h-full w-64 bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out md:hidden"
+        [class.translate-x-full]="!sidebarOpen"
+    >
+
+        <!-- SIDEBAR HEADER -->
+        <div class="p-5 border-b text-lg font-semibold text-green-600">
+            ShipEase
+        </div>
+
+        <!-- SIDEBAR NAV -->
+        <nav class="flex flex-col p-5 gap-5 text-sm text-gray-700">
+
+            <!-- NORMAL LINKS -->
+            <a
+                *ngFor="let link of navLinks"
+                [routerLink]="link.path"
+                routerLinkActive="text-green-600 font-medium"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="cursor-pointer hover:text-green-600 transition"
+                (click)="toggleSidebar()"
+            >
+                {{ link.label }}
+            </a>
+
+            <!-- AUTH LINKS -->
+            <div class="border-t pt-4 flex flex-col gap-4">
+
+                <a
+                    routerLink="/login"
+                    routerLinkActive="text-green-600 font-medium"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    class="cursor-pointer hover:text-green-600 transition"
+                    (click)="toggleSidebar()"
+                >
+                    Login
+                </a>
+
+                <a
+                    routerLink="/register"
+                    routerLinkActive="text-green-600 font-medium"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    class="cursor-pointer hover:text-green-600 transition"
+                    (click)="toggleSidebar()"
+                >
+                    Register
+                </a>
+
+            </div>
+
+        </nav>
+
+    </div>
+
+</header>

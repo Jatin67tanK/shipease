@@ -1,0 +1,129 @@
+<div class="min-h-screen bg-[#f5faf7] flex justify-center items-center px-4">
+
+  <!-- CARD -->
+  <div class="bg-white w-full max-w-md rounded-2xl shadow-sm p-7 min-h-[240px]">
+
+    <!-- HEADING -->
+    <div class="mb-5">
+      <h1 class="text-2xl font-bold text-gray-900">
+        Welcome Back
+      </h1>
+      <p class="text-sm text-green-600 mt-1">
+        Enter your credentials to access your account.
+      </p>
+    </div>
+
+    <!-- FORM -->
+    <form
+      #loginForm="ngForm"
+      (ngSubmit)="onLogin(loginForm)"
+      class="space-y-4"   
+    >
+
+      <!-- EMAIL -->
+      <div>
+        <label class="text-sm font-medium text-gray-700">
+          Email
+        </label>
+
+        <input
+          type="email"
+          name="email"
+          [(ngModel)]="loginData.email"
+          required
+          email
+          #email="ngModel"
+          placeholder="user@shipease.com"
+          class="w-full mt-1 border rounded-lg px-4 h-11 text-sm outline-none focus:ring-2 focus:ring-green-500"
+          [class.border-red-500]="submitted && email.invalid"
+        />
+
+        <!-- RESERVED ERROR SPACE -->
+        <!-- <div class="min-h-[30px] mt-1"> ✅ Smaller error spacing -->
+
+          <p *ngIf="submitted && email.errors?.['required']"
+             class="text-red-500 text-xs">
+            Email is required
+          </p>
+
+          <p *ngIf="submitted && email.errors?.['email']"
+             class="text-red-500 text-xs">
+            Enter a valid email
+          </p>
+
+        <!-- </div> -->
+      </div>
+
+      <!-- PASSWORD -->
+      <div>
+        <label class="text-sm font-medium text-gray-700">
+          Password
+        </label>
+
+        <div class="relative mt-1">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            name="password"
+            [(ngModel)]="loginData.password"
+            required
+            minlength="6"
+            #password="ngModel"
+            placeholder="••••••••"
+            class="w-full border rounded-lg px-4 h-11 text-sm outline-none focus:ring-2 focus:ring-green-500"
+            [class.border-red-500]="submitted && password.invalid"
+          />
+
+          <span
+            (click)="togglePassword()"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer select-none"
+          >
+            {{ showPassword ? '🙈' : '👁️' }}
+          </span>
+        </div>
+
+        <!-- RESERVED ERROR SPACE -->
+        <div class="min-h-[30px] mt-1"> <!-- ✅ Smaller spacing -->
+
+          <p *ngIf="submitted && password.errors?.['required']"
+             class="text-red-500 text-xs">
+            Password is required
+          </p>
+
+          <p *ngIf="submitted && password.errors?.['minlength']"
+             class="text-red-500 text-xs">
+            Minimum 6 characters required
+          </p>
+
+        </div>
+      </div>
+
+      <!-- ERROR FROM BACKEND -->
+      <p *ngIf="errorMessage" class="text-red-500 text-xs -mt-1">
+        {{ errorMessage }}
+      </p>
+
+      <!-- BUTTON -->
+      <button
+        type="submit"
+        class="w-full bg-green-600 hover:bg-green-700 text-white h-11 rounded-lg font-medium transition"
+      >
+        Login
+      </button>
+
+    </form>
+
+    <!-- FOOTER -->
+    <p class="text-sm text-center text-gray-500 mt-5">
+      Don’t have an account?
+
+      <button
+        routerLink="/register"
+        class="text-green-600 font-medium"
+      >
+        Register
+      </button>
+    </p>
+
+  </div>
+
+</div>

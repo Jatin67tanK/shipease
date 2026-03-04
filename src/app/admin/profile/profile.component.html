@@ -1,0 +1,157 @@
+<div class="h-full flex flex-col bg-[#f6fff9]">
+
+    <!-- ✅ HEADER -->
+    <div class="h-16 bg-white border-b flex items-center justify-between px-8">
+
+        <div class="text-lg font-semibold text-gray-800">
+            Admin Profile
+        </div>
+
+        <div class="flex items-center gap-3">
+
+            <div class="text-right leading-tight">
+                <div class="text-sm font-semibold text-gray-800">
+                    Jane Doe
+                </div>
+                <div class="text-xs text-gray-500">
+                    HR Administrator
+                </div>
+            </div>
+
+            <img src="https://i.pravatar.cc/40?img=47"
+                 class="w-9 h-9 rounded-full border border-gray-200" />
+
+        </div>
+
+    </div>
+
+    <!-- ✅ MAIN CONTENT -->
+    <div class="p-8 lg:p-10">
+
+        <!-- ✅ PROFILE CARD -->
+        <div class="bg-white rounded-2xl shadow-sm border border-green-50 p-8">
+
+            <!-- TOP -->
+            <div class="flex items-center justify-between">
+
+                <!-- LEFT -->
+                <div class="flex items-center gap-6">
+
+                    <!-- AVATAR -->
+                    <div class="relative">
+
+                        <img src="https://i.pravatar.cc/150?img=47"
+                             class="w-20 h-20 rounded-full object-cover border-4 border-gray-100" />
+
+                        <!-- VERIFIED -->
+                        <div class="absolute bottom-0 right-0 w-5 h-5 bg-green-600 rounded-full flex items-center justify-center text-white text-[10px] border-2 border-white">
+                            <i class="fas fa-check"></i>
+                        </div>
+
+                    </div>
+
+                    <!-- INFO -->
+                    <div>
+
+                        <div class="text-xl font-semibold text-gray-900">
+                            Jane Doe
+                        </div>
+
+                        <div class="flex items-center gap-3 mt-1">
+
+                            <span class="text-xs px-3 py-1 rounded-full bg-green-50 text-green-600 font-medium">
+                                HR Administrator
+                            </span>
+
+                            <span class="text-sm text-gray-500 flex items-center gap-1">
+                                <i class="fas fa-map-marker-alt text-gray-400 text-xs"></i>
+                                San Francisco, CA
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- EDIT BUTTON -->
+                <button
+                    routerLink="/admin/profile/edit"
+                    class="flex items-center gap-2 px-4 py-2 rounded-xl bg-green-600 text-white text-sm hover:bg-green-700 shadow-sm transition">
+
+                    <i class="fas fa-pen text-xs"></i>
+                    Edit Profile
+
+                </button>
+
+            </div>
+
+            <!-- DIVIDER -->
+            <div class="border-t border-gray-100 my-7"></div>
+
+            <!-- PERSONAL INFO -->
+            <div>
+
+                <div class="text-xs font-semibold tracking-wider text-gray-500 mb-6">
+                    PERSONAL INFORMATION
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-16">
+
+                    <div>
+                        <div class="text-sm text-gray-500">Full Name</div>
+                        <div class="text-sm font-medium text-gray-900 mt-1">
+                            Jane Doe
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="text-sm text-gray-500">Email Address</div>
+                        <div class="text-sm font-medium text-gray-900 mt-1 flex items-center gap-2">
+                            <i class="fas fa-envelope text-gray-400 text-xs"></i>
+                            admin@shipease.com
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="text-sm text-gray-500">Phone Number</div>
+                        <div class="text-sm font-medium text-gray-900 mt-1 flex items-center gap-2">
+                            <i class="fas fa-phone text-gray-400 text-xs"></i>
+                            +1 (555) 123-4567
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="text-sm text-gray-500">State / Region</div>
+                        <div class="text-sm font-medium text-gray-900 mt-1">
+                            California
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="text-sm text-gray-500">Country</div>
+                        <div class="text-sm font-medium text-gray-900 mt-1">
+                            🇺🇸 United States
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- BOTTOM NOTE -->
+            <div class="mt-10 flex items-center gap-2 text-xs text-gray-400">
+
+                <i class="fas fa-info-circle"></i>
+
+                <span>
+                    This account was created on January 15, 2023. Last login: Today at 9:42 AM.
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,55 @@
+<div class="h-full bg-white">
+
+    <!-- HEADER -->
+    <div class="h-16 border-b flex justify-between items-center px-6">
+
+        <div class="font-semibold">
+            Shipment History
+        </div>
+
+        <div class="flex items-center gap-2">
+            <span class="text-sm font-medium">Jane Doe</span>
+            <img src="https://i.pravatar.cc/40"
+                 class="w-9 h-9 rounded-full" />
+        </div>
+
+    </div>
+
+    <!-- TRACKING ID -->
+    <div class="px-6 pt-4 text-sm text-gray-400">
+        Tracking ID:
+        <span class="font-semibold text-gray-700">
+            {{ trackingId }}
+        </span>
+    </div>
+
+    <!-- TABS (FIXED ROUTING ONLY) -->
+    <div class="px-6 pt-4 flex gap-6 text-sm">
+
+        <!-- ✅ Delivered -->
+        <a
+            [routerLink]="['./']"
+            routerLinkActive="text-green-600 border-b-2 border-green-600"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="pb-2 text-gray-500">
+            Delivered
+        </a>
+
+        <!-- ✅ Refunded -->
+        <a
+            [routerLink]="['./refunded']"
+            routerLinkActive="text-green-600 border-b-2 border-green-600"
+            class="pb-2 text-gray-500">
+            Refunded
+        </a>
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="p-6">
+        <div class="border rounded-xl">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+
+</div>

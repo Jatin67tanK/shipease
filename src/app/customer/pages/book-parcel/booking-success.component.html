@@ -1,0 +1,64 @@
+<div class="h-full bg-white">
+
+    <!-- HEADER -->
+    <div class="h-16 border-b flex justify-between items-center px-6">
+
+        <div class="font-semibold text-gray-800">
+            Booking Confirmed
+        </div>
+
+        <div class="flex items-center gap-4 text-sm">
+
+            <span class="text-gray-600">Help Center</span>
+
+            <div class="flex items-center gap-2">
+                <span class="font-medium">Alex Morgan</span>
+                <img src="https://i.pravatar.cc/40"
+                     class="w-9 h-9 rounded-full" />
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- LOADING -->
+    <div *ngIf="isLoading"
+         class="flex items-center justify-center h-[calc(100vh-4rem)] text-sm text-gray-400">
+        Finalizing booking...
+    </div>
+
+    <!-- CONTENT -->
+    <div *ngIf="!isLoading"
+         class="flex flex-col items-center justify-center h-[calc(100vh-4rem)]">
+
+        <div class="text-green-500 text-5xl mb-4">✔</div>
+
+        <div class="text-2xl font-bold text-gray-800">
+            Payment Successful!
+        </div>
+
+        <div class="text-gray-500 text-sm mb-6">
+            Your parcel has been booked successfully.
+        </div>
+
+        <div class="border border-green-200 bg-[#f5fff7] rounded-xl px-8 py-4 text-lg font-semibold">
+            {{ trackingId }}
+        </div>
+
+        <div class="flex gap-4 mt-6">
+
+            <button (click)="trackParcel()"
+                    class="border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50 transition">
+                Track Parcel
+            </button>
+
+            <button routerLink="/customer"
+                    class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+                Go to Dashboard
+            </button>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,25 @@
+<div class="flex h-screen bg-[#f5f7f6]">
+
+    <!-- ✅ SIDEBAR -->
+    <app-sidebar
+        [collapsed]="collapsed"
+        (toggle)="toggleSidebar()">
+    </app-sidebar>
+
+    <!-- ✅ MAIN AREA -->
+    <div class="flex-1 flex flex-col overflow-hidden">       
+
+        <!-- ✅ PAGE CONTENT -->
+        <div class="flex-1 overflow-auto">
+
+            <div class="max-w-[1400px] w-full ">
+
+                <router-outlet></router-outlet>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

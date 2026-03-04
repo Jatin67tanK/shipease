@@ -1,0 +1,45 @@
+<div class="p-4">
+
+    <div *ngIf="isLoading" class="text-sm text-gray-400 p-4">
+        Loading refunded parcels...
+    </div>
+
+    <div *ngIf="!isLoading && parcels.length === 0"
+         class="text-sm text-gray-400 text-center p-10">
+        No refunded shipments 💰
+    </div>
+
+    <table *ngIf="!isLoading && parcels.length > 0" class="w-full text-sm">
+
+        <thead class="text-gray-400 text-xs border-b">
+            <tr>
+                <th class="text-left p-4">TRACKING ID</th>
+                <th class="text-left">SENDER NAME</th>
+                <th class="text-left">RECEIVER NAME</th>
+                <th class="text-left">PARCEL TYPE</th>
+                <th class="text-left">FINAL STATUS</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr *ngFor="let p of parcels" class="border-b last:border-0">
+
+                <td class="p-4 font-medium">{{ p.id }}</td>
+                <td>{{ p.sender }}</td>
+                <td>{{ p.receiver }}</td>
+                <td>{{ p.type }}</td>
+
+                <td>
+                    <span class="px-3 py-1 rounded-full text-xs bg-red-100 text-red-500">
+                        {{ p.status }}
+                    </span>
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>

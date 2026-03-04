@@ -1,0 +1,207 @@
+<div class="h-full flex flex-col bg-[#f6fff9]">
+
+    <!-- ✅ TOP HEADER -->
+    <div class="h-16 bg-white border-b flex items-center justify-between px-8">
+
+        <div class="text-lg font-semibold text-gray-800">
+            Pricing Management
+        </div>
+
+        <div class="flex items-center gap-3">
+
+            <div class="text-right leading-tight">
+                <div class="text-sm font-semibold text-gray-800">
+                    Admin User
+                </div>
+                <div class="text-xs text-gray-500">
+                    Super Admin
+                </div>
+            </div>
+
+            <div class="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center text-sm font-semibold text-green-600">
+                A
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ✅ MAIN CONTENT -->
+    <div class="p-8 lg:p-10">
+
+        <!-- ✅ INFO BANNER -->
+        <div class="flex items-start gap-4 bg-blue-50 border border-blue-100 rounded-xl px-5 py-4 mb-6">
+
+            <div class="text-blue-500 text-lg mt-0.5">
+                <i class="fas fa-info-circle"></i>
+            </div>
+
+            <div class="text-sm text-gray-600 leading-relaxed">
+                <div class="font-semibold text-gray-800">
+                    Configuration Mode
+                </div>
+
+                <div class="text-xs text-gray-500 mt-1">
+                    You are configuring the base pricing rules for all future parcel bookings.
+                    Changes made here will not affect existing shipments or draft bookings.
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ✅ MAIN CARD -->
+        <div class="bg-white rounded-2xl shadow-sm border border-green-50 p-7">
+
+            <!-- HEADER -->
+            <div class="mb-8">
+
+                <div class="text-lg font-semibold text-gray-900">
+                    Pricing Configuration
+                </div>
+
+                <div class="text-sm text-gray-500 mt-1">
+                    Adjust base rates and surcharges for the logistics network.
+                </div>
+
+            </div>
+
+            <!-- ✅ DISTANCE SECTION -->
+            <div class="mb-10">
+
+                <div class="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fas fa-map-marker-alt text-green-600"></i>
+                    Distance-Based Pricing
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <!-- INPUT -->
+                    <div>
+                        <label class="text-xs font-medium text-gray-600">Local Base Price</label>
+
+                        <div class="flex items-center mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 focus-within:border-green-500">
+                            <span class="text-green-600 text-sm mr-2">₹</span>
+                            <input type="number" [(ngModel)]="pricing.local"
+                                   class="bg-transparent outline-none text-sm flex-1">
+                            <span class="text-xs text-gray-400">Rs.</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-medium text-gray-600">Intercity Base Price</label>
+
+                        <div class="flex items-center mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 focus-within:border-green-500">
+                            <span class="text-green-600 text-sm mr-2">₹</span>
+                            <input type="number" [(ngModel)]="pricing.intercity"
+                                   class="bg-transparent outline-none text-sm flex-1">
+                            <span class="text-xs text-gray-400">Rs.</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-medium text-gray-600">Interstate Base Price</label>
+
+                        <div class="flex items-center mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 focus-within:border-green-500">
+                            <span class="text-green-600 text-sm mr-2">₹</span>
+                            <input type="number" [(ngModel)]="pricing.interstate"
+                                   class="bg-transparent outline-none text-sm flex-1">
+                            <span class="text-xs text-gray-400">Rs.</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-medium text-gray-600">International Base Price</label>
+
+                        <div class="flex items-center mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 focus-within:border-green-500">
+                            <span class="text-green-600 text-sm mr-2">₹</span>
+                            <input type="number" [(ngModel)]="pricing.international"
+                                   class="bg-transparent outline-none text-sm flex-1">
+                            <span class="text-xs text-gray-400">Rs.</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- DIVIDER -->
+            <div class="border-t border-gray-100 my-6"></div>
+
+            <!-- ✅ LOWER GRID -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                <!-- WEIGHT -->
+                <div>
+
+                    <div class="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                        <i class="fas fa-weight-hanging text-green-600"></i>
+                        Weight-Based Pricing
+                    </div>
+
+                    <label class="text-xs font-medium text-gray-600">Price per Kg</label>
+
+                    <div class="flex items-center mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 focus-within:border-green-500">
+                        <span class="text-green-600 text-sm mr-2">₹</span>
+                        <input type="number" [(ngModel)]="pricing.perKg"
+                               class="bg-transparent outline-none text-sm flex-1">
+                        <span class="text-xs text-gray-400">/ Kg</span>
+                    </div>
+
+                    <div class="text-xs text-gray-400 mt-2">
+                        Multiplier applied to total parcel weight.
+                    </div>
+
+                </div>
+
+                <!-- DELIVERY -->
+                <div>
+
+                    <div class="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                        <i class="fas fa-rocket text-green-600"></i>
+                        Delivery Type Charges
+                    </div>
+
+                    <label class="text-xs font-medium text-gray-600">Express Delivery Extra Charge</label>
+
+                    <div class="flex items-center mt-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 focus-within:border-green-500">
+                        <span class="text-green-600 text-sm mr-2">₹</span>
+                        <input type="number" [(ngModel)]="pricing.express"
+                               class="bg-transparent outline-none text-sm flex-1">
+                        <span class="text-xs text-gray-400">Flat Fee</span>
+                    </div>
+
+                    <div class="text-xs text-gray-400 mt-2">
+                        Added to base price for express shipments.
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ✅ BUTTON ROW -->
+            <div class="flex justify-end gap-3 mt-10">
+
+                <button
+                    (click)="resetPricing()"
+                    class="px-4 py-2 text-sm rounded-xl border border-gray-200 bg-gray-100 hover:bg-gray-200 transition">
+                    Reset
+                </button>
+
+                <button
+                    (click)="savePricing()"
+                    class="px-4 py-2 text-sm rounded-xl bg-green-600 text-white hover:bg-green-700 shadow-sm transition">
+                    Save Pricing
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- ✅ FOOTER -->
+        <div class="text-center text-xs text-gray-400 mt-6">
+            © 2023 ShipEase Logistics. Pricing Management
+        </div>
+
+    </div>
+
+</div>

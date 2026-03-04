@@ -1,0 +1,55 @@
+<div class="flex h-screen bg-gray-100">
+
+  <!-- ✅ DESKTOP SIDEBAR -->
+  <aside
+    *ngIf="!isMobile"
+    [class.w-64]="isSidebarOpen"
+    [class.w-20]="!isSidebarOpen"
+    class="bg-white shadow transition-all duration-300">
+
+    <app-sidebar
+      [collapsed]="!isSidebarOpen"
+      (toggle)="toggleSidebar()">
+    </app-sidebar>
+
+  </aside>
+
+  <!-- ✅ MOBILE OVERLAY -->
+  <div
+    *ngIf="isMobile && isSidebarOpen"
+    class="fixed inset-0 bg-black bg-opacity-40 z-40"
+    (click)="toggleSidebar()">
+  </div>
+
+  <!-- ✅ MOBILE SIDEBAR -->
+  <aside
+    *ngIf="isMobile"
+    [class.-translate-x-full]="!isSidebarOpen"
+    class="fixed left-0 top-0 h-full w-64 bg-white shadow z-50 transform transition-transform duration-300">
+
+    <app-sidebar (toggle)="toggleSidebar()"></app-sidebar>
+
+  </aside>
+
+  <!-- ✅ MAIN AREA -->
+  <div class="flex-1 flex flex-col transition-all duration-300">
+
+    <!-- ✅ MOBILE TOP BAR -->
+    <div *ngIf="isMobile" class="bg-white shadow p-4 flex items-center">
+
+      <button (click)="toggleSidebar()" class="p-2">
+        ☰
+      </button>
+
+      <h1 class="ml-4 font-semibold">Dashboard</h1>
+
+    </div>
+
+    <!-- PAGE CONTENT -->
+    <main class="flex-1   overflow-y-auto ">
+      <router-outlet></router-outlet>
+    </main>
+
+  </div>
+
+</div>

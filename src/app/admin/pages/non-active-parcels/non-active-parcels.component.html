@@ -1,0 +1,183 @@
+<div class="h-full flex flex-col bg-[#f6fff9]">
+
+  <!-- TOP HEADER -->
+  <div class="h-16 bg-white border-b flex items-center justify-between px-8">
+    <div class="text-lg font-semibold text-gray-800">Non-Active Parcels</div>
+    <div class="flex items-center gap-3">
+      <div class="text-right leading-tight">
+        <div class="text-sm font-semibold text-gray-800">Admin User</div>
+        <div class="text-xs text-gray-500">Super Admin</div>
+      </div>
+      <div class="w-9 h-9 rounded-full bg-orange-100 flex items-center justify-center text-sm font-semibold text-orange-600">
+        A
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="p-8 lg:p-10">
+
+    <div class="mb-6">
+      <div class="text-lg font-semibold text-gray-900">Completed Shipments</div>
+      <div class="text-sm text-gray-500 mt-1">Archive of all parcels with final delivery or refund status.</div>
+    </div>
+
+    <!-- ✅ SEARCH + FILTER BAR -->
+    <div class="flex flex-wrap items-center gap-3 mb-4">
+
+      <!-- Search -->
+      <div class="flex items-center gap-3 bg-white border border-gray-200 rounded-2xl px-4 py-2.5 shadow-sm flex-1 min-w-[220px] max-w-md">
+        <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearch($event)"
+          placeholder="Search by ID, sender, receiver, status..."
+          class="flex-1 text-sm text-gray-700 placeholder-gray-400 outline-none bg-transparent"
+        />
+        <button *ngIf="searchQuery" (click)="clearSearch()"
+                class="text-gray-400 hover:text-red-400 transition text-xs font-bold">✕</button>
+      </div>
+
+      <!-- Month -->
+      <select
+        [(ngModel)]="selectedMonth"
+        (ngModelChange)="onMonthChange($event)"
+        class="text-sm border border-gray-200 rounded-2xl px-4 py-2.5 bg-white shadow-sm outline-none text-gray-600 cursor-pointer hover:border-gray-300 transition">
+        <option value="">All Months</option>
+        <option *ngFor="let m of monthList" [value]="m.value">{{ m.label }}</option>
+      </select>
+
+      <!-- Year -->
+      <select
+        [(ngModel)]="selectedYear"
+        (ngModelChange)="onYearChange($event)"
+        class="text-sm border border-gray-200 rounded-2xl px-4 py-2.5 bg-white shadow-sm outline-none text-gray-600 cursor-pointer hover:border-gray-300 transition">
+        <option value="">All Years</option>
+        <option *ngFor="let y of yearList" [value]="y">{{ y }}</option>
+      </select>
+
+      <!-- Clear Filters -->
+      <button *ngIf="hasActiveFilters"
+              (click)="clearFilters()"
+              class="flex items-center gap-1.5 text-xs font-semibold text-red-500 bg-red-50 border border-red-100 hover:bg-red-100 px-4 py-2.5 rounded-2xl transition">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+        Clear Filters
+      </button>
+
+      <!-- Record count -->
+      <div class="text-xs text-gray-400 ml-auto">{{ filteredParcels.length }} record(s)</div>
+
+    </div>
+
+    <!-- ✅ ACTIVE FILTER TAGS -->
+    <div *ngIf="hasActiveFilters" class="flex flex-wrap gap-2 mb-4">
+      <span *ngIf="selectedMonth"
+            class="text-xs bg-blue-50 text-blue-600 border border-blue-100 px-3 py-1 rounded-full">
+        📅 {{ monthList[+selectedMonth - 1].label }}
+      </span>
+      <span *ngIf="selectedYear"
+            class="text-xs bg-blue-50 text-blue-600 border border-blue-100 px-3 py-1 rounded-full">
+        📅 {{ selectedYear }}
+      </span>
+      <span *ngIf="searchQuery"
+            class="text-xs bg-blue-50 text-blue-600 border border-blue-100 px-3 py-1 rounded-full">
+        🔍 "{{ searchQuery }}"
+      </span>
+    </div>
+
+    <!-- TABLE CARD -->
+    <div class="bg-white rounded-2xl shadow-sm border border-green-50">
+      <div class="overflow-x-auto">
+        <table class="w-full">
+
+          <thead>
+            <tr class="text-xs text-gray-500 bg-gray-50 border-y border-gray-100">
+              <th class="text-left font-semibold px-6 py-3">TRACKING ID</th>
+              <th class="text-left font-semibold px-6 py-3">SENDER</th>
+              <th class="text-left font-semibold px-6 py-3">RECEIVER</th>
+              <th class="text-left font-semibold px-6 py-3">PICKUP ADDRESS</th>
+              <th class="text-left font-semibold px-6 py-3">DROP ADDRESS</th>
+              <th class="text-left font-semibold px-6 py-3">FINAL STATUS</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <!-- LOADING -->
+            <tr *ngIf="isLoading">
+              <td colspan="6" class="text-center py-10 text-gray-400 text-sm">
+                Loading parcels...
+              </td>
+            </tr>
+
+            <!-- ROWS -->
+            <tr *ngFor="let parcel of filteredParcels"
+                class="text-sm border-t border-gray-100 hover:bg-gray-50 transition">
+
+              <td class="px-6 py-4">
+                <div class="font-semibold text-green-600">{{ parcel.tracking_id }}</div>
+                <div class="text-xs text-gray-400">{{ parcel.createdAt | date:'dd MMM yyyy' }}</div>
+              </td>
+
+              <td class="px-6 py-4">
+                <div class="font-medium text-gray-800">{{ parcel.sender_name }}</div>
+                <div class="text-xs text-gray-400">{{ parcel.sender_phone }}</div>
+                <div class="text-xs text-gray-400">{{ parcel.sender_city }}, {{ parcel.sender_state }}</div>
+              </td>
+
+              <td class="px-6 py-4">
+                <div class="font-medium text-gray-800">{{ parcel.receiver_name }}</div>
+                <div class="text-xs text-gray-400">{{ parcel.receiver_phone }}</div>
+                <div class="text-xs text-gray-400">{{ parcel.receiver_city }}, {{ parcel.receiver_state }}</div>
+              </td>
+
+              <td class="px-6 py-4 max-w-[160px]">
+                <div class="text-sm text-gray-600 truncate" [title]="parcel.pickup_address">
+                  {{ parcel.pickup_address }}
+                </div>
+              </td>
+
+              <td class="px-6 py-4 max-w-[160px]">
+                <div class="text-sm text-gray-600 truncate" [title]="parcel.drop_address">
+                  {{ parcel.drop_address }}
+                </div>
+              </td>
+
+              <td class="px-6 py-4">
+                <span class="px-3 py-1.5 rounded-full text-xs font-semibold"
+                  [ngClass]="{
+                    'bg-green-100 text-green-700': parcel.current_status === 'Delivered',
+                    'bg-red-100 text-red-600':     parcel.current_status === 'Refunded',
+                    'bg-gray-100 text-gray-600':   parcel.current_status === 'Cancelled'
+                  }">
+                  {{ parcel.current_status }}
+                </span>
+              </td>
+
+            </tr>
+
+            <!-- EMPTY STATE -->
+            <tr *ngIf="!isLoading && filteredParcels.length === 0">
+              <td colspan="6" class="text-center py-12 text-gray-400">
+                <div class="text-3xl mb-2">📦</div>
+                <div *ngIf="hasActiveFilters">No parcels match the selected filters.</div>
+                <div *ngIf="!hasActiveFilters">No Non-Active Parcels Found 😎</div>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="text-center text-xs text-gray-400 mt-6">
+      © 2023 ShipEase Logistics. Non-Active Parcels
+    </div>
+
+  </div>
+</div>

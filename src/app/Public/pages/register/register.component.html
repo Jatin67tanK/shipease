@@ -1,0 +1,162 @@
+<div class="bg-[#f5faf7] flex justify-center items-center p-10 px-4">
+
+  <div class="bg-white w-full max-w-xl rounded-2xl shadow-sm p-6">
+
+    <div class="mb-5">
+      <h1 class="text-2xl font-bold text-gray-900">
+        Create your ShipEase account
+      </h1>
+      <p class="text-sm text-green-600 mt-1">
+        Register to start booking and tracking parcels.
+      </p>
+    </div>
+
+    <form #registerForm="ngForm" (ngSubmit)="onRegister(registerForm)" class="space-y-4">
+
+      <!-- FULL NAME -->
+      <div>
+        <label class="text-sm font-medium text-gray-700">Full Name</label>
+
+        <div class="mt-1 flex items-center border rounded-lg px-3 h-11">
+          <span class="text-gray-400 mr-2">👤</span>
+
+          <input
+            type="text"
+            name="name"
+            [(ngModel)]="registerData.name"
+            required
+            minlength="3"
+            #name="ngModel"
+            placeholder="Enter your full name"
+            class="w-full outline-none text-sm"
+          />
+        </div>
+      </div>
+
+      <!-- EMAIL -->
+      <div>
+        <label class="text-sm font-medium text-gray-700">Email Address</label>
+
+        <div class="mt-1 flex items-center border rounded-lg px-3 h-11">
+          <span class="text-gray-400 mr-2">✉️</span>
+
+          <input
+            type="email"
+            name="email"
+            [(ngModel)]="registerData.email"
+            required
+            email
+            #email="ngModel"
+            placeholder="name@company.com"
+            class="w-full outline-none text-sm"
+          />
+        </div>
+      </div>
+
+      <!-- PASSWORD -->
+      <div>
+        <label class="text-sm font-medium text-gray-700">Password</label>
+
+        <div class="mt-1 flex items-center border rounded-lg px-3 h-11 relative">
+          <span class="text-gray-400 mr-2">🔒</span>
+
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            name="password"
+            [(ngModel)]="registerData.password"
+            required
+            minlength="6"
+            #password="ngModel"
+            placeholder="Create a password"
+            class="w-full outline-none text-sm"
+          />
+
+          <span
+            (click)="togglePassword()"
+            class="absolute right-3 text-gray-400 cursor-pointer"
+          >
+            {{ showPassword ? '🙈' : '👁️' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- PHONE -->
+      <div>
+        <label class="text-sm font-medium text-gray-700">
+          Phone Number
+        </label>
+
+        <div class="mt-1 flex items-center border rounded-lg px-3 h-11">
+          <span class="text-gray-400 mr-2">📞</span>
+
+          <input
+            type="text"
+            name="phone_number"
+            [(ngModel)]="registerData.phone_number"
+            required
+            minlength="10"
+            maxlength="10"
+            pattern="[0-9]{10}"
+            #phone_number="ngModel"
+            placeholder="Enter 10 digit number"
+            class="w-full outline-none text-sm"
+            (input)="allowOnlyNumbers($event)"
+          />
+        </div>
+
+        <div class="min-h-[32px] mt-1">
+          <p *ngIf="submitted && phone_number.errors?.['required']"
+             class="text-red-500 text-xs">
+            Phone number is required
+          </p>
+
+          <p *ngIf="submitted && phone_number.errors?.['pattern']"
+             class="text-red-500 text-xs">
+            Must be exactly 10 digits
+          </p>
+        </div>
+      </div>
+
+      <!-- STATE + COUNTRY -->
+      <div class="grid grid-cols-2 gap-3">
+
+        <input
+          type="text"
+          name="state"
+          [(ngModel)]="registerData.state"
+          required
+          placeholder="State"
+          class="w-full border rounded-lg px-3 h-11 text-sm"
+        />
+
+        <input
+          type="text"
+          name="country"
+          [(ngModel)]="registerData.country"
+          required
+          placeholder="Country"
+          class="w-full border rounded-lg px-3 h-11 text-sm"
+        />
+
+      </div>
+
+      <button
+        type="submit"
+        class="w-full bg-green-600 hover:bg-green-700 text-white h-11 rounded-lg font-medium"
+      >
+        Register
+      </button>
+
+      <p *ngIf="successMessage" class="text-green-600 text-sm text-center">
+        {{ successMessage }}
+      </p>
+
+      <p *ngIf="errorMessage" class="text-red-500 text-sm text-center">
+        {{ errorMessage }}
+      </p>
+
+    </form>
+
+  </div>
+
+</div>

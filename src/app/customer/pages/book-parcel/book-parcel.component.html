@@ -1,0 +1,219 @@
+<div class="h-full bg-[#f5fff7]">
+
+  <!-- HEADER -->
+  <div class="h-16 bg-white border-b flex items-center px-6 justify-between shrink-0">
+    <div class="font-semibold text-lg">Book Parcel</div>
+    <div class="flex items-center gap-3">
+      <div class="text-right leading-tight">
+        <div class="text-sm font-semibold">Alex Morgan</div>
+        <div class="text-xs text-gray-500">Premium Customer</div>
+      </div>
+      <img src="https://i.pravatar.cc/40" class="w-9 h-9 rounded-full" />
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div *ngIf="isLoading"
+       class="flex items-center justify-center p-10 text-sm text-gray-400">
+    Booking parcel...
+  </div>
+
+  <!-- CONTENT -->
+  <div *ngIf="!isLoading" class="p-6">
+    <div class="bg-white rounded-2xl shadow-sm p-8">
+
+      <div class="text-2xl font-bold mb-1">Book a New Parcel</div>
+      <div class="text-gray-500 text-sm mb-8">Enter parcel details to continue to checkout.</div>
+
+      <div class="grid grid-cols-2 gap-6 text-sm">
+
+        <!-- Sender Name -->
+        <div>
+          <label class="text-gray-500 text-xs">Sender Name</label>
+          <input name="sender_name" [(ngModel)]="booking.sender_name"
+                 class="w-full border rounded-lg px-4 py-2 mt-1" placeholder="John Doe">
+        </div>
+
+        <!-- Receiver Name -->
+        <div>
+          <label class="text-gray-500 text-xs">Receiver Name</label>
+          <input name="receiver_name" [(ngModel)]="booking.receiver_name"
+                 class="w-full border rounded-lg px-4 py-2 mt-1" placeholder="Jane Smith">
+        </div>
+
+        <!-- Sender Phone -->
+        <div>
+          <label class="text-gray-500 text-xs">Sender Phone</label>
+          <input name="sender_phone" [(ngModel)]="booking.sender_phone"
+                 class="w-full border rounded-lg px-4 py-2 mt-1" placeholder="9999999999">
+        </div>
+
+        <!-- Receiver Phone -->
+        <div>
+          <label class="text-gray-500 text-xs">Receiver Phone</label>
+          <input name="receiver_phone" [(ngModel)]="booking.receiver_phone"
+                 class="w-full border rounded-lg px-4 py-2 mt-1" placeholder="8888888888">
+        </div>
+
+        <!-- Pickup Address -->
+        <div>
+          <label class="text-gray-500 text-xs">Pickup Address</label>
+          <textarea name="pickup_address" [(ngModel)]="booking.pickup_address"
+                    class="w-full border rounded-lg px-4 py-2 mt-1"
+                    placeholder="Building, Street, City..."></textarea>
+        </div>
+
+        <!-- Drop Address -->
+        <div>
+          <label class="text-gray-500 text-xs">Drop Address</label>
+          <textarea name="drop_address" [(ngModel)]="booking.drop_address"
+                    class="w-full border rounded-lg px-4 py-2 mt-1"
+                    placeholder="Building, Street, City..."></textarea>
+        </div>
+
+        <!-- Sender State -->
+        <div>
+          <label class="text-gray-500 text-xs">Sender State</label>
+          <select name="sender_state" [(ngModel)]="booking.sender_state"
+                  (ngModelChange)="onSenderStateChange($event)"
+                  class="w-full border rounded-lg px-4 py-2 mt-1">
+            <option value="">Select State</option>
+            <option *ngFor="let state of stateList" [value]="state">{{ state }}</option>
+          </select>
+        </div>
+
+        <!-- Sender City -->
+        <div>
+          <label class="text-gray-500 text-xs">Sender City</label>
+          <select name="sender_city" [(ngModel)]="booking.sender_city"
+                  class="w-full border rounded-lg px-4 py-2 mt-1"
+                  [disabled]="!senderCities.length">
+            <option value="">Select City</option>
+            <option *ngFor="let city of senderCities" [value]="city">{{ city }}</option>
+          </select>
+        </div>
+
+        <!-- Receiver State -->
+        <div>
+          <label class="text-gray-500 text-xs">Receiver State</label>
+          <select name="receiver_state" [(ngModel)]="booking.receiver_state"
+                  (ngModelChange)="onReceiverStateChange($event)"
+                  class="w-full border rounded-lg px-4 py-2 mt-1">
+            <option value="">Select State</option>
+            <option *ngFor="let state of stateList" [value]="state">{{ state }}</option>
+          </select>
+        </div>
+
+        <!-- Receiver City -->
+        <div>
+          <label class="text-gray-500 text-xs">Receiver City</label>
+          <select name="receiver_city" [(ngModel)]="booking.receiver_city"
+                  class="w-full border rounded-lg px-4 py-2 mt-1"
+                  [disabled]="!receiverCities.length">
+            <option value="">Select City</option>
+            <option *ngFor="let city of receiverCities" [value]="city">{{ city }}</option>
+          </select>
+        </div>
+
+        <!-- Distance Category -->
+        <div>
+          <label class="text-gray-500 text-xs">Distance Category</label>
+          <select name="distance_category" [(ngModel)]="booking.distance_category"
+                  class="w-full border rounded-lg px-4 py-2 mt-1">
+            <option value="">Select distance category</option>
+            <option>Local</option>
+            <option>Intercity</option>
+            <option>Interstate</option>
+            <option>International</option>
+          </select>
+        </div>
+
+        <!-- Parcel Type -->
+        <div>
+          <label class="text-gray-500 text-xs">Parcel Type</label>
+          <select name="parcel_type" [(ngModel)]="booking.parcel_type"
+                  class="w-full border rounded-lg px-4 py-2 mt-1">
+            <option value="">Select type</option>
+            <option>Electronics</option>
+            <option>Documents</option>
+            <option>Fragile</option>
+            <option>Clothing</option>
+          </select>
+        </div>
+
+        <!-- Parcel Weight -->
+        <div>
+          <label class="text-gray-500 text-xs">Parcel Weight (kg)</label>
+          <input name="parcel_weight" [(ngModel)]="booking.parcel_weight"
+                 class="w-full border rounded-lg px-4 py-2 mt-1" placeholder="0.0">
+        </div>
+
+        <!-- Delivery Type -->
+        <div>
+          <label class="text-gray-500 text-xs">Delivery Type</label>
+          <select name="delivery_type" [(ngModel)]="booking.delivery_type"
+                  class="w-full border rounded-lg px-4 py-2 mt-1">
+            <option>Normal Delivery</option>
+            <option>Express Delivery</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- PARCEL IMAGES UPLOAD -->
+      <div class="mt-6">
+        <label class="text-gray-500 text-xs block mb-2">
+          Parcel Images
+          <span class="text-red-400 ml-1">* (Min 1, Max 3)</span>
+        </label>
+
+        <!-- Upload Area -->
+        <div
+          class="border-2 border-dashed border-green-200 rounded-xl p-6 text-center cursor-pointer hover:border-green-400 hover:bg-green-50/50 transition"
+          (click)="imageInput.click()"
+          [class.opacity-50]="selectedImages.length >= 3">
+
+          <div class="text-3xl mb-2">📦</div>
+          <div class="text-sm text-gray-500">
+            <span class="text-green-600 font-semibold">Click to upload</span> parcel images
+          </div>
+          <div class="text-xs text-gray-400 mt-1">
+            JPG, PNG, WEBP — max 5MB each — {{ selectedImages.length }}/3 uploaded
+          </div>
+
+          <input #imageInput type="file" accept="image/*" multiple
+                 class="hidden" (change)="onImageSelect($event)" />
+        </div>
+
+        <!-- Image Previews -->
+        <div *ngIf="selectedImages.length > 0"
+             class="flex gap-4 mt-4 flex-wrap">
+          <div *ngFor="let img of selectedImages; let i = index"
+               class="relative group w-24 h-24 rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+            <img [src]="img.preview" class="w-full h-full object-cover" />
+            <button
+              (click)="removeImage(i)"
+              class="absolute top-1 right-1 bg-red-500 text-white w-5 h-5 rounded-full text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="imageError" class="text-red-400 text-xs mt-2">{{ imageError }}</div>
+      </div>
+
+      <!-- BUTTONS -->
+      <div class="flex justify-between items-center mt-10">
+        <button routerLink="/customer" class="text-gray-500 text-sm hover:text-gray-700">
+          Cancel
+        </button>
+        <button (click)="proceedToCheckout()"
+                class="bg-green-600 text-white px-8 py-3 rounded-lg text-sm shadow hover:bg-green-700 transition">
+          Proceed to Checkout
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>

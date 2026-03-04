@@ -1,0 +1,60 @@
+<div class="h-full flex flex-col bg-[#f5fff7]">
+
+    <!-- HEADER -->
+    <div class="h-16 bg-white border-b flex items-center justify-between px-6 sticky top-0 z-30">
+        <div class="text-lg font-semibold text-gray-800">
+            Shipments
+        </div>
+
+        <div class="flex items-center gap-3">
+            <div class="text-right leading-tight">
+                <div class="text-sm font-semibold text-gray-800">Alex Morgan</div>
+                <div class="text-xs text-gray-500">Premium Customer</div>
+            </div>
+
+            <img src="https://i.pravatar.cc/40" class="w-9 h-9 rounded-full border border-gray-200" />
+        </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="p-6 flex flex-col flex-1">
+
+        <!-- TABS + BUTTON -->
+        <div class="flex items-center justify-between mb-4">
+
+            <div class="flex gap-6 text-sm">
+                <a routerLink="active" routerLinkActive="text-green-600 border-b-2 border-green-600"
+                    class="pb-2 text-gray-500">
+                    Active Parcels
+                </a>
+
+                <a routerLink="inactive" routerLinkActive="text-green-600 border-b-2 border-green-600"
+                    class="pb-2 text-gray-500">
+                    Non-Active Parcels
+                </a>
+            </div>
+
+            <!-- ✅ BUTTON -->
+            <button routerLink="/customer/book"
+                class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm shadow hover:bg-green-700 transition">
+                + Book Parcel
+            </button>
+
+        </div>
+
+        <!-- ROUTED TABLE -->
+        <div class="bg-white rounded-xl shadow-sm flex-1">
+            <router-outlet></router-outlet>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="text-center text-xs text-gray-400 mt-6">
+            © 2023 ShipEase Logistics. Need help?
+            <span class="text-green-600 cursor-pointer">Contact Support</span>
+        </div>
+
+    </div>
+
+
+
+</div>

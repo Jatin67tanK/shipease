@@ -1,0 +1,129 @@
+<div class="h-full bg-white">
+
+    <!-- HEADER -->
+    <div class="h-16 border-b flex justify-between items-center px-6">
+
+        <div class="flex items-center gap-2 font-semibold">
+            <span class="text-green-600 text-xl">🚚</span>
+            Track Parcel
+        </div>
+
+        <div class="flex items-center gap-2">
+            <div class="text-right text-sm">
+                <div class="font-semibold">Alex Morgan</div>
+                <div class="text-xs text-gray-500">Premium Customer</div>
+            </div>
+
+            <img src="https://i.pravatar.cc/40"
+                 class="w-9 h-9 rounded-full" />
+        </div>
+
+    </div>
+
+    <!-- CONTENT -->
+    <div class="p-6">
+
+        <div class="text-2xl font-bold mb-1">
+            Track Your Parcel
+        </div>
+
+        <div class="text-gray-500 text-sm mb-6">
+            Enter a Tracking ID to view the current status of your shipment.
+        </div>
+
+        <!-- INPUT CARD -->
+        <div class="bg-[#f5fff7] rounded-xl p-6 mb-6">
+
+            <div class="text-sm font-semibold mb-2">
+                Track Input
+            </div>
+
+            <div class="text-xs text-gray-500 mb-4">
+                Please enter your unique tracking ID below.
+            </div>
+
+            <div class="flex gap-3">
+
+                <input
+                    [(ngModel)]="trackingId"
+                    placeholder="SE-999999"
+                    class="flex-1 border border-gray-200 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-green-500 outline-none" />
+
+                <button
+                    (click)="trackParcel()"
+                    class="bg-green-600 text-white px-6 rounded-lg hover:bg-green-700 transition">
+                    Track Parcel →
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- ✅ LOADING -->
+        <div *ngIf="isLoading"
+             class="text-sm text-gray-400 p-6">
+            Fetching parcel details...
+        </div>
+
+        <!-- ✅ ERROR -->
+        <div *ngIf="!isLoading && errorMessage"
+             class="text-sm text-red-500 p-6">
+            {{ errorMessage }}
+        </div>
+
+        <!-- ✅ RESULT -->
+        <div *ngIf="!isLoading && parcel" class="border rounded-xl p-6">
+
+            <div class="flex justify-between text-xs text-gray-400 mb-6">
+                <span>Tracking Results</span>
+                <span>UPDATED JUST NOW</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6 text-sm">
+
+                <div>
+                    <div class="text-gray-400 text-xs">Tracking ID</div>
+                    <div class="font-semibold">{{ parcel.id }}</div>
+                </div>
+
+                <div>
+                    <div class="text-gray-400 text-xs">Parcel Status</div>
+
+                    <span
+                        class="px-3 py-1 rounded-full text-xs"
+                        [ngClass]="{
+                            'bg-yellow-100 text-yellow-600': parcel.status === 'In Transit',
+                            'bg-blue-100 text-blue-600': parcel.status === 'Picked Up',
+                            'bg-gray-100 text-gray-500': parcel.status === 'Booked',
+                            'bg-green-100 text-green-600': parcel.status === 'Delivered',
+                            'bg-red-100 text-red-500': parcel.status === 'Refunded'
+                        }">
+                        {{ parcel.status }}
+                    </span>
+
+                </div>
+
+                <div>
+                    <div class="text-gray-400 text-xs">Sender Name</div>
+                    <div class="font-medium">{{ parcel.sender }}</div>
+                </div>
+
+                <div>
+                    <div class="text-gray-400 text-xs">Receiver Name</div>
+                    <div class="font-medium">{{ parcel.receiver }}</div>
+                </div>
+
+                <div>
+                    <div class="text-gray-400 text-xs">Parcel Type</div>
+                    <div>{{ parcel.type }}</div>
+                </div>
+
+                //add 
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

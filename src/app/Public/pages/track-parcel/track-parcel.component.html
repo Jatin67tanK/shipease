@@ -1,0 +1,219 @@
+<div class="min-h-screen bg-[#f5faf7] flex flex-col">
+
+  <!-- MAIN CONTENT -->
+  <div class="flex-1 flex flex-col items-center px-6 py-10">
+
+    <!-- HEADER -->
+    <div class="text-center max-w-5xl">
+      <h1 class="text-4xl font-bold text-gray-900">
+        Track Your Parcel
+      </h1>
+      <p class="text-gray-500 mt-3">
+        Enter your unique tracking ID below to view shipment updates.
+      </p>
+    </div>
+
+    <!-- SEARCH BOX -->
+    <div class="bg-white shadow-sm rounded-xl p-7 mt-8 w-full max-w-7xl">
+      <label class="text-sm font-semibold text-gray-700 block mb-3">
+        Tracking ID
+      </label>
+
+      <div class="flex gap-3">
+        <div class="flex items-center border rounded-lg px-4 flex-1 h-11">
+          <svg class="w-4 h-4 text-gray-400 mr-2"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               viewBox="0 0 24 24">
+            <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+
+          <input
+            type="text"
+            [(ngModel)]="trackingId"
+            placeholder="SE-807837"
+            class="w-full outline-none text-sm"
+          />
+        </div>
+
+        <button
+          (click)="trackParcel()"
+          class="bg-green-500 hover:bg-green-600 text-white px-7 rounded-lg text-sm font-semibold">
+          Track Parcel
+        </button>
+      </div>
+
+      <!-- ERROR -->
+      <p *ngIf="errorMessage" class="text-red-500 text-sm mt-3">
+        {{ errorMessage }}
+      </p>
+
+      <!-- LOADING -->
+      <p *ngIf="isLoading" class="text-gray-500 text-sm mt-3">
+        Fetching parcel details...
+      </p>
+    </div>
+
+    <!-- SHIPMENT DETAILS -->
+    <div *ngIf="parcel" class="bg-white shadow-sm rounded-xl p-7 mt-6 w-full max-w-7xl">
+
+      <!-- TOP ROW -->
+      <div class="flex justify-between items-center mb-6">
+        <div class="flex items-center gap-2 text-green-600 font-semibold text-sm">
+          <span>📦</span>
+          <span>SHIPMENT DETAILS</span>
+        </div>
+
+        <span class="bg-yellow-100 text-yellow-600 text-xs px-3 py-1 rounded-full font-semibold">
+          {{ parcel.status }}
+        </span>
+      </div>
+
+      <!-- DETAILS GRID -->
+      <div class="grid grid-cols-2 gap-y-5 text-sm">
+
+        <div>
+          <p class="text-gray-400 text-xs">TRACKING ID</p>
+          <p class="font-semibold text-gray-900">#{{ parcel.tracking_id }}</p>
+        </div>
+
+        <div>
+          <p class="text-gray-400 text-xs">PARCEL TYPE</p>
+          <p class="font-semibold text-gray-900">{{ parcel.parcel_type }}</p>
+        </div>
+
+        <div>
+          <p class="text-gray-400 text-xs">SENDER</p>
+          <p class="font-semibold text-gray-900">{{ parcel.sender_name }}</p>
+        </div>
+
+        <div>
+          <p class="text-gray-400 text-xs">RECEIVER</p>
+          <p class="font-semibold text-gray-900">{{ parcel.receiver_name }}</p>
+        </div>
+
+      </div>
+
+      <!-- PROGRESS BAR -->
+      <div class="mt-12">
+
+        <div class="text-sm font-semibold mb-6">
+          Shipment Progress
+        </div>
+
+        <div class="relative">
+
+          <div class="absolute top-5 left-0 right-0 h-1 bg-gray-200 rounded"></div>
+
+          <div
+            class="absolute top-5 left-0 h-1 bg-green-500 rounded transition-all duration-500"
+            [style.width.%]="progressWidth">
+          </div>
+
+          <div class="flex justify-between text-xs text-gray-500">
+
+            <div class="flex flex-col items-center">
+              <div class="w-10 h-10 rounded-full flex items-center justify-center text-lg"
+                   [ngClass]="progressStep >= 1 ? 'bg-green-500 text-white' : 'bg-gray-200'">
+                📦
+              </div>
+              <div class="mt-2">Booked</div>
+            </div>
+
+            <div class="flex flex-col items-center">
+              <div class="w-10 h-10 rounded-full flex items-center justify-center text-lg"
+                   [ngClass]="progressStep >= 2 ? 'bg-green-500 text-white' : 'bg-gray-200'">
+                🚚
+              </div>
+              <div class="mt-2">Picked Up</div>
+            </div>
+
+            <div class="flex flex-col items-center">
+              <div class="w-10 h-10 rounded-full flex items-center justify-center text-lg"
+                   [ngClass]="progressStep >= 3 ? 'bg-green-500 text-white' : 'bg-gray-200'">
+                🛣
+              </div>
+              <div class="mt-2">In Transit</div>
+            </div>
+
+            <div class="flex flex-col items-center">
+              <div class="w-10 h-10 rounded-full flex items-center justify-center text-lg"
+                   [ngClass]="progressStep >= 4 ? 'bg-green-500 text-white' : 'bg-gray-200'">
+                ✅
+              </div>
+              <div class="mt-2">Delivered</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- 😈🔥 DELIVERY TIMELINE -->
+      <div class="mt-14">
+
+        <div class="text-sm font-semibold mb-6">
+          Shipment History 😏🔥
+        </div>
+
+        <!-- EMPTY STATE -->
+        <div *ngIf="parcelEvents?.length === 0"
+             class="text-sm text-gray-400">
+          No tracking updates available.
+        </div>
+
+        <!-- EVENTS -->
+        <div class="space-y-4">
+
+          <div *ngFor="let event of parcelEvents"
+               class="border rounded-lg p-4 flex justify-between items-center">
+
+            <div>
+              <div class="text-sm font-semibold text-gray-900">
+                {{ event.status }}
+              </div>
+
+              <div class="text-xs text-gray-500 mt-1">
+                {{ event.description }}
+              </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+              {{ event.createdAt | date:'medium' }}
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BOOK NEW PARCEL -->
+    <div class="bg-white shadow-sm rounded-xl p-7 mt-6 w-full max-w-7xl flex justify-between items-center">
+
+      <div class="flex items-center gap-4">
+        <div class="w-11 h-11 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+          💬
+        </div>
+
+        <div>
+          <p class="font-semibold text-gray-900 text-sm">
+            Want to book a new parcel?
+          </p>
+          <p class="text-xs text-gray-500">
+            Fast, reliable, and secure shipping.
+          </p>
+        </div>
+      </div>
+
+      <button routerLink="/login"
+              class="bg-black hover:bg-gray-800 text-white px-6 py-2 rounded-lg text-sm">
+        Book Now
+      </button>
+    </div>
+
+  </div>
+</div>
