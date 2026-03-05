@@ -16,7 +16,7 @@ import { ActiveParcelsComponent } from './pages/active-parcels/active-parcels.co
 import { NonActiveParcelsComponent } from './pages/non-active-parcels/non-active-parcels.component';
 import { PricingManagementComponent } from './pages/pricing-management/pricing-management.component';
 
-import { ProfileComponent } from './profile/profile.component';
+import { ProfileComponent } from './pages/profile/profile.component';
 import { EditProfileComponent } from './pages/edit-profile/edit-profile.component';
 
 @NgModule({

@@ -47,7 +47,30 @@ export class AuthService {
         }
       })
     );
+    
   }
+
+  changePassword(payload: { current_password: string; new_password: string }) {
+  return this.http.put<any>(
+    `${this.AUTH}/change-password`,
+    payload,
+    this.getAuthHeaders()
+  );
+}
+
+  getAdminProfile() {
+    return this.http.get<any>(
+      `${this.AUTH}/admin/me`,
+      this.getAuthHeaders()
+    ).pipe(
+      tap((res: any) => {
+        if (res?.data) {  
+          this.profileSubject.next(res.data);
+        } 
+      })
+    );
+  }
+  
 
   /* ===================================================== */
   updateProfile(payload: any) {

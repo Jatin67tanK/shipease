@@ -17,12 +17,12 @@ import { ShipmentHistoryComponent } from './pages/track-parcel/shipment-history.
 import { DeliveredHistoryComponent } from './pages/track-parcel/delivered-history.component';
 import { RefundedHistoryComponent } from './pages/track-parcel/refunded-history.component';
 
-import { ProfileComponent } from './pages/profile/profile.component';
+import { ProfileComponent } from '../admin/pages/profile/profile.component';
 import { ShipmentsComponent } from './pages/shipments/shipments.component';
 import { ActiveParcelsComponent } from './pages/shipments/active-parcels.component';
 import { InactiveParcelsComponent } from './pages/shipments/inactive-parcels.compnent';
 import { EditProfileComponent } from './pages/profile/edit-profile.component';
-
+  
 const routes: Routes = [
 
   /* ✅ NO SIDEBAR ROUTE */

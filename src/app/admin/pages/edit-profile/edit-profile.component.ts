@@ -1,21 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-profile',
-  templateUrl: './edit-profile.component.html',
+  templateUrl: './edit-profile.component.html'
 })
 export class EditProfileComponent implements OnInit {
 
-  profile: any = {
-    name: '',
-    phone_number: '',
-    state: '',
-    country: ''
-  };
+  profile: any = null;
 
+  isLoading = true;
   isSaving = false;
+
+  errorMessage = '';
+  successMessage = '';
 
   constructor(
     private authService: AuthService,
@@ -23,27 +22,85 @@ export class EditProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadProfile();
+  }
 
-    this.authService.getProfile().subscribe({
+  loadProfile(): void {
+
+    this.isLoading = true;
+
+    this.authService.getAdminProfile().subscribe({
+
       next: (res: any) => {
-        this.profile = res.data;
+
+        if (!res?.data) {
+          this.errorMessage = 'Profile not found 💀';
+          this.isLoading = false;
+          return;
+        }
+
+        this.profile = { ...res.data };   // ✅ Deep copy
+        this.isLoading = false;
+      },
+
+      error: (err) => {
+
+        console.warn("Profile Load Error:", err);
+
+        this.errorMessage =
+          err?.error?.message || 'Failed to load profile 💀';
+
+        this.isLoading = false;
       }
     });
   }
 
   saveChanges(): void {
 
+    if (!this.profile) {
+      this.errorMessage = "Profile not loaded 💀";
+      return;
+    }
+
+    const payload = {
+      name: this.profile.name?.trim(),
+      phone_number: this.profile.phone_number?.trim(),
+      state: this.profile.state?.trim(),
+      country: this.profile.country?.trim()
+    };
+
+    console.log("😈 PAYLOAD:", payload);
+
+    if (!payload.name ||
+        !payload.phone_number ||
+        !payload.state ||
+        !payload.country) {
+
+      this.errorMessage = "Fill required fields 😑";
+      return;
+    }
+
     this.isSaving = true;
 
-    this.authService.updateProfile(this.profile).subscribe({
+    this.authService.updateProfile(payload).subscribe({
 
-      next: () => {
-        alert("Profile updated 😎🔥");
-        this.router.navigate(['/admin/profile']);
+      next: (res) => {
+
+        console.log("😈 RESPONSE:", res);
+
+        this.successMessage = "Profile Updated 😎🔥";
+        this.isSaving = false;
+
+        this.router.navigate(['/customer/profile']);
       },
 
-      error: () => {
-        alert("Update failed 💀");
+      error: (err) => {
+
+        console.warn("Update Error:", err);
+
+        this.errorMessage =
+          err?.error?.message || "Update failed 💀";
+
         this.isSaving = false;
       }
     });

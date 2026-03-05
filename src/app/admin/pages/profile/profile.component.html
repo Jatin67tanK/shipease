@@ -1,0 +1,328 @@
+<!-- profile.component.html · Shared Admin & Customer · Pure Tailwind · FA Icons -->
+
+<div class="min-h-screen bg-slate-50 p-4 md:p-8" style="font-family:'DM Sans',sans-serif">
+
+  <!-- LOADING -->
+  <div *ngIf="isLoading" class="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+    <div class="w-10 h-10 rounded-full border-4 border-slate-200 border-t-[#16A34A] animate-spin"></div>
+    <p class="text-sm text-slate-400 font-medium">Loading profile...</p>
+  </div>
+
+  <div *ngIf="!isLoading && profile" class="max-w-6xl mx-auto flex flex-col gap-5">
+
+    <!-- SUCCESS TOAST -->
+    <div *ngIf="successMessage"
+         class="flex items-center justify-between gap-3 bg-[#DCFCE7] border border-green-200 text-[#16A34A] px-4 py-3 rounded-xl text-sm font-medium">
+      <div class="flex items-center gap-2">
+        <i class="fas fa-check-circle"></i>
+        <span>{{ successMessage }}</span>
+      </div>
+      <button (click)="dismissSuccess()"><i class="fas fa-times text-green-400 hover:text-green-600"></i></button>
+    </div>
+
+    <!-- ERROR TOAST -->
+    <div *ngIf="errorMessage"
+         class="flex items-center justify-between gap-3 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-medium">
+      <div class="flex items-center gap-2">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span>{{ errorMessage }}</span>
+      </div>
+      <button (click)="dismissError()"><i class="fas fa-times text-red-400 hover:text-red-600"></i></button>
+    </div>
+
+    <!-- ══ HERO CARD ══ -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="h-1.5 bg-gradient-to-r from-[#16A34A] to-emerald-400"></div>
+      <div class="p-6 md:p-8">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5 justify-between">
+
+          <!-- Avatar + Info -->
+          <div class="flex items-center gap-5">
+            <div class="relative shrink-0">
+              <div class="w-20 h-20 rounded-2xl bg-[#DCFCE7] border-2 border-green-200 flex items-center justify-center text-2xl font-bold text-[#16A34A]"
+                   style="font-family:'Sora',sans-serif">
+                {{ avatarInitials }}
+              </div>
+              <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-[#16A34A] rounded-full border-2 border-white flex items-center justify-center">
+                <i class="fas fa-check text-white" style="font-size:7px"></i>
+              </div>
+            </div>
+            <div>
+              <h1 class="text-xl font-bold text-slate-800" style="font-family:'Sora',sans-serif">{{ profile.name }}</h1>
+              <!-- ✅ EMAIL -->
+              <p class="text-sm text-slate-400 mt-0.5 flex items-center gap-1.5">
+                <i class="fas fa-envelope text-slate-300 text-xs"></i>
+                {{ profile.email }}
+              </p>
+              <div class="flex flex-wrap items-center gap-2 mt-2">
+
+                <span class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full flex items-center gap-1"
+                      [ngClass]="isAdmin ? 'bg-violet-100 text-violet-600 border border-violet-200' : 'bg-[#DCFCE7] text-[#16A34A] border border-green-200'">
+                  <i class="fas" [ngClass]="isAdmin ? 'fa-shield-alt' : 'fa-user'"></i>
+                  {{ profile.role }}
+                </span>
+
+                <span class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full flex items-center gap-1"
+                      [ngClass]="profile.status === 'Active' ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-red-50 text-red-500 border border-red-200'">
+                  <i class="fas fa-circle" style="font-size:6px"></i>
+                  {{ profile.status || 'Active' }}
+                </span>
+
+                <span *ngIf="isCustomer && profile.isNumVerified"
+                      class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-200 flex items-center gap-1">
+                  <i class="fas fa-mobile-alt"></i> Verified
+                </span>
+                <span *ngIf="isCustomer && !profile.isNumVerified"
+                      class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-amber-50 text-amber-600 border border-amber-200 flex items-center gap-1">
+                  <i class="fas fa-exclamation-circle"></i> Unverified
+                </span>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="flex items-center gap-2 shrink-0">
+            <button *ngIf="!isEditing" (click)="enterEditMode()"
+              class="flex items-center gap-2 text-sm font-semibold bg-[#16A34A] text-white px-4 py-2.5 rounded-xl hover:bg-green-700 transition-all shadow-sm">
+              <i class="fas fa-pen text-xs"></i> Edit Profile
+            </button>
+            <div *ngIf="isEditing" class="flex gap-2">
+              <button (click)="cancelEdit()"
+                class="flex items-center gap-2 text-sm font-semibold text-slate-500 bg-slate-100 hover:bg-slate-200 px-4 py-2.5 rounded-xl transition-all">
+                <i class="fas fa-times text-xs"></i> Cancel
+              </button>
+              <button (click)="saveProfile()" [disabled]="isSaving"
+                class="flex items-center gap-2 text-sm font-semibold bg-[#16A34A] text-white px-4 py-2.5 rounded-xl hover:bg-green-700 transition-all shadow-sm disabled:opacity-50">
+                <span *ngIf="isSaving" class="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                <i *ngIf="!isSaving" class="fas fa-save text-xs"></i>
+                {{ isSaving ? 'Saving...' : 'Save Changes' }}
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PERSONAL INFORMATION ══ -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-8">
+      <div class="mb-6">
+        <span class="text-[10px] font-bold uppercase tracking-widest text-[#16A34A] bg-[#DCFCE7] border border-green-200 px-3 py-1 rounded-full inline-flex items-center gap-1.5">
+          <i class="fas fa-id-card"></i> Personal Information
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Name -->
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 flex items-center gap-1.5">
+            <i class="fas fa-user text-slate-300"></i> Full Name
+          </p>
+          <div *ngIf="!isEditing" class="text-sm font-semibold text-slate-800">{{ profile.name }}</div>
+          <input *ngIf="isEditing" [(ngModel)]="editForm.name" type="text"
+            class="w-full text-sm font-medium text-slate-800 border border-slate-200 rounded-xl px-3 py-2.5 outline-none focus:border-[#16A34A] focus:ring-2 focus:ring-[#DCFCE7] transition-all" />
+        </div>
+
+        <!-- Email readonly -->
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 flex items-center gap-1.5">
+            <i class="fas fa-envelope text-slate-300"></i> Email Address
+          </p>
+          <div class="flex items-center gap-2 text-sm font-semibold text-slate-800">
+            {{ profile.email }}
+            <span class="text-[9px] text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full font-medium inline-flex items-center gap-1">
+              <i class="fas fa-lock" style="font-size:8px"></i> Read only
+            </span>
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 flex items-center gap-1.5">
+            <i class="fas fa-phone text-slate-300"></i> Phone Number
+          </p>
+          <div *ngIf="!isEditing" class="text-sm font-semibold text-slate-800">{{ profile.phone_number || '—' }}</div>
+          <input *ngIf="isEditing" [(ngModel)]="editForm.phone_number" type="tel"
+            class="w-full text-sm font-medium text-slate-800 border border-slate-200 rounded-xl px-3 py-2.5 outline-none focus:border-[#16A34A] focus:ring-2 focus:ring-[#DCFCE7] transition-all" />
+        </div>
+
+        <!-- State -->
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 flex items-center gap-1.5">
+            <i class="fas fa-map-marker-alt text-slate-300"></i> State / Region
+          </p>
+          <div *ngIf="!isEditing" class="text-sm font-semibold text-slate-800">{{ profile.state || '—' }}</div>
+          <input *ngIf="isEditing" [(ngModel)]="editForm.state" type="text"
+            class="w-full text-sm font-medium text-slate-800 border border-slate-200 rounded-xl px-3 py-2.5 outline-none focus:border-[#16A34A] focus:ring-2 focus:ring-[#DCFCE7] transition-all" />
+        </div>
+
+        <!-- Country -->
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 flex items-center gap-1.5">
+            <i class="fas fa-globe text-slate-300"></i> Country
+          </p>
+          <div *ngIf="!isEditing" class="text-sm font-semibold text-slate-800">{{ profile.country || '—' }}</div>
+          <input *ngIf="isEditing" [(ngModel)]="editForm.country" type="text"
+            class="w-full text-sm font-medium text-slate-800 border border-slate-200 rounded-xl px-3 py-2.5 outline-none focus:border-[#16A34A] focus:ring-2 focus:ring-[#DCFCE7] transition-all" />
+        </div>
+
+        <!-- Role -->
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 flex items-center gap-1.5">
+            <i class="fas fa-user-tag text-slate-300"></i> Account Role
+          </p>
+          <div class="flex items-center gap-2 text-sm font-semibold text-slate-800">
+            <i class="fas text-slate-400 text-xs" [ngClass]="isAdmin ? 'fa-shield-alt' : 'fa-user'"></i>
+            {{ profile.role }}
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ ACCOUNT INFO ══ -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-8">
+      <div class="mb-6">
+        <span class="text-[10px] font-bold uppercase tracking-widest text-[#16A34A] bg-[#DCFCE7] border border-green-200 px-3 py-1 rounded-full inline-flex items-center gap-1.5">
+          <i class="fas fa-info-circle"></i> Account Information
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+        <div class="bg-slate-50 border border-slate-100 rounded-xl p-4">
+          <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-2 flex items-center gap-1.5">
+            <i class="fas fa-calendar-alt text-slate-300"></i> Member Since
+          </p>
+          <p class="text-sm font-bold text-slate-700">{{ memberSince }}</p>
+        </div>
+
+        <div class="bg-slate-50 border border-slate-100 rounded-xl p-4">
+          <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-2 flex items-center gap-1.5">
+            <i class="fas fa-toggle-on text-slate-300"></i> Account Status
+          </p>
+          <div class="flex items-center gap-1.5">
+            <div class="w-2 h-2 rounded-full"
+                 [ngClass]="profile.status === 'Active' ? 'bg-[#16A34A]' : 'bg-red-500'"></div>
+            <p class="text-sm font-bold text-slate-700">{{ profile.status || 'Active' }}</p>
+          </div>
+        </div>
+
+        <div class="bg-slate-50 border border-slate-100 rounded-xl p-4">
+          <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-2 flex items-center gap-1.5">
+            <i class="fas fa-shield-alt text-slate-300"></i>
+            {{ isCustomer ? 'Phone Verified' : 'Access Level' }}
+          </p>
+          <p class="text-sm font-bold text-slate-700 flex items-center gap-1.5" *ngIf="isCustomer">
+            <i class="fas text-xs" [ngClass]="profile.isNumVerified ? 'fa-check-circle text-[#16A34A]' : 'fa-times-circle text-amber-500'"></i>
+            {{ profile.isNumVerified ? 'Verified' : 'Not Verified' }}
+          </p>
+          <p class="text-sm font-bold text-slate-700 flex items-center gap-1.5" *ngIf="isAdmin">
+            <i class="fas fa-shield-alt text-violet-500 text-xs"></i> Full Access
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ CHANGE PASSWORD ══ -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+
+      <button (click)="togglePasswordSection()"
+        class="w-full flex items-center justify-between px-6 md:px-8 py-5 hover:bg-slate-50 transition-colors">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center">
+            <i class="fas fa-lock text-amber-500 text-sm"></i>
+          </div>
+          <div class="text-left">
+            <p class="text-sm font-bold text-slate-800">Change Password</p>
+            <p class="text-xs text-slate-400">Update your account password</p>
+          </div>
+        </div>
+        <i class="fas fa-chevron-down text-slate-400 text-xs transition-transform"
+           [class.rotate-180]="showPasswordSection"></i>
+      </button>
+
+      <div *ngIf="showPasswordSection" class="px-6 md:px-8 pb-7 border-t border-slate-100 pt-6">
+
+        <div *ngIf="passwordError"
+             class="mb-4 text-xs font-medium text-red-600 bg-red-50 border border-red-200 px-4 py-3 rounded-xl flex items-center gap-2">
+          <i class="fas fa-exclamation-triangle"></i> {{ passwordError }}
+        </div>
+        <div *ngIf="passwordSuccess"
+             class="mb-4 text-xs font-medium text-[#16A34A] bg-[#DCFCE7] border border-green-200 px-4 py-3 rounded-xl flex items-center gap-2">
+          <i class="fas fa-check-circle"></i> {{ passwordSuccess }}
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
+
+          <div>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5">Current Password</p>
+            <div class="relative">
+              <input [(ngModel)]="passwordForm.current_password"
+                [type]="showCurrentPw ? 'text' : 'password'"
+                placeholder="Enter current password"
+                class="w-full text-sm border border-slate-200 rounded-xl px-3 py-2.5 pr-10 outline-none focus:border-[#16A34A] focus:ring-2 focus:ring-[#DCFCE7] transition-all" />
+              <button type="button" (click)="showCurrentPw = !showCurrentPw"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                <i class="fas text-xs" [ngClass]="showCurrentPw ? 'fa-eye-slash' : 'fa-eye'"></i>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5">New Password</p>
+            <div class="relative">
+              <input [(ngModel)]="passwordForm.new_password"
+                [type]="showNewPw ? 'text' : 'password'"
+                placeholder="Min. 6 characters"
+                class="w-full text-sm border border-slate-200 rounded-xl px-3 py-2.5 pr-10 outline-none focus:border-[#16A34A] focus:ring-2 focus:ring-[#DCFCE7] transition-all" />
+              <button type="button" (click)="showNewPw = !showNewPw"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                <i class="fas text-xs" [ngClass]="showNewPw ? 'fa-eye-slash' : 'fa-eye'"></i>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5">Confirm Password</p>
+            <div class="relative">
+              <input [(ngModel)]="passwordForm.confirm_password"
+                [type]="showConfirmPw ? 'text' : 'password'"
+                placeholder="Repeat new password"
+                class="w-full text-sm border border-slate-200 rounded-xl px-3 py-2.5 pr-10 outline-none focus:border-[#16A34A] focus:ring-2 focus:ring-[#DCFCE7] transition-all" />
+              <button type="button" (click)="showConfirmPw = !showConfirmPw"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                <i class="fas text-xs" [ngClass]="showConfirmPw ? 'fa-eye-slash' : 'fa-eye'"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button (click)="savePassword()" [disabled]="isSaving"
+            class="flex items-center gap-2 text-sm font-semibold bg-[#16A34A] text-white px-5 py-2.5 rounded-xl hover:bg-green-700 transition-all shadow-sm disabled:opacity-50">
+            <span *ngIf="isSaving" class="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+            <i *ngIf="!isSaving" class="fas fa-lock text-xs"></i>
+            {{ isSaving ? 'Saving...' : 'Update Password' }}
+          </button>
+          <button (click)="togglePasswordSection()"
+            class="text-sm font-semibold text-slate-500 hover:text-slate-700 transition-colors">
+            Cancel
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <p class="text-center text-xs text-slate-400 pb-4 flex items-center justify-center gap-1.5">
+      <i class="fas fa-lock text-slate-300"></i>
+      Your information is encrypted and stored securely. Member since {{ memberSince }}.
+    </p>
+
+  </div>
+</div>
