@@ -18,6 +18,7 @@ import { PricingManagementComponent } from './pages/pricing-management/pricing-m
 
 import { ProfileComponent } from './pages/profile/profile.component';
 import { EditProfileComponent } from './pages/edit-profile/edit-profile.component';
+import { EmployeeManagementComponent } from './pages/employee-management/employee-management.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { EditProfileComponent } from './pages/edit-profile/edit-profile.componen
     PricingManagementComponent,
 
     ProfileComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    EmployeeManagementComponent
   ],
   imports: [
     CommonModule,     // ✅ REQUIRED

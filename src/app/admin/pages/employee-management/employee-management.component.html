@@ -1,0 +1,179 @@
+<div class="p-6 max-w-6xl mx-auto">
+
+  <!-- Header -->
+  <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-800">Delivery Staff</h1>
+      <p class="text-slate-500 text-sm mt-1">Manage delivery employees and assign parcels</p>
+    </div>
+    <button (click)="openAddModal()"
+      class="bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-blue-700 transition flex items-center gap-2">
+      <span>+</span> Add Employee
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="flex justify-center py-20">
+    <div class="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+  </div>
+
+  <!-- Empty -->
+  <div *ngIf="!isLoading && employees.length === 0"
+    class="bg-white rounded-2xl border border-slate-100 shadow-sm py-20 text-center">
+    <div class="text-5xl mb-4">👷</div>
+    <p class="text-lg font-semibold text-slate-600">No employees yet</p>
+    <p class="text-sm text-slate-400 mt-1 mb-6">Add delivery staff to assign parcels</p>
+    <button (click)="openAddModal()"
+      class="bg-blue-600 text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-blue-700 transition">
+      Add First Employee
+    </button>
+  </div>
+
+  <!-- Employee Table -->
+  <div *ngIf="!isLoading && employees.length > 0"
+    class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
+          <tr>
+            <th class="px-6 py-3 text-left font-medium">Employee</th>
+            <th class="px-6 py-3 text-left font-medium">ID</th>
+            <th class="px-6 py-3 text-left font-medium">Contact</th>
+            <th class="px-6 py-3 text-left font-medium">Location</th>
+            <th class="px-6 py-3 text-left font-medium">Assigned</th>
+            <th class="px-6 py-3 text-left font-medium">Status</th>
+            <th class="px-6 py-3 text-left font-medium">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-50">
+          <tr *ngFor="let emp of employees" class="hover:bg-slate-50 transition">
+            <td class="px-6 py-4">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center text-base">👷</div>
+                <div>
+                  <p class="font-semibold text-slate-800">{{ emp.name }}</p>
+                  <p class="text-xs text-slate-400">{{ emp.email }}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-6 py-4 font-mono text-xs text-slate-600 font-medium">{{ emp.employee_id }}</td>
+            <td class="px-6 py-4 text-slate-600">{{ emp.phone_number }}</td>
+            <td class="px-6 py-4 text-slate-600">{{ emp.state }}, {{ emp.country }}</td>
+            <td class="px-6 py-4">
+              <span class="bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-full">
+                {{ emp.assigned_count }}
+              </span>
+            </td>
+            <td class="px-6 py-4">
+              <span class="px-2.5 py-1 rounded-full text-xs font-medium"
+                [class.bg-green-100]="emp.is_active"
+                [class.text-green-700]="emp.is_active"
+                [class.bg-slate-100]="!emp.is_active"
+                [class.text-slate-500]="!emp.is_active">
+                {{ emp.is_active ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+            <td class="px-6 py-4">
+              <button (click)="openAssignModal(emp._id)"
+                class="text-xs bg-orange-50 text-orange-700 border border-orange-200 px-3 py-1.5 rounded-lg hover:bg-orange-100 transition font-medium">
+                Assign Parcel
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ADD EMPLOYEE MODAL -->
+<div *ngIf="showAddModal"
+  class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+  (click)="showAddModal = false">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"
+    (click)="$event.stopPropagation()">
+
+    <h3 class="text-lg font-bold text-slate-800 mb-5">Add Delivery Employee</h3>
+
+    <div class="space-y-4">
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-xs font-semibold text-slate-600 block mb-1.5">Full Name *</label>
+          <input [(ngModel)]="addForm.name" type="text" placeholder="John Doe"
+            class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-slate-600 block mb-1.5">Phone *</label>
+          <input [(ngModel)]="addForm.phone_number" type="tel" placeholder="9876543210"
+            class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+        </div>
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-slate-600 block mb-1.5">Email *</label>
+        <input [(ngModel)]="addForm.email" type="email" placeholder="staff@shipease.com"
+          class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+      </div>
+      <div>
+        <label class="text-xs font-semibold text-slate-600 block mb-1.5">Password *</label>
+        <input [(ngModel)]="addForm.password" type="password" placeholder="Min 6 characters"
+          class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-xs font-semibold text-slate-600 block mb-1.5">State *</label>
+          <input [(ngModel)]="addForm.state" type="text" placeholder="Gujarat"
+            class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-slate-600 block mb-1.5">Country</label>
+          <input [(ngModel)]="addForm.country" type="text" placeholder="India"
+            class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+        </div>
+      </div>
+    </div>
+
+    <p *ngIf="addError" class="mt-3 text-xs text-red-600 font-medium">⚠ {{ addError }}</p>
+
+    <div class="flex gap-3 mt-5">
+      <button (click)="showAddModal = false"
+        class="flex-1 border border-slate-200 text-slate-600 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-50 transition">
+        Cancel
+      </button>
+      <button (click)="submitAddEmployee()" [disabled]="isAdding"
+        class="flex-1 bg-blue-600 text-white py-2.5 rounded-xl text-sm font-medium hover:bg-blue-700 transition disabled:opacity-50">
+        {{ isAdding ? 'Adding...' : 'Add Employee' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ASSIGN PARCEL MODAL -->
+<div *ngIf="showAssignModal"
+  class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+  (click)="showAssignModal = false">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6"
+    (click)="$event.stopPropagation()">
+
+    <h3 class="text-lg font-bold text-slate-800 mb-2">Assign Parcel</h3>
+    <p class="text-sm text-slate-500 mb-5">Enter the tracking ID to assign to this employee</p>
+
+    <div>
+      <label class="text-xs font-semibold text-slate-600 block mb-1.5">Tracking ID *</label>
+      <input [(ngModel)]="assignTrackingId" type="text" placeholder="SE-123456"
+        class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+    </div>
+
+    <p *ngIf="assignError" class="mt-3 text-xs text-red-600 font-medium">⚠ {{ assignError }}</p>
+
+    <div class="flex gap-3 mt-5">
+      <button (click)="showAssignModal = false"
+        class="flex-1 border border-slate-200 text-slate-600 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-50 transition">
+        Cancel
+      </button>
+      <button (click)="submitAssign()" [disabled]="isAssigning"
+        class="flex-1 bg-orange-600 text-white py-2.5 rounded-xl text-sm font-medium hover:bg-orange-700 transition disabled:opacity-50">
+        {{ isAssigning ? 'Assigning...' : 'Assign' }}
+      </button>
+    </div>
+  </div>
+</div>

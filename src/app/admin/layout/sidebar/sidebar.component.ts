@@ -1,69 +1,28 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html'
 })
 export class SidebarComponent {
-
-  /* ✅ Controlled by Parent (PC View) */
   @Input() collapsed = false;
-
-  /* ✅ Notify Parent (PC Collapse) */
   @Output() toggle = new EventEmitter<void>();
 
-  /* ✅ Mobile Drawer State (Internal) */
   mobileOpen = false;
 
-  /* ✅ Menu Items */
   menuItems = [
-    {
-      label: 'Dashboard',
-      icon: '📊',
-      link: '/admin/dashboard'
-    },
-   {
-  label: 'Active Parcels',
-  icon: '📦',
-  link: '/admin/parcels/active'
-},
-{
-  label: 'Non-Active Parcels',
-  icon: '🗂',
-  link: '/admin/parcels/non-active'
-},
-    {
-      label: 'Pricing Management',
-      icon: '💰',
-      link: '/admin/pricing'
-    },
-    {
-      label: 'My Profile',
-      icon: '👤',
-      link: '/admin/profile'
-    }
-    // { icon: '🔍', label: 'Track Parcel', link: '/admin/track' },
+    { label: 'Dashboard',    link: '/admin/dashboard',   icon: '📊' },
+    { label: 'Active Parcels', link: '/admin/parcels/active', icon: '📦' },
+    { label: 'Non-Active',   link: '/admin/parcels/non-active', icon: '🗃️' },
+    { label: 'Pricing',      link: '/admin/pricing',     icon: '💰' },
+    { label: 'Employees',    link: '/admin/employees',   icon: '👷' }, // ✅ NEW
+    { label: 'Profile',      link: '/admin/profile',     icon: '👤' },
   ];
 
-  /* ✅ Smart Toggle Behaviour */
-  onToggle(): void {
+  constructor(private authService: AuthService) {}
 
-    if (window.innerWidth < 1024) {
-      // ✅ Mobile → Open Drawer
-      this.mobileOpen = !this.mobileOpen;
-    } else {
-      // ✅ PC → Ask Parent to Collapse
-      this.toggle.emit();
-    }
+  onToggle() { this.toggle.emit(); }
 
-  }
-
-  /* ✅ Close Sidebar After Click (Mobile Only) */
-  onMobileItemClick(): void {
-
-    if (window.innerWidth < 1024) {
-      this.mobileOpen = false;
-    }
-
-  }
+  logout() { this.authService.logout(); }
 }

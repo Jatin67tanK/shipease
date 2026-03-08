@@ -1,0 +1,71 @@
+<div class="p-6 max-w-6xl mx-auto">
+
+  <!-- Welcome Header -->
+  <div class="mb-8">
+    <h1 class="text-2xl font-bold text-slate-800">
+      Welcome back, {{ profile?.name || 'Staff' }} 👋
+    </h1>
+    <p class="text-slate-500 text-sm mt-1">
+      {{ profile?.employee_id }} &nbsp;·&nbsp; Here's your delivery summary
+    </p>
+  </div>
+
+  <!-- Stat Cards -->
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+    <div *ngFor="let card of statCards"
+      class="rounded-xl p-4 border {{ card.border }} {{ card.color }} flex flex-col gap-2">
+      <span class="text-2xl">{{ card.icon }}</span>
+      <div class="text-2xl font-bold">{{ stats[card.key] ?? 0 }}</div>
+      <div class="text-xs font-medium opacity-80">{{ card.label }}</div>
+    </div>
+  </div>
+
+  <!-- Recent Parcels -->
+  <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+      <h2 class="font-semibold text-slate-800">Recent Assigned Parcels</h2>
+      <a routerLink="/delivery/parcels"
+        class="text-sm text-blue-600 hover:underline font-medium">View all →</a>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="py-12 flex justify-center">
+      <div class="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+    </div>
+
+    <!-- Empty -->
+    <div *ngIf="!isLoading && recentParcels.length === 0"
+      class="py-16 text-center text-slate-400">
+      <div class="text-4xl mb-3">📭</div>
+      <p class="text-sm">No parcels assigned yet</p>
+    </div>
+
+    <!-- Table -->
+    <div *ngIf="!isLoading && recentParcels.length > 0" class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
+          <tr>
+            <th class="px-6 py-3 text-left font-medium">Tracking ID</th>
+            <th class="px-6 py-3 text-left font-medium">Receiver</th>
+            <th class="px-6 py-3 text-left font-medium">Drop Address</th>
+            <th class="px-6 py-3 text-left font-medium">Status</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-50">
+          <tr *ngFor="let parcel of recentParcels"
+            class="hover:bg-slate-50 transition">
+            <td class="px-6 py-4 font-mono text-xs text-slate-700 font-medium">{{ parcel.tracking_id }}</td>
+            <td class="px-6 py-4 text-slate-700">{{ parcel.receiver_name }}</td>
+            <td class="px-6 py-4 text-slate-500 truncate max-w-xs">{{ parcel.drop_address }}</td>
+            <td class="px-6 py-4">
+              <span class="px-2.5 py-1 rounded-full text-xs font-medium {{ getStatusClass(parcel.current_status) }}">
+                {{ parcel.current_status }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

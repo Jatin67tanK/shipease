@@ -56,9 +56,11 @@ export class ProfileComponent implements OnInit {
       role = JSON.parse(atob(token!.split('.')[1])).role;
     } catch { }
 
-    const request = role === 'Admin'
-      ? this.authService.getAdminProfile()
-      : this.authService.getProfile();
+const request = role === 'Admin'
+  ? this.authService.getAdminProfile()
+  : role === 'Employee'
+    ? this.authService.getEmployeeProfile()
+    : this.authService.getProfile();
 
     request.subscribe({
       next: (res: any) => {
