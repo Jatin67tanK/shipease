@@ -22,7 +22,7 @@ import { ShipmentsComponent } from './pages/shipments/shipments.component';
 import { ActiveParcelsComponent } from './pages/shipments/active-parcels.component';
 import { InactiveParcelsComponent } from './pages/shipments/inactive-parcels.compnent';
 import { EditProfileComponent } from './pages/profile/edit-profile.component';
-  
+
 const routes: Routes = [
 
   /* ✅ NO SIDEBAR ROUTE */

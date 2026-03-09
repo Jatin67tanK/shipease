@@ -1,129 +1,299 @@
-<div class="h-full bg-white">
+<div class="min-h-screen bg-[#F0FDF4]">
 
-    <!-- HEADER -->
-    <div class="h-16 border-b flex justify-between items-center px-6">
+  <!-- ══════════════════════════════════
+       HERO SEARCH SECTION
+  ══════════════════════════════════ -->
+  <div class="bg-white border-b border-gray-100 shadow-sm">
+    <div class="max-w-3xl mx-auto px-4 py-10">
 
-        <div class="flex items-center gap-2 font-semibold">
-            <span class="text-green-600 text-xl">🚚</span>
-            Track Parcel
+      <div class="flex items-center gap-3 mb-2">
+        <div class="w-10 h-10 rounded-xl bg-[#16A34A] flex items-center justify-center shadow">
+          <i class="fa-solid fa-location-dot text-white text-lg"></i>
         </div>
+        <h1 class="text-2xl font-bold text-gray-800">Track Your Parcel</h1>
+      </div>
+      <p class="text-sm text-gray-500 mb-6 ml-13 pl-1">
+        Enter your tracking ID to get live status updates
+      </p>
 
-        <div class="flex items-center gap-2">
-            <div class="text-right text-sm">
-                <div class="font-semibold">Alex Morgan</div>
-                <div class="text-xs text-gray-500">Premium Customer</div>
-            </div>
-
-            <img src="https://i.pravatar.cc/40"
-                 class="w-9 h-9 rounded-full" />
+      <!-- Search Bar -->
+      <div class="flex gap-3">
+        <div class="relative flex-1">
+          <i class="fa-solid fa-barcode absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+          <input
+            [(ngModel)]="trackingId"
+            (keyup.enter)="trackParcel()"
+            placeholder="e.g. SE-123456"
+            class="w-full pl-11 pr-4 py-3.5 border border-gray-200 rounded-xl text-sm
+                   bg-[#F0FDF4] focus:outline-none focus:ring-2 focus:ring-green-400
+                   focus:border-transparent font-mono font-semibold tracking-wide transition-all" />
         </div>
+        <button
+          (click)="trackParcel()"
+          [disabled]="isLoading"
+          class="flex items-center gap-2 px-6 py-3.5 bg-[#16A34A] text-white text-sm font-semibold
+                 rounded-xl hover:bg-green-700 active:scale-95 transition-all disabled:opacity-60 shadow-md whitespace-nowrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          {{ isLoading ? 'Searching...' : 'Track Now' }}
+        </button>
+      </div>
 
     </div>
+  </div>
 
-    <!-- CONTENT -->
-    <div class="p-6">
+  <!-- ══════════════════════════════════
+       BODY
+  ══════════════════════════════════ -->
+  <div class="max-w-3xl mx-auto px-4 py-8">
 
-        <div class="text-2xl font-bold mb-1">
-            Track Your Parcel
-        </div>
-
-        <div class="text-gray-500 text-sm mb-6">
-            Enter a Tracking ID to view the current status of your shipment.
-        </div>
-
-        <!-- INPUT CARD -->
-        <div class="bg-[#f5fff7] rounded-xl p-6 mb-6">
-
-            <div class="text-sm font-semibold mb-2">
-                Track Input
-            </div>
-
-            <div class="text-xs text-gray-500 mb-4">
-                Please enter your unique tracking ID below.
-            </div>
-
-            <div class="flex gap-3">
-
-                <input
-                    [(ngModel)]="trackingId"
-                    placeholder="SE-999999"
-                    class="flex-1 border border-gray-200 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-green-500 outline-none" />
-
-                <button
-                    (click)="trackParcel()"
-                    class="bg-green-600 text-white px-6 rounded-lg hover:bg-green-700 transition">
-                    Track Parcel →
-                </button>
-
-            </div>
-
-        </div>
-
-        <!-- ✅ LOADING -->
-        <div *ngIf="isLoading"
-             class="text-sm text-gray-400 p-6">
-            Fetching parcel details...
-        </div>
-
-        <!-- ✅ ERROR -->
-        <div *ngIf="!isLoading && errorMessage"
-             class="text-sm text-red-500 p-6">
-            {{ errorMessage }}
-        </div>
-
-        <!-- ✅ RESULT -->
-        <div *ngIf="!isLoading && parcel" class="border rounded-xl p-6">
-
-            <div class="flex justify-between text-xs text-gray-400 mb-6">
-                <span>Tracking Results</span>
-                <span>UPDATED JUST NOW</span>
-            </div>
-
-            <div class="grid grid-cols-2 gap-6 text-sm">
-
-                <div>
-                    <div class="text-gray-400 text-xs">Tracking ID</div>
-                    <div class="font-semibold">{{ parcel.id }}</div>
-                </div>
-
-                <div>
-                    <div class="text-gray-400 text-xs">Parcel Status</div>
-
-                    <span
-                        class="px-3 py-1 rounded-full text-xs"
-                        [ngClass]="{
-                            'bg-yellow-100 text-yellow-600': parcel.status === 'In Transit',
-                            'bg-blue-100 text-blue-600': parcel.status === 'Picked Up',
-                            'bg-gray-100 text-gray-500': parcel.status === 'Booked',
-                            'bg-green-100 text-green-600': parcel.status === 'Delivered',
-                            'bg-red-100 text-red-500': parcel.status === 'Refunded'
-                        }">
-                        {{ parcel.status }}
-                    </span>
-
-                </div>
-
-                <div>
-                    <div class="text-gray-400 text-xs">Sender Name</div>
-                    <div class="font-medium">{{ parcel.sender }}</div>
-                </div>
-
-                <div>
-                    <div class="text-gray-400 text-xs">Receiver Name</div>
-                    <div class="font-medium">{{ parcel.receiver }}</div>
-                </div>
-
-                <div>
-                    <div class="text-gray-400 text-xs">Parcel Type</div>
-                    <div>{{ parcel.type }}</div>
-                </div>
-
-                //add 
-
-            </div>
-
-        </div>
-
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-24 text-gray-400">
+      <div class="w-12 h-12 border-4 border-[#16A34A] border-t-transparent rounded-full animate-spin mb-4"></div>
+      <p class="text-sm">Fetching parcel details...</p>
     </div>
 
+    <!-- Error -->
+    <div *ngIf="!isLoading && errorMessage"
+         class="flex items-center gap-4 bg-red-50 border border-red-200 rounded-2xl px-6 py-5 text-red-600">
+      <i class="fa-solid fa-circle-exclamation text-2xl flex-shrink-0"></i>
+      <div>
+        <p class="font-semibold text-red-700">Parcel Not Found</p>
+        <p class="text-sm mt-0.5">{{ errorMessage }}</p>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && !parcel && !errorMessage"
+         class="flex flex-col items-center justify-center py-24 text-gray-400">
+      <i class="fa-solid fa-box-open text-6xl mb-4 text-gray-300"></i>
+      <p class="text-lg font-medium text-gray-500">Enter a tracking ID to begin</p>
+      <p class="text-sm mt-1">Your shipment details will appear here</p>
+    </div>
+
+    <!-- ══════════════════════════════════
+         RESULT CARD
+    ══════════════════════════════════ -->
+    <div *ngIf="!isLoading && parcel" class="space-y-5">
+
+      <!-- ── STATUS HERO ── -->
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+
+        <!-- Top accent bar -->
+        <div class="h-1.5 bg-[#16A34A]"></div>
+
+        <div class="p-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <p class="text-xs text-gray-400 uppercase tracking-wide mb-1">Tracking ID</p>
+              <p class="font-mono font-bold text-xl text-[#16A34A] tracking-wider">{{ parcel.id }}</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1.5 rounded-full text-xs font-semibold {{ statusColor(parcel.status) }}">
+                <i class="fa-solid fa-circle-dot mr-1"></i> {{ parcel.status }}
+              </span>
+              <span class="px-3 py-1.5 rounded-full text-xs font-semibold {{ paymentColor(parcel.payment) }}">
+                <i class="fa-solid fa-credit-card mr-1"></i> {{ parcel.payment }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Progress Stepper -->
+          <div class="mt-6">
+            <div class="relative flex items-center justify-between">
+              <!-- Background line -->
+              <div class="absolute inset-x-0 top-4 h-0.5 bg-gray-200 z-0 mx-6"></div>
+              <!-- Active line -->
+              <div class="absolute top-4 h-0.5 bg-[#16A34A] z-0 mx-6 transition-all duration-500"
+                   [style.width.%]="(progressStep - 1) * 33.33 * (100/(100)) "></div>
+
+              <ng-container *ngFor="let step of [
+                {n:1, icon:'fa-box',         label:'Booked'},
+                {n:2, icon:'fa-hand-holding-box', label:'Picked Up'},
+                {n:3, icon:'fa-truck',       label:'In Transit'},
+                {n:4, icon:'fa-house-circle-check', label:'Delivered'}
+              ]">
+                <div class="relative z-10 flex flex-col items-center gap-1.5">
+                  <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300"
+                       [class.bg-[#16A34A]]="progressStep >= step.n"
+                       [class.text-white]="progressStep >= step.n"
+                       [class.bg-gray-100]="progressStep < step.n"
+                       [class.text-gray-400]="progressStep < step.n"
+                       [class.ring-4]="progressStep === step.n"
+                       [class.ring-green-200]="progressStep === step.n">
+                    <i class="fa-solid {{ step.icon }} text-xs"></i>
+                  </div>
+                  <span class="text-xs font-medium hidden sm:block"
+                        [class.text-[#16A34A]]="progressStep >= step.n"
+                        [class.font-semibold]="progressStep === step.n"
+                        [class.text-gray-400]="progressStep < step.n">
+                    {{ step.label }}
+                  </span>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── DETAILS GRID ── -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+        <!-- Sender Card -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+              <i class="fa-solid fa-circle-up text-blue-500"></i>
+            </div>
+            <h3 class="font-semibold text-gray-700 text-sm">Sender Details</h3>
+          </div>
+          <div class="space-y-3">
+            <div class="flex items-start gap-2">
+              <i class="fa-solid fa-user text-gray-300 text-xs mt-0.5"></i>
+              <div>
+                <p class="text-xs text-gray-400">Name</p>
+                <p class="font-semibold text-gray-800 text-sm">{{ parcel.sender }}</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <i class="fa-solid fa-phone text-gray-300 text-xs mt-0.5"></i>
+              <div>
+                <p class="text-xs text-gray-400">Phone</p>
+                <p class="text-sm text-gray-700">{{ parcel.senderPhone || '—' }}</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <i class="fa-solid fa-location-dot text-gray-300 text-xs mt-0.5"></i>
+              <div>
+                <p class="text-xs text-gray-400">Pickup Address</p>
+                <p class="text-sm text-gray-700">{{ parcel.pickup }}</p>
+                <p class="text-xs text-gray-400 mt-0.5">{{ parcel.senderCity }}{{ parcel.senderState ? ', ' + parcel.senderState : '' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Receiver Card -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center">
+              <i class="fa-solid fa-circle-down text-[#16A34A]"></i>
+            </div>
+            <h3 class="font-semibold text-gray-700 text-sm">Receiver Details</h3>
+          </div>
+          <div class="space-y-3">
+            <div class="flex items-start gap-2">
+              <i class="fa-solid fa-user text-gray-300 text-xs mt-0.5"></i>
+              <div>
+                <p class="text-xs text-gray-400">Name</p>
+                <p class="font-semibold text-gray-800 text-sm">{{ parcel.receiver }}</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <i class="fa-solid fa-phone text-gray-300 text-xs mt-0.5"></i>
+              <div>
+                <p class="text-xs text-gray-400">Phone</p>
+                <p class="text-sm text-gray-700">{{ parcel.receiverPhone || '—' }}</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <i class="fa-solid fa-location-dot text-gray-300 text-xs mt-0.5"></i>
+              <div>
+                <p class="text-xs text-gray-400">Drop Address</p>
+                <p class="text-sm text-gray-700">{{ parcel.drop }}</p>
+                <p class="text-xs text-gray-400 mt-0.5">{{ parcel.receiverCity }}{{ parcel.receiverState ? ', ' + parcel.receiverState : '' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PARCEL INFO ── -->
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-[#F0FDF4] flex items-center justify-center">
+            <i class="fa-solid fa-box text-[#16A34A]"></i>
+          </div>
+          <h3 class="font-semibold text-gray-700 text-sm">Parcel Information</h3>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="bg-[#F0FDF4] rounded-xl p-3">
+            <p class="text-xs text-gray-400 mb-1">Type</p>
+            <p class="font-semibold text-gray-800 text-sm capitalize">{{ parcel.type }}</p>
+          </div>
+          <div class="bg-[#F0FDF4] rounded-xl p-3">
+            <p class="text-xs text-gray-400 mb-1">Weight</p>
+            <p class="font-semibold text-gray-800 text-sm">{{ parcel.weight }} kg</p>
+          </div>
+          <div class="bg-[#F0FDF4] rounded-xl p-3">
+            <p class="text-xs text-gray-400 mb-1">Distance</p>
+            <p class="font-semibold text-gray-800 text-sm">{{ parcel.distance }}</p>
+          </div>
+          <div class="bg-[#F0FDF4] rounded-xl p-3">
+            <p class="text-xs text-gray-400 mb-1">Delivery</p>
+            <p class="font-semibold text-gray-800 text-sm">{{ parcel.delivery }}</p>
+          </div>
+        </div>
+
+        <!-- Cost + Dates -->
+        <div class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap justify-between gap-4">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-indian-rupee-sign text-[#16A34A] text-lg"></i>
+            <div>
+              <p class="text-xs text-gray-400">Total Cost</p>
+              <p class="font-bold text-gray-800 text-lg">₹{{ parcel.cost }}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2" *ngIf="parcel.bookedAt">
+            <i class="fa-solid fa-calendar text-gray-300"></i>
+            <div>
+              <p class="text-xs text-gray-400">Booked On</p>
+              <p class="text-sm font-medium text-gray-700">{{ parcel.bookedAt | date:'dd MMM yyyy, h:mm a' }}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2" *ngIf="parcel.deliveredAt">
+            <i class="fa-solid fa-calendar-check text-green-400"></i>
+            <div>
+              <p class="text-xs text-gray-400">Delivered On</p>
+              <p class="text-sm font-medium text-green-700">{{ parcel.deliveredAt | date:'dd MMM yyyy, h:mm a' }}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2" *ngIf="parcel.assignedEmployee">
+            <i class="fa-solid fa-hard-hat text-yellow-400"></i>
+            <div>
+              <p class="text-xs text-gray-400">Delivery Agent</p>
+              <p class="text-sm font-medium text-gray-700">{{ parcel.assignedEmployee }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Special Note -->
+        <div *ngIf="parcel.specialNote" class="mt-4 flex items-start gap-2 bg-yellow-50 border border-yellow-100 rounded-xl px-4 py-3">
+          <i class="fa-solid fa-note-sticky text-yellow-500 mt-0.5"></i>
+          <div>
+            <p class="text-xs font-semibold text-yellow-700">Special Note</p>
+            <p class="text-sm text-yellow-800 mt-0.5">{{ parcel.specialNote }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PARCEL IMAGES ── -->
+      <div *ngIf="parcel.images && parcel.images.length > 0"
+           class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-[#F0FDF4] flex items-center justify-center">
+            <i class="fa-solid fa-images text-[#16A34A]"></i>
+          </div>
+          <h3 class="font-semibold text-gray-700 text-sm">Parcel Images</h3>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <img *ngFor="let img of parcel.images"
+               [src]="img.startsWith('http') ? img : (API + '/uploads/parcels/' + img)"
+               class="w-24 h-24 object-cover rounded-xl border border-gray-100 shadow-sm cursor-pointer hover:scale-105 transition-transform"
+               alt="Parcel image" />
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>

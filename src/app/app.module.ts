@@ -5,18 +5,22 @@ import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-
+import { CommonModule } from '@angular/common';
 import { TokenInterceptor } from './core/interceptors/token.interceptor';
-
+import { LoginComponent } from './Public/pages/login/login.component';
+import { RegisterComponent } from './Public/pages/register/register.component';
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    
+    FormsModule 
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }

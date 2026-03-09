@@ -288,7 +288,7 @@ loadParcels(type: string): void {
   }
 
   confirmChange(status: string): void {
-    this.parcelService.updateStatus(this.selectedParcel.tracking_id, status).subscribe({
+    this.parcelService.updateParcelStatus(this.selectedParcel.tracking_id, status).subscribe({
       next: () => this.loadParcels(this.currentRouteStatus),
       error: () => {
         this.selectedParcel.current_status = this.previousStatus;

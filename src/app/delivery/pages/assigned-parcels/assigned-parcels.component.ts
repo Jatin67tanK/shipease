@@ -1,51 +1,37 @@
 import { Component, OnInit } from '@angular/core';
 import { ParcelService } from 'src/app/core/services/parcel.service';
-import { environment } from 'src/environments/environment';
-
 @Component({
   selector: 'app-assigned-parcels',
-  templateUrl: './assigned-parcels.component.html'
+  templateUrl: './assigned-parcels.component.html',
+   // optional, if you have CSS
 })
 export class AssignedParcelsComponent implements OnInit {
-
   parcels: any[] = [];
-  filteredParcels: any[] = [];
+  filteredParcels: any[] = [];       // renamed
   isLoading = true;
 
-  // Filters
-  selectedStatus = '';
+  filterTabs = [
+    { label: 'All', value: '' },
+    { label: 'Assigned', value: 'ASSIGNED' },
+    { label: 'In Transit', value: 'IN_TRANSIT' },
+    { label: 'Delivered', value: 'DELIVERED' },
+    { label: 'Failed', value: 'FAILED' },
+  ];
+  selectedStatus = '';                // renamed
   searchQuery = '';
 
-  // Status modal
+  // MODALS
   showModal = false;
   selectedParcel: any = null;
   newStatus = '';
-  deliveryNote = '';
   previousStatus = '';
+  deliveryNote = '';
   isUpdating = false;
+  updateError = '';
 
-  // Image modal
-  imageModal = false;
+  imageModal: boolean = false;
   imageModalParcel: any = null;
   fullImageUrl: string | null = null;
-
-  readonly allowedStatuses = ['Picked Up', 'In Transit', 'Out for Delivery', 'Delivered'];
-
-  readonly statusFlow: Record<string, string[]> = {
-    'Booked':           ['Picked Up'],
-    'Picked Up':        ['In Transit'],
-    'In Transit':       ['Out for Delivery'],
-    'Out for Delivery': ['Delivered'],
-    'Delivered':        [],
-  };
-
-  readonly filterTabs = [
-    { label: 'All',              value: '' },
-    { label: 'Picked Up',        value: 'Picked Up' },
-    { label: 'In Transit',       value: 'In Transit' },
-    { label: 'Out for Delivery', value: 'Out for Delivery' },
-    { label: 'Delivered',        value: 'Delivered' },
-  ];
 
   constructor(private parcelService: ParcelService) {}
 
@@ -54,8 +40,8 @@ export class AssignedParcelsComponent implements OnInit {
   loadParcels(): void {
     this.isLoading = true;
     this.parcelService.getAssignedParcels().subscribe({
-      next: (res: any) => {
-        this.parcels = res.data || [];
+      next: (r) => {
+        this.parcels = r.data || [];
         this.applyFilters();
         this.isLoading = false;
       },
@@ -65,99 +51,61 @@ export class AssignedParcelsComponent implements OnInit {
 
   applyFilters(): void {
     let data = [...this.parcels];
-
-    if (this.selectedStatus) {
-      data = data.filter(p => p.current_status === this.selectedStatus);
-    }
-
+    if (this.selectedStatus) data = data.filter(p => p.cycle_status === this.selectedStatus);
     if (this.searchQuery.trim()) {
       const q = this.searchQuery.toLowerCase();
       data = data.filter(p =>
         p.tracking_id?.toLowerCase().includes(q) ||
-        p.receiver_name?.toLowerCase().includes(q) ||
-        p.drop_address?.toLowerCase().includes(q) ||
-        p.receiver_city?.toLowerCase().includes(q)
+        p.receiver_name?.toLowerCase().includes(q)
       );
     }
-
     this.filteredParcels = data;
   }
 
-  setTab(status: string): void {
-    this.selectedStatus = status;
-    this.applyFilters();
+  setTab(v: string): void { this.selectedStatus = v; this.applyFilters(); }
+  onSearch(v: string): void { this.searchQuery = v; this.applyFilters(); }
+
+  openImageModal(parcel: any): void { this.imageModal = true; this.imageModalParcel = parcel; }
+  closeImageModal(): void { this.imageModal = false; this.imageModalParcel = null; }
+
+  openFullImage(img: string): void { this.fullImageUrl = img; }
+  closeFullImage(): void { this.fullImageUrl = null; }
+
+  getImageUrl(img: string): string { return img; }  // adjust if you have base URL
+
+  confirmStatusUpdate(): void {
+    if (!this.selectedParcel || this.isUpdating) return;
+    this.isUpdating = true;
+    this.parcelService.updateDeliveryStatus(this.selectedParcel._id, this.newStatus)
+      .subscribe({
+        next: () => { this.loadParcels(); this.closeModal(); this.isUpdating = false; },
+        error: (err: any) => { this.updateError = err?.error?.error || 'Update failed'; this.isUpdating = false; }
+      });
   }
 
-  onSearch(val: string): void {
-    this.searchQuery = val;
-    this.applyFilters();
-  }
-
-  // ── Next status available for a parcel ──────────────
-  getNextStatuses(parcel: any): string[] {
-    return this.statusFlow[parcel.current_status] || [];
-  }
-
-  canUpdate(parcel: any): boolean {
-    return this.getNextStatuses(parcel).length > 0;
-  }
-
-  // ── Open status modal ────────────────────────────────
-  openStatusModal(parcel: any): void {
+  openModal(parcel: any): void {
     this.selectedParcel = parcel;
-    this.previousStatus = parcel.current_status;
-    const nextStatuses = this.getNextStatuses(parcel);
-    this.newStatus = nextStatuses[0] || '';
+    this.newStatus = parcel.cycle_status === 'ASSIGNED' ? 'IN_TRANSIT' : 'DELIVERED';
+    this.previousStatus = parcel.cycle_status;
     this.deliveryNote = '';
+    this.updateError = '';
     this.showModal = true;
   }
 
-  closeModal(): void {
-    this.showModal = false;
-    this.selectedParcel = null;
-    this.isUpdating = false;
-  }
-
-  confirmStatusUpdate(): void {
-    if (!this.selectedParcel || !this.newStatus || this.isUpdating) return;
-    this.isUpdating = true;
-
-    this.parcelService.updateDeliveryStatus(
-      this.selectedParcel.tracking_id,
-      this.newStatus,
-      this.deliveryNote
-    ).subscribe({
-      next: () => {
-        this.selectedParcel.current_status = this.newStatus;
-        this.applyFilters();
-        this.closeModal();
-      },
-      error: (err) => {
-        alert(err?.error?.message || 'Update failed. Please try again.');
-        this.isUpdating = false;
-      }
-    });
-  }
-
-  // ── Image helpers ────────────────────────────────────
-  openImageModal(p: any): void { this.imageModalParcel = p; this.imageModal = true; }
-  closeImageModal(): void { this.imageModal = false; this.fullImageUrl = null; }
-  openFullImage(f: string): void { this.fullImageUrl = this.getImageUrl(f); }
-  closeFullImage(): void { this.fullImageUrl = null; }
-
-  getImageUrl(f: string): string {
-    return `${environment.apiUrl}/uploads/parcels/${f}`;
-  }
-
-  // ── Status badge class ───────────────────────────────
-  getStatusClass(status: string): string {
-    const map: Record<string, string> = {
-      'Booked': 'bg-slate-100 text-slate-700',
-      'Picked Up': 'bg-blue-100 text-blue-700',
-      'In Transit': 'bg-yellow-100 text-yellow-700',
-      'Out for Delivery': 'bg-orange-100 text-orange-700',
-      'Delivered': 'bg-green-100 text-green-700',
+  closeModal(): void { this.showModal = false; this.selectedParcel = null; }
+openStatusModal(parcel: any): void {
+  this.openModal(parcel); // reuse existing method
+}
+  statusClass(s: string): string {
+    const m: Record<string,string> = {
+      'PENDING':    'bg-gray-100   text-gray-600',
+      'ASSIGNED':   'bg-blue-100   text-blue-600',
+      'IN_TRANSIT': 'bg-yellow-100 text-yellow-600',
+      'DELIVERED':  'bg-green-100  text-green-600',
+      'FAILED':     'bg-red-100    text-red-600',
     };
-    return map[status] || 'bg-gray-100 text-gray-700';
+    return m[s] || 'bg-gray-100 text-gray-600';
   }
+
+  canUpdate(p: any): boolean { return ['ASSIGNED','IN_TRANSIT'].includes(p.cycle_status); }
 }

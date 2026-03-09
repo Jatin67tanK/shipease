@@ -1,83 +1,140 @@
-<div class="p-6 max-w-6xl mx-auto">
+<div class="min-h-screen bg-[#F0FDF4] p-4 md:p-6">
 
   <!-- Header -->
   <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
     <div>
-      <h1 class="text-2xl font-bold text-slate-800">Delivery Staff</h1>
-      <p class="text-slate-500 text-sm mt-1">Manage delivery employees and assign parcels</p>
+      <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+        <i class="fa-solid fa-hard-hat text-[#16A34A]"></i> Delivery Staff
+      </h1>
+      <p class="text-gray-500 text-sm mt-1">Manage delivery employees, assign parcels and cities</p>
     </div>
     <button (click)="openAddModal()"
-      class="bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-blue-700 transition flex items-center gap-2">
-      <span>+</span> Add Employee
+      class="flex items-center gap-2 bg-[#16A34A] text-white px-5 py-2.5 rounded-xl text-sm
+             font-semibold hover:bg-green-700 active:scale-95 transition-all shadow-md">
+      <i class="fa-solid fa-plus"></i> Add Employee
     </button>
   </div>
 
   <!-- Loading -->
-  <div *ngIf="isLoading" class="flex justify-center py-20">
-    <div class="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+  <div *ngIf="isLoading" class="flex justify-center py-24">
+    <div class="w-10 h-10 border-4 border-[#16A34A] border-t-transparent rounded-full animate-spin"></div>
   </div>
 
   <!-- Empty -->
   <div *ngIf="!isLoading && employees.length === 0"
-    class="bg-white rounded-2xl border border-slate-100 shadow-sm py-20 text-center">
-    <div class="text-5xl mb-4">👷</div>
-    <p class="text-lg font-semibold text-slate-600">No employees yet</p>
-    <p class="text-sm text-slate-400 mt-1 mb-6">Add delivery staff to assign parcels</p>
+    class="bg-white rounded-2xl border border-gray-100 shadow-sm py-24 text-center">
+    <i class="fa-solid fa-hard-hat text-5xl text-gray-300 mb-4 block"></i>
+    <p class="text-lg font-semibold text-gray-600">No employees yet</p>
+    <p class="text-sm text-gray-400 mt-1 mb-6">Add delivery staff to get started</p>
     <button (click)="openAddModal()"
-      class="bg-blue-600 text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-blue-700 transition">
+      class="bg-[#16A34A] text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-green-700 transition">
       Add First Employee
     </button>
   </div>
 
-  <!-- Employee Table -->
+  <!-- Table -->
   <div *ngIf="!isLoading && employees.length > 0"
-    class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+    class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
-        <thead class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
+        <thead class="bg-gray-50 border-b border-gray-100">
           <tr>
-            <th class="px-6 py-3 text-left font-medium">Employee</th>
-            <th class="px-6 py-3 text-left font-medium">ID</th>
-            <th class="px-6 py-3 text-left font-medium">Contact</th>
-            <th class="px-6 py-3 text-left font-medium">Location</th>
-            <th class="px-6 py-3 text-left font-medium">Assigned</th>
-            <th class="px-6 py-3 text-left font-medium">Status</th>
-            <th class="px-6 py-3 text-left font-medium">Action</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Employee</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">ID</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Contact</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Location</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Cities</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Assigned</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Status</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Actions</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-slate-50">
-          <tr *ngFor="let emp of employees" class="hover:bg-slate-50 transition">
-            <td class="px-6 py-4">
+        <tbody class="divide-y divide-gray-50">
+          <tr *ngFor="let emp of employees" class="hover:bg-[#F0FDF4] transition-colors">
+
+            <!-- Employee Name -->
+            <td class="px-5 py-4">
               <div class="flex items-center gap-3">
-                <div class="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center text-base">👷</div>
+                <div class="w-9 h-9 bg-[#F0FDF4] rounded-xl flex items-center justify-center flex-shrink-0">
+                  <i class="fa-solid fa-hard-hat text-[#16A34A]"></i>
+                </div>
                 <div>
-                  <p class="font-semibold text-slate-800">{{ emp.name }}</p>
-                  <p class="text-xs text-slate-400">{{ emp.email }}</p>
+                  <p class="font-semibold text-gray-800">{{ emp.name }}</p>
+                  <p class="text-xs text-gray-400">{{ emp.email }}</p>
                 </div>
               </div>
             </td>
-            <td class="px-6 py-4 font-mono text-xs text-slate-600 font-medium">{{ emp.employee_id }}</td>
-            <td class="px-6 py-4 text-slate-600">{{ emp.phone_number }}</td>
-            <td class="px-6 py-4 text-slate-600">{{ emp.state }}, {{ emp.country }}</td>
-            <td class="px-6 py-4">
-              <span class="bg-blue-50 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-full">
-                {{ emp.assigned_count }}
+
+            <!-- ID -->
+            <td class="px-5 py-4">
+              <span class="font-mono text-xs font-bold text-[#16A34A] bg-[#F0FDF4] px-2 py-1 rounded-lg">
+                {{ emp.employee_id }}
               </span>
             </td>
-            <td class="px-6 py-4">
-              <span class="px-2.5 py-1 rounded-full text-xs font-medium"
+
+            <!-- Contact -->
+            <td class="px-5 py-4 text-gray-600 text-xs">
+              <div class="flex items-center gap-1.5">
+                <i class="fa-solid fa-phone text-gray-300"></i>
+                {{ emp.phone_number }}
+              </div>
+            </td>
+
+            <!-- Location -->
+            <td class="px-5 py-4 text-gray-600 text-xs">
+              <div class="flex items-center gap-1.5">
+                <i class="fa-solid fa-location-dot text-gray-300"></i>
+                {{ emp.state }}, {{ emp.country }}
+              </div>
+            </td>
+
+            <!-- Assigned Cities -->
+            <td class="px-5 py-4">
+              <div class="flex flex-wrap gap-1 max-w-[180px]">
+                <span *ngFor="let city of (emp.assignedCities || []).slice(0, 3)"
+                  class="bg-blue-50 text-blue-600 text-xs px-2 py-0.5 rounded-full font-medium">
+                  {{ city }}
+                </span>
+                <span *ngIf="(emp.assignedCities || []).length > 3"
+                  class="bg-gray-100 text-gray-500 text-xs px-2 py-0.5 rounded-full">
+                  +{{ emp.assignedCities.length - 3 }}
+                </span>
+                <span *ngIf="!(emp.assignedCities?.length)" class="text-xs text-gray-400 italic">None</span>
+              </div>
+            </td>
+
+            <!-- Assigned Parcels -->
+            <td class="px-5 py-4">
+              <span class="bg-[#F0FDF4] text-[#16A34A] text-xs font-bold px-2.5 py-1 rounded-full">
+                {{ emp.assigned_count || 0 }}
+              </span>
+            </td>
+
+            <!-- Status -->
+            <td class="px-5 py-4">
+              <span class="px-2.5 py-1 rounded-full text-xs font-semibold"
                 [class.bg-green-100]="emp.is_active"
                 [class.text-green-700]="emp.is_active"
-                [class.bg-slate-100]="!emp.is_active"
-                [class.text-slate-500]="!emp.is_active">
+                [class.bg-gray-100]="!emp.is_active"
+                [class.text-gray-500]="!emp.is_active">
                 {{ emp.is_active ? 'Active' : 'Inactive' }}
               </span>
             </td>
-            <td class="px-6 py-4">
-              <button (click)="openAssignModal(emp._id)"
-                class="text-xs bg-orange-50 text-orange-700 border border-orange-200 px-3 py-1.5 rounded-lg hover:bg-orange-100 transition font-medium">
-                Assign Parcel
-              </button>
+
+            <!-- Actions -->
+            <td class="px-5 py-4">
+              <div class="flex items-center gap-2">
+                <button (click)="openAssignModal(emp._id)"
+                  class="text-xs bg-orange-50 text-orange-700 border border-orange-200 px-3 py-1.5
+                         rounded-lg hover:bg-orange-100 transition font-medium whitespace-nowrap">
+                  <i class="fa-solid fa-box mr-1"></i> Assign
+                </button>
+                <button (click)="openCitiesModal(emp)"
+                  class="text-xs bg-blue-50 text-blue-700 border border-blue-200 px-3 py-1.5
+                         rounded-lg hover:bg-blue-100 transition font-medium whitespace-nowrap">
+                  <i class="fa-solid fa-city mr-1"></i> Cities
+                </button>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -86,93 +143,286 @@
   </div>
 </div>
 
-<!-- ADD EMPLOYEE MODAL -->
+
+<!-- ══════════════════════════════════════════════
+     ADD EMPLOYEE MODAL
+══════════════════════════════════════════════ -->
 <div *ngIf="showAddModal"
-  class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+  class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4"
   (click)="showAddModal = false">
-  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"
+  <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto"
     (click)="$event.stopPropagation()">
 
-    <h3 class="text-lg font-bold text-slate-800 mb-5">Add Delivery Employee</h3>
+    <!-- Modal Header -->
+    <div class="flex items-center justify-between mb-5">
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 bg-[#F0FDF4] rounded-xl flex items-center justify-center">
+          <i class="fa-solid fa-user-plus text-[#16A34A]"></i>
+        </div>
+        <h3 class="text-lg font-bold text-gray-800">Add Delivery Employee</h3>
+      </div>
+      <button (click)="showAddModal = false"
+        class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
 
     <div class="space-y-4">
+
+      <!-- Name + Phone -->
       <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="text-xs font-semibold text-slate-600 block mb-1.5">Full Name *</label>
+          <label class="text-xs font-semibold text-gray-600 block mb-1.5">
+            Full Name <span class="text-red-400">*</span>
+          </label>
           <input [(ngModel)]="addForm.name" type="text" placeholder="John Doe"
-            class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-green-300 bg-[#F0FDF4]"/>
         </div>
         <div>
-          <label class="text-xs font-semibold text-slate-600 block mb-1.5">Phone *</label>
+          <label class="text-xs font-semibold text-gray-600 block mb-1.5">
+            Phone <span class="text-red-400">*</span>
+          </label>
           <input [(ngModel)]="addForm.phone_number" type="tel" placeholder="9876543210"
-            class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-green-300 bg-[#F0FDF4]"/>
         </div>
       </div>
+
+      <!-- Email -->
       <div>
-        <label class="text-xs font-semibold text-slate-600 block mb-1.5">Email *</label>
+        <label class="text-xs font-semibold text-gray-600 block mb-1.5">
+          Email <span class="text-red-400">*</span>
+        </label>
         <input [(ngModel)]="addForm.email" type="email" placeholder="staff@shipease.com"
-          class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm
+                 focus:outline-none focus:ring-2 focus:ring-green-300 bg-[#F0FDF4]"/>
       </div>
+
+      <!-- Password -->
       <div>
-        <label class="text-xs font-semibold text-slate-600 block mb-1.5">Password *</label>
+        <label class="text-xs font-semibold text-gray-600 block mb-1.5">
+          Password <span class="text-red-400">*</span>
+        </label>
         <input [(ngModel)]="addForm.password" type="password" placeholder="Min 6 characters"
-          class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm
+                 focus:outline-none focus:ring-2 focus:ring-green-300 bg-[#F0FDF4]"/>
       </div>
+
+      <!-- State + Country -->
       <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="text-xs font-semibold text-slate-600 block mb-1.5">State *</label>
-          <input [(ngModel)]="addForm.state" type="text" placeholder="Gujarat"
-            class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          <label class="text-xs font-semibold text-gray-600 block mb-1.5">
+            State <span class="text-red-400">*</span>
+          </label>
+          <select [(ngModel)]="addForm.state"
+            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-green-300 bg-[#F0FDF4]">
+            <option value="" disabled>Select state</option>
+            <option *ngFor="let s of stateList" [value]="s">{{ s }}</option>
+          </select>
         </div>
         <div>
-          <label class="text-xs font-semibold text-slate-600 block mb-1.5">Country</label>
+          <label class="text-xs font-semibold text-gray-600 block mb-1.5">Country</label>
           <input [(ngModel)]="addForm.country" type="text" placeholder="India"
-            class="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-green-300 bg-[#F0FDF4]"/>
         </div>
+      </div>
+
+      <!-- Assigned Cities -->
+      <div>
+        <label class="text-xs font-semibold text-gray-600 block mb-1.5">
+          Assigned Cities
+          <span class="text-gray-400 font-normal ml-1">(used for auto-assignment)</span>
+        </label>
+
+        <!-- City tags -->
+        <div *ngIf="addForm.assignedCities.length > 0"
+          class="flex flex-wrap gap-1.5 mb-2">
+          <span *ngFor="let city of addForm.assignedCities; let i = index"
+            class="flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-200
+                   text-xs px-2.5 py-1 rounded-full font-medium">
+            {{ city }}
+            <button (click)="removeAddCity(i)"
+              class="hover:text-red-500 transition ml-0.5">
+              <i class="fa-solid fa-xmark text-xs"></i>
+            </button>
+          </span>
+        </div>
+
+        <!-- City input -->
+        <div class="flex gap-2">
+          <input [(ngModel)]="cityInput"
+            (keydown)="addCityOnEnter($event)"
+            type="text" placeholder="Type city name and press Enter or Add"
+            class="flex-1 border border-gray-200 rounded-xl px-3 py-2.5 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-green-300 bg-[#F0FDF4]"/>
+          <button (click)="addCityTag()"
+            class="px-4 py-2.5 bg-[#16A34A] text-white text-xs font-semibold
+                   rounded-xl hover:bg-green-700 transition whitespace-nowrap">
+            <i class="fa-solid fa-plus mr-1"></i> Add
+          </button>
+        </div>
+        <p class="text-xs text-gray-400 mt-1.5">
+          <i class="fa-solid fa-circle-info mr-1"></i>
+          Cities determine which parcels this employee auto-receives during assignment cycles
+        </p>
       </div>
     </div>
 
-    <p *ngIf="addError" class="mt-3 text-xs text-red-600 font-medium">⚠ {{ addError }}</p>
+    <!-- Error -->
+    <div *ngIf="addError"
+      class="mt-4 flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-red-600 text-sm">
+      <i class="fa-solid fa-circle-exclamation"></i> {{ addError }}
+    </div>
 
+    <!-- Buttons -->
     <div class="flex gap-3 mt-5">
       <button (click)="showAddModal = false"
-        class="flex-1 border border-slate-200 text-slate-600 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-50 transition">
+        class="flex-1 border border-gray-200 text-gray-600 py-2.5 rounded-xl text-sm
+               font-semibold hover:bg-gray-50 transition">
         Cancel
       </button>
       <button (click)="submitAddEmployee()" [disabled]="isAdding"
-        class="flex-1 bg-blue-600 text-white py-2.5 rounded-xl text-sm font-medium hover:bg-blue-700 transition disabled:opacity-50">
+        class="flex-1 bg-[#16A34A] text-white py-2.5 rounded-xl text-sm font-semibold
+               hover:bg-green-700 transition disabled:opacity-60 flex items-center justify-center gap-2">
+        <i class="fa-solid" [class.fa-spinner]="isAdding" [class.fa-spin]="isAdding"
+           [class.fa-user-plus]="!isAdding"></i>
         {{ isAdding ? 'Adding...' : 'Add Employee' }}
       </button>
     </div>
   </div>
 </div>
 
-<!-- ASSIGN PARCEL MODAL -->
+
+<!-- ══════════════════════════════════════════════
+     ASSIGN PARCEL MODAL
+══════════════════════════════════════════════ -->
 <div *ngIf="showAssignModal"
-  class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+  class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4"
   (click)="showAssignModal = false">
-  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6"
+  <div class="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-6"
     (click)="$event.stopPropagation()">
 
-    <h3 class="text-lg font-bold text-slate-800 mb-2">Assign Parcel</h3>
-    <p class="text-sm text-slate-500 mb-5">Enter the tracking ID to assign to this employee</p>
-
-    <div>
-      <label class="text-xs font-semibold text-slate-600 block mb-1.5">Tracking ID *</label>
-      <input [(ngModel)]="assignTrackingId" type="text" placeholder="SE-123456"
-        class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 bg-orange-50 rounded-xl flex items-center justify-center">
+          <i class="fa-solid fa-box text-orange-500"></i>
+        </div>
+        <h3 class="text-lg font-bold text-gray-800">Assign Parcel</h3>
+      </div>
+      <button (click)="showAssignModal = false"
+        class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
     </div>
 
-    <p *ngIf="assignError" class="mt-3 text-xs text-red-600 font-medium">⚠ {{ assignError }}</p>
+    <p class="text-sm text-gray-500 mb-4">Enter the tracking ID to assign to this employee</p>
+
+    <label class="text-xs font-semibold text-gray-600 block mb-1.5">
+      Tracking ID <span class="text-red-400">*</span>
+    </label>
+    <input [(ngModel)]="assignTrackingId" type="text" placeholder="SE-123456"
+      class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-mono
+             focus:outline-none focus:ring-2 focus:ring-green-300 bg-[#F0FDF4]"/>
+
+    <div *ngIf="assignError"
+      class="mt-3 flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-2 text-red-600 text-xs">
+      <i class="fa-solid fa-circle-exclamation"></i> {{ assignError }}
+    </div>
 
     <div class="flex gap-3 mt-5">
       <button (click)="showAssignModal = false"
-        class="flex-1 border border-slate-200 text-slate-600 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-50 transition">
+        class="flex-1 border border-gray-200 text-gray-600 py-2.5 rounded-xl text-sm font-semibold hover:bg-gray-50 transition">
         Cancel
       </button>
       <button (click)="submitAssign()" [disabled]="isAssigning"
-        class="flex-1 bg-orange-600 text-white py-2.5 rounded-xl text-sm font-medium hover:bg-orange-700 transition disabled:opacity-50">
-        {{ isAssigning ? 'Assigning...' : 'Assign' }}
+        class="flex-1 bg-orange-500 text-white py-2.5 rounded-xl text-sm font-semibold
+               hover:bg-orange-600 transition disabled:opacity-60 flex items-center justify-center gap-2">
+        <i class="fa-solid" [class.fa-spinner]="isAssigning" [class.fa-spin]="isAssigning"
+           [class.fa-paper-plane]="!isAssigning"></i>
+        {{ isAssigning ? 'Assigning...' : 'Assign Parcel' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     MANAGE CITIES MODAL
+══════════════════════════════════════════════ -->
+<div *ngIf="showCitiesModal"
+  class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+  (click)="showCitiesModal = false">
+  <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-6"
+    (click)="$event.stopPropagation()">
+
+    <div class="flex items-center justify-between mb-2">
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center">
+          <i class="fa-solid fa-city text-blue-500"></i>
+        </div>
+        <h3 class="text-lg font-bold text-gray-800">Manage Cities</h3>
+      </div>
+      <button (click)="showCitiesModal = false"
+        class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <p class="text-sm text-gray-500 mb-5">
+      Cities assigned to <strong class="text-gray-700">{{ citiesEmployee?.name }}</strong>
+      — parcels in these cities will be auto-assigned to this employee
+    </p>
+
+    <!-- Current city tags -->
+    <div class="min-h-[48px] flex flex-wrap gap-1.5 mb-4 p-3 bg-[#F0FDF4] rounded-xl border border-gray-100">
+      <span *ngFor="let city of citiesList; let i = index"
+        class="flex items-center gap-1 bg-white text-blue-700 border border-blue-200
+               text-xs px-2.5 py-1 rounded-full font-medium shadow-sm">
+        <i class="fa-solid fa-location-dot text-blue-400 text-xs"></i>
+        {{ city }}
+        <button (click)="removeCityTag(i)"
+          class="hover:text-red-500 transition ml-0.5">
+          <i class="fa-solid fa-xmark text-xs"></i>
+        </button>
+      </span>
+      <span *ngIf="citiesList.length === 0" class="text-xs text-gray-400 italic self-center px-1">
+        No cities assigned yet
+      </span>
+    </div>
+
+    <!-- Add city input -->
+    <div class="flex gap-2 mb-2">
+      <input [(ngModel)]="cityCityInput"
+        (keydown)="addCitiesOnEnter($event)"
+        type="text" placeholder="Type city name and press Enter or Add"
+        class="flex-1 border border-gray-200 rounded-xl px-3 py-2.5 text-sm
+               focus:outline-none focus:ring-2 focus:ring-green-300 bg-[#F0FDF4]"/>
+      <button (click)="addCitiesTag()"
+        class="px-4 py-2.5 bg-blue-500 text-white text-xs font-semibold
+               rounded-xl hover:bg-blue-600 transition whitespace-nowrap">
+        <i class="fa-solid fa-plus mr-1"></i> Add
+      </button>
+    </div>
+
+    <div *ngIf="citiesError"
+      class="mb-3 flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-2 text-red-600 text-xs">
+      <i class="fa-solid fa-circle-exclamation"></i> {{ citiesError }}
+    </div>
+
+    <div class="flex gap-3 mt-4">
+      <button (click)="showCitiesModal = false"
+        class="flex-1 border border-gray-200 text-gray-600 py-2.5 rounded-xl text-sm font-semibold hover:bg-gray-50 transition">
+        Cancel
+      </button>
+      <button (click)="saveCities()" [disabled]="isSavingCities"
+        class="flex-1 bg-[#16A34A] text-white py-2.5 rounded-xl text-sm font-semibold
+               hover:bg-green-700 transition disabled:opacity-60 flex items-center justify-center gap-2">
+        <i class="fa-solid" [class.fa-spinner]="isSavingCities" [class.fa-spin]="isSavingCities"
+           [class.fa-floppy-disk]="!isSavingCities"></i>
+        {{ isSavingCities ? 'Saving...' : 'Save Cities' }}
       </button>
     </div>
   </div>

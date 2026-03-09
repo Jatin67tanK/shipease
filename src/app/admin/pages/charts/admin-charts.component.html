@@ -1,0 +1,161 @@
+<div class="min-h-screen bg-[#F0FDF4] p-4 md:p-6">
+
+  <!-- Header -->
+  <div class="mb-6">
+   <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2"><i class="fa-solid fa-chart-bar text-[#16A34A]"></i> Analytics & Charts</h1>
+    <p class="text-sm text-gray-500 mt-1">Real-time insights across all operations</p>
+  </div>
+
+  <!-- Tab Switcher -->
+  <div class="flex flex-wrap gap-2 mb-6 bg-white p-2 rounded-2xl border border-gray-100 shadow-sm w-fit">
+    <button *ngFor="let tab of [
+       {key:'bookings',  icon:'fa-calendar-days', label:'Monthly Bookings'},
+        {key:'cities',    icon:'fa-city',          label:'City Volume'},
+        {key:'status',    icon:'fa-chart-pie',     label:'Status Breakdown'},
+        {key:'employees', icon:'fa-hard-hat',      label:'Employee Stats'},
+        {key:'trend',     icon:'fa-chart-line',    label:'Success Trend'}
+      ]"
+      (click)="setTab(tab.key)"
+      [class.bg-[#16A34A]]="activeTab === tab.key"
+      [class.text-white]="activeTab === tab.key"
+      [class.shadow-md]="activeTab === tab.key"
+      [class.text-gray-600]="activeTab !== tab.key"
+      class="px-4 py-2 rounded-xl text-sm font-semibold transition-all whitespace-nowrap">
+      <i class="fa-solid {{ tab.icon }}"></i> {{ tab.label }}
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       CHART 1 — Monthly Bookings
+  ══════════════════════════════════════════════ -->
+  <div *ngIf="activeTab === 'bookings'" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+    <!-- Controls -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+      <div>
+        <h2 class="text-lg font-bold text-gray-800">Parcels Booked</h2>
+        <p class="text-sm text-gray-400 mt-0.5">Total this month: <strong class="text-green-600">{{ barTotal }}</strong></p>
+      </div>
+      <div class="flex gap-2">
+        <select [(ngModel)]="barMonth" (change)="reloadBar()"
+                class="px-3 py-2 border border-gray-200 rounded-xl text-sm bg-[#F0FDF4]
+                       focus:outline-none focus:ring-2 focus:ring-green-300">
+          <option *ngFor="let m of months" [value]="m.v">{{ m.l }}</option>
+        </select>
+        <select [(ngModel)]="barYear" (change)="reloadBar()"
+                class="px-3 py-2 border border-gray-200 rounded-xl text-sm bg-[#F0FDF4]
+                       focus:outline-none focus:ring-2 focus:ring-green-300">
+          <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+        </select>
+      </div>
+    </div>
+    <div *ngIf="isLoading['bookings']" class="flex justify-center py-20">
+      <div class="w-8 h-8 border-4 border-[#16A34A] border-t-transparent rounded-full animate-spin"></div>
+    </div>
+    <div class="relative h-80">
+      <canvas #barChart></canvas>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       CHART 2 — City Distribution
+  ══════════════════════════════════════════════ -->
+  <div *ngIf="activeTab === 'cities'" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+      <div>
+        <h2 class="text-lg font-bold text-gray-800">City-wise Parcel Volume</h2>
+        <p class="text-sm text-gray-400 mt-0.5">Top 10 cities by number of parcels</p>
+      </div>
+      <div class="flex gap-2 items-center">
+        <input type="date" [(ngModel)]="hbarFrom" (change)="reloadHBar()"
+               class="px-3 py-2 border border-gray-200 rounded-xl text-sm bg-[#F0FDF4]
+                      focus:outline-none focus:ring-2 focus:ring-green-300">
+        <span class="text-gray-400 text-sm">to</span>
+        <input type="date" [(ngModel)]="hbarTo" (change)="reloadHBar()"
+               class="px-3 py-2 border border-gray-200 rounded-xl text-sm bg-[#F0FDF4]
+                      focus:outline-none focus:ring-2 focus:ring-green-300">
+      </div>
+    </div>
+    <div *ngIf="isLoading['cities']" class="flex justify-center py-20">
+      <div class="w-8 h-8 border-4 border-[#16A34A] border-t-transparent rounded-full animate-spin"></div>
+    </div>
+    <div class="relative h-80">
+      <canvas #hbarChart></canvas>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       CHART 3 — Status Doughnut
+  ══════════════════════════════════════════════ -->
+  <div *ngIf="activeTab === 'status'" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+      <div>
+        <h2 class="text-lg font-bold text-gray-800">Parcel Status Breakdown</h2>
+        <p class="text-sm text-gray-400 mt-0.5">Operational health overview</p>
+      </div>
+      <div class="flex gap-2 items-center">
+        <input type="date" [(ngModel)]="doughFrom" (change)="reloadDough()"
+               class="px-3 py-2 border border-gray-200 rounded-xl text-sm bg-[#F0FDF4]
+                      focus:outline-none focus:ring-2 focus:ring-green-300">
+        <span class="text-gray-400 text-sm">to</span>
+        <input type="date" [(ngModel)]="doughTo" (change)="reloadDough()"
+               class="px-3 py-2 border border-gray-200 rounded-xl text-sm bg-[#F0FDF4]
+                      focus:outline-none focus:ring-2 focus:ring-green-300">
+      </div>
+    </div>
+    <div *ngIf="isLoading['status']" class="flex justify-center py-20">
+      <div class="w-8 h-8 border-4 border-[#16A34A] border-t-transparent rounded-full animate-spin"></div>
+    </div>
+    <div class="relative h-80 max-w-sm mx-auto">
+      <canvas #doughChart></canvas>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       CHART 4 — Employee Performance
+  ══════════════════════════════════════════════ -->
+  <div *ngIf="activeTab === 'employees'" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+      <div>
+        <h2 class="text-lg font-bold text-gray-800">Employee Performance</h2>
+        <p class="text-sm text-gray-400 mt-0.5">Sorted by deliveries (highest first)</p>
+      </div>
+      <div class="flex gap-2">
+        <select [(ngModel)]="grpMonth" (change)="reloadGrp()"
+                class="px-3 py-2 border border-gray-200 rounded-xl text-sm bg-[#F0FDF4]
+                       focus:outline-none focus:ring-2 focus:ring-green-300">
+          <option *ngFor="let m of months" [value]="m.v">{{ m.l }}</option>
+        </select>
+        <select [(ngModel)]="grpYear" (change)="reloadGrp()"
+                class="px-3 py-2 border border-gray-200 rounded-xl text-sm bg-[#F0FDF4]
+                       focus:outline-none focus:ring-2 focus:ring-green-300">
+          <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+        </select>
+      </div>
+    </div>
+    <div *ngIf="isLoading['employees']" class="flex justify-center py-20">
+      <div class="w-8 h-8 border-4 border-[#16A34A] border-t-transparent rounded-full animate-spin"></div>
+    </div>
+    <div class="relative h-80">
+      <canvas #grpChart></canvas>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       CHART 5 — Success Rate Trend
+  ══════════════════════════════════════════════ -->
+  <div *ngIf="activeTab === 'trend'" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+    <div class="flex items-center justify-between mb-5">
+      <div>
+        <h2 class="text-lg font-bold text-gray-800">Daily Success Rate Trend</h2>
+        <p class="text-sm text-gray-400 mt-0.5">Last 30 days · Dashed red = 80% target</p>
+      </div>
+    </div>
+    <div *ngIf="isLoading['trend']" class="flex justify-center py-20">
+      <div class="w-8 h-8 border-4 border-[#16A34A] border-t-transparent rounded-full animate-spin"></div>
+    </div>
+    <div class="relative h-80">
+      <canvas #lineChart></canvas>
+    </div>
+  </div>
+
+</div>

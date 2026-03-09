@@ -8,18 +8,22 @@ import { HeaderComponent } from './layout/header/header.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { PublicLayoutComponent } from './layout/public-layout/public-layout.component';
 import { PublicShellComponent } from './layout/public-shell/public-shell.component';
+import { FormsModule } from '@angular/forms';
+import { TrackParcelComponent } from './pages/track-parcel/track-parcel.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
     PublicLayoutComponent,
-    PublicShellComponent
+    PublicShellComponent,
+    TrackParcelComponent
   ],
   imports: [
     CommonModule,
     PublicRoutingModule,
-    RouterModule
+    RouterModule,
+    FormsModule
   ]
 })
 export class PublicModule {}

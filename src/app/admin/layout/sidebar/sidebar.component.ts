@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Router }    from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
@@ -6,23 +7,31 @@ import { AuthService } from 'src/app/core/services/auth.service';
   templateUrl: './sidebar.component.html'
 })
 export class SidebarComponent {
-  @Input() collapsed = false;
+
+  @Input() collapsed = false;            // ← correct
   @Output() toggle = new EventEmitter<void>();
 
-  mobileOpen = false;
-
   menuItems = [
-    { label: 'Dashboard',    link: '/admin/dashboard',   icon: '📊' },
-    { label: 'Active Parcels', link: '/admin/parcels/active', icon: '📦' },
-    { label: 'Non-Active',   link: '/admin/parcels/non-active', icon: '🗃️' },
-    { label: 'Pricing',      link: '/admin/pricing',     icon: '💰' },
-    { label: 'Employees',    link: '/admin/employees',   icon: '👷' }, // ✅ NEW
-    { label: 'Profile',      link: '/admin/profile',     icon: '👤' },
+   { label: 'Dashboard',          link: '/admin/dashboard',          icon: 'fa-house'                },
+{ label: 'Active Parcels',     link: '/admin/active-parcels',     icon: 'fa-box'                  },
+{ label: 'Non-Active Parcels', link: '/admin/non-active-parcels', icon: 'fa-boxes-stacked'        },
+{ label: 'Pricing',            link: '/admin/pricing',            icon: 'fa-tag'                  },
+{ label: 'Employees',          link: '/admin/employees',          icon: 'fa-hard-hat'             },
+{ label: 'Employee Progress',  link: '/admin/employee-progress',  icon: 'fa-chart-line'           },
+{ label: 'Unassigned Parcels', link: '/admin/unassigned-parcels', icon: 'fa-triangle-exclamation' },
+{ label: 'Cycle History',      link: '/admin/cycle-history',      icon: 'fa-rotate'               },
+{ label: 'Analytics',          link: '/admin/charts',             icon: 'fa-chart-bar'            },
+{ label: 'Profile',            link: '/admin/profile',            icon: 'fa-user'                 },
   ];
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
-  onToggle() { this.toggle.emit(); }
+  logout(): void {
+    this.authService.logout();
+  }
 
-  logout() { this.authService.logout(); }
+  toggleSidebar(): void {
+    this.collapsed = !this.collapsed;
+    this.toggle.emit();  // emit to parent
+  }
 }

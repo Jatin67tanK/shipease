@@ -1,106 +1,132 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
-import { BehaviorSubject, tap } from 'rxjs';
+import { Injectable }            from '@angular/core';
+import { HttpClient }           from '@angular/common/http';
+import { Router }               from '@angular/router';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { tap }                  from 'rxjs/operators';
+import { environment }          from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
   private API = environment.apiUrl;
-  private AUTH = `${this.API}/api/auth`;
 
-  private profileSubject = new BehaviorSubject<any>(null);
-  profile$ = this.profileSubject.asObservable();
+  // ✅ KEPT — customer/profile.component.ts subscribes to this
+  private _profile = new BehaviorSubject<any>(null);
+  profile$ = this._profile.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  private getAuthHeaders() {
-    const token = localStorage.getItem('token');
-    return { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
+  // ── Auth ──────────────────────────────────────────────────
+
+  login(email: string, password: string): Observable<any> {
+    return this.http.post(`${this.API}/api/auth/login`, { email, password });
   }
 
-  login(payload: any) {
-    return this.http.post<any>(`${this.AUTH}/login`, payload);
+  register(data: any): Observable<any> {
+    return this.http.post(`${this.API}/api/auth/register`, data);
   }
 
-  register(payload: any) {
-    return this.http.post<any>(`${this.AUTH}/register`, payload);
+
+  // ── Token helpers ─────────────────────────────────────────
+
+  setToken(token: string): void { localStorage.setItem('token', token); }
+  getToken(): string | null      { return localStorage.getItem('token'); }
+  clearToken(): void             { localStorage.removeItem('token'); }
+saveToken(token: string): void {
+    localStorage.setItem('token', token);
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      this._profile.next({ role: payload.role, id: payload.id, email: payload.email });
+    } catch { this._profile.next(null); }
   }
 
-  // ── Role-based redirect after login ──────────────────
-  redirectByRole(role: string): void {
-    if (role === 'Admin') this.router.navigate(['/admin/dashboard']);
-    else if (role === 'Employee') this.router.navigate(['/delivery/dashboard']);
-    else this.router.navigate(['/customer/shipments']);
+  isLoggedIn(): boolean {
+    const token = this.getToken();
+    if (!token) return false;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.exp * 1000 > Date.now();
+    } catch { return false; }
   }
-
-  // ── Profiles ─────────────────────────────────────────
-  getProfile() {
-    return this.http.get<any>(`${this.AUTH}/me`, this.getAuthHeaders()).pipe(
-      tap((res: any) => { if (res?.data) this.profileSubject.next(res.data); })
-    );
-  }
-
-  getAdminProfile() {
-    return this.http.get<any>(`${this.AUTH}/admin/me`, this.getAuthHeaders()).pipe(
-      tap((res: any) => { if (res?.data) this.profileSubject.next(res.data); })
-    );
-  }
-
-  getEmployeeProfile() {
-    return this.http.get<any>(`${this.API}/api/employee/me`, this.getAuthHeaders()).pipe(
-      tap((res: any) => { if (res?.data) this.profileSubject.next(res.data); })
-    );
-  }
-
-  updateProfile(payload: any) {
-    return this.http.put<any>(`${this.AUTH}/updateprofile`, payload, this.getAuthHeaders()).pipe(
-      tap((res: any) => { if (res?.data) this.profileSubject.next(res.data); })
-    );
-  }
-
-  updateEmployeeProfile(payload: any) {
-    return this.http.put<any>(`${this.API}/api/employee/me`, payload, this.getAuthHeaders());
-  }
-
-  sendOTP() {
-    return this.http.post<any>(`${this.AUTH}/send-otp`, {}, this.getAuthHeaders());
-  }
-
-  verifyOTP(otp: string) {
-    return this.http.post<any>(`${this.AUTH}/verify-otp`, { otp }, this.getAuthHeaders());
-  }
-
-  saveToken(token: string) { localStorage.setItem('token', token); }
-  getToken() { return localStorage.getItem('token'); }
 
   getRole(): string {
     const token = this.getToken();
     if (!token) return '';
-    try {
-      return JSON.parse(atob(token.split('.')[1]))?.role || '';
-    } catch { return ''; }
+    try { return JSON.parse(atob(token.split('.')[1])).role; }
+    catch { return ''; }
   }
 
-  clearToken() {
-    localStorage.removeItem('token');
-    this.profileSubject.next(null);
+  getUserId(): string {
+    const token = this.getToken();
+    if (!token) return '';
+    try { return JSON.parse(atob(token.split('.')[1])).id; }
+    catch { return ''; }
   }
 
-  logout() {
+  // ── Role-based redirect ───────────────────────────────────
+
+  redirectByRole(role: string): void {
+    const routes: Record<string, string> = {
+      Admin:    '/admin/dashboard',
+      Employee: '/delivery/dashboard',
+      Customer: '/customer/shipments',
+    };
+    this.router.navigate([routes[role] || '/login']);
+  }
+
+  logout(): void {
     this.clearToken();
+    this._profile.next(null);
     this.router.navigate(['/login']);
   }
 
-  isLoggedIn(): boolean { return !!this.getToken(); }
-  // ADD THIS METHOD to auth.service.ts
+  // ── Profile APIs ──────────────────────────────────────────
 
-changePassword(payload: { current_password: string; new_password: string }) {
-  return this.http.put<any>(
-    `${this.AUTH}/change-password`,
-    payload,
-    this.getAuthHeaders()
-  );
-}
+  /** Customer profile — also pushes to profile$ stream */
+  getProfile(): Observable<any> {
+    return this.http.get(`${this.API}/api/auth/me`).pipe(
+      tap((res: any) => { if (res?.data) this._profile.next(res.data); })
+    );
+  }
+
+  /** Admin profile */
+  getAdminProfile(): Observable<any> {
+    return this.http.get(`${this.API}/api/auth/admin/me`);
+  }
+
+  /** Employee profile */
+  getEmployeeProfile(): Observable<any> {
+    return this.http.get(`${this.API}/api/employee/me`);
+  }
+
+  /** Update Customer profile */
+  updateProfile(data: any): Observable<any> {
+    return this.http.put(`${this.API}/api/auth/update-profile`, data).pipe(
+      tap((res: any) => { if (res?.data) this._profile.next(res.data); })
+    );
+  }
+
+  /** Update Employee profile */
+  updateEmployeeProfile(data: any): Observable<any> {
+    return this.http.put(`${this.API}/api/employee/me`, data);
+  }
+
+  /** Update Admin profile */
+  updateAdminProfile(data: any): Observable<any> {
+    return this.http.put(`${this.API}/api/admin/update-profile`, data);
+  }
+
+  /** Change password — all roles */
+  changePassword(data: { current_password: string; new_password: string }): Observable<any> {
+    return this.http.put(`${this.API}/api/auth/change-password`, data);
+  }
+
+  // ✅ KEPT — verify-otp.component.ts calls these
+  sendOTP(): Observable<any> {
+    return this.http.post(`${this.API}/api/otp/send`, {});
+  }
+
+  verifyOTP(otp: string): Observable<any> {
+    return this.http.post(`${this.API}/api/otp/verify`, { otp });
+  }
 }

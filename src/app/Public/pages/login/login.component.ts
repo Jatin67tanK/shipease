@@ -25,7 +25,7 @@ export class LoginComponent {
 
     this.isLoading = true;
 
-    this.authService.login(this.form).subscribe({
+    this.authService.login(this.form.email, this.form.password).subscribe({
       next: (res: any) => {
         this.authService.saveToken(res.token);
         this.authService.redirectByRole(res.role);
