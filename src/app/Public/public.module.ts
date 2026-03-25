@@ -15,7 +15,7 @@ import { RegisterComponent }     from './pages/register/register.component';
 import { TrackParcelComponent }  from './pages/track-parcel/track-parcel.component';
 import { VerifyOtpComponent }    from './pages/verify-otp/verify-otp.component';
 import { ContactComponent }      from './pages/contact/contact.component';
-
+  
 @NgModule({
   declarations: [
     // Layout
