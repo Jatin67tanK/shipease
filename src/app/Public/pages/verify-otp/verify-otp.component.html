@@ -1,0 +1,140 @@
+<div class="min-h-screen bg-[#F0FDF4] flex items-center justify-center p-4">
+
+  <!-- Background decoration -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute -top-32 -right-32 w-96 h-96 bg-green-200 rounded-full opacity-20 blur-3xl"></div>
+    <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-green-300 rounded-full opacity-20 blur-3xl"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-green-100 rounded-full opacity-30 blur-3xl"></div>
+  </div>
+
+  <!-- Card -->
+  <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
+
+    <!-- Top accent bar -->
+    <div class="h-1.5 bg-gradient-to-r from-green-400 via-[#16A34A] to-green-600"></div>
+
+    <div class="p-8">
+
+      <!-- ── SUCCESS STATE ── -->
+      <div *ngIf="isVerified" class="flex flex-col items-center text-center py-6">
+        <div class="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mb-4 animate-bounce">
+          <i class="fa-solid fa-circle-check text-[#16A34A] text-4xl"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Verified!</h2>
+        <p class="text-gray-500 text-sm">Your phone number has been verified.</p>
+        <p class="text-gray-400 text-xs mt-1">Redirecting to dashboard...</p>
+        <div class="mt-4 w-8 h-8 border-3 border-[#16A34A] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+
+      <!-- ── MAIN CONTENT ── -->
+      <div *ngIf="!isVerified">
+
+        <!-- Back button -->
+        <button (click)="goBack()"
+          class="flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 transition mb-6">
+          <i class="fa-solid fa-arrow-left"></i> Back to Login
+        </button>
+
+        <!-- Icon + Title -->
+        <div class="flex flex-col items-center text-center mb-8">
+          <div class="relative mb-4">
+            <div class="w-16 h-16 bg-[#F0FDF4] rounded-2xl flex items-center justify-center shadow-sm">
+              <i class="fa-solid fa-mobile-screen-button text-[#16A34A] text-2xl"></i>
+            </div>
+            <!-- Ping animation -->
+            <span class="absolute -top-1 -right-1 w-4 h-4 bg-[#16A34A] rounded-full flex items-center justify-center">
+              <span class="absolute inline-flex w-full h-full bg-green-400 rounded-full animate-ping opacity-75"></span>
+              <span class="relative w-2 h-2 bg-[#16A34A] rounded-full"></span>
+            </span>
+          </div>
+
+          <h1 class="text-2xl font-bold text-gray-800 mb-1">Verify Your Number</h1>
+          <p class="text-gray-500 text-sm leading-relaxed">
+            We sent a 6-digit OTP to<br/>
+            <span class="font-semibold text-gray-700 font-mono">{{ maskedPhone }}</span>
+          </p>
+        </div>
+
+        <!-- ── OTP BOXES ── -->
+        <div class="flex justify-center gap-3 mb-6" (paste)="onPaste($event)">
+          <input
+            *ngFor="let d of digits; let i = index"
+            #otpBox
+            type="tel"
+            inputmode="numeric"
+            maxlength="1"
+            [value]="d"
+            (input)="onInput(i, $event)"
+            (keydown)="onKeydown(i, $event)"
+            class="w-11 h-14 text-center text-xl font-bold border-2 rounded-xl outline-none transition-all duration-200
+                   text-gray-800 bg-[#F0FDF4] caret-[#16A34A]"
+            [class.border-[#16A34A]]="d !== ''"
+            [class.bg-green-50]="d !== ''"
+            [class.border-gray-200]="d === ''"
+            [class.focus:border-[#16A34A]]="true"
+            [class.focus:ring-2]="true"
+            [class.focus:ring-green-200]="true"
+            [class.border-red-400]="errorMessage && d === ''"
+            autocomplete="one-time-code" />
+        </div>
+
+        <!-- Error -->
+        <div *ngIf="errorMessage"
+          class="flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-red-600 text-sm mb-4">
+          <i class="fa-solid fa-circle-exclamation flex-shrink-0"></i>
+          {{ errorMessage }}
+        </div>
+
+        <!-- Success message (OTP sent) -->
+        <div *ngIf="successMessage && !errorMessage"
+          class="flex items-center gap-2 bg-green-50 border border-green-200 rounded-xl px-4 py-3 text-green-700 text-sm mb-4">
+          <i class="fa-solid fa-circle-check flex-shrink-0"></i>
+          {{ successMessage }}
+        </div>
+
+        <!-- ── VERIFY BUTTON ── -->
+        <button (click)="verifyOTP()" [disabled]="isLoading || otpValue.length !== 6"
+          class="w-full flex items-center justify-center gap-2 bg-[#16A34A] text-white py-3.5 rounded-xl
+                 text-sm font-semibold hover:bg-green-700 active:scale-95 transition-all
+                 disabled:opacity-50 disabled:cursor-not-allowed shadow-md mb-4">
+          <i class="fa-solid" [class.fa-spinner]="isLoading" [class.fa-spin]="isLoading"
+             [class.fa-shield-check]="!isLoading"></i>
+          {{ isLoading ? 'Verifying...' : 'Verify OTP' }}
+        </button>
+
+        <!-- ── RESEND ── -->
+        <div class="text-center">
+          <p class="text-xs text-gray-400 mb-2">Didn't receive the code?</p>
+
+          <!-- Cooldown timer -->
+          <div *ngIf="resendCooldown > 0"
+            class="inline-flex items-center gap-2 text-xs text-gray-500">
+            <i class="fa-regular fa-clock text-gray-400"></i>
+            Resend in
+            <span class="font-mono font-bold text-[#16A34A]">
+              00:{{ resendCooldown < 10 ? '0' + resendCooldown : resendCooldown }}
+            </span>
+          </div>
+
+          <!-- Resend button -->
+          <button *ngIf="resendCooldown === 0" (click)="sendOTP()" [disabled]="isSending"
+            class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#16A34A]
+                   hover:text-green-700 transition disabled:opacity-50">
+            <i class="fa-solid fa-rotate-right text-xs" [class.fa-spin]="isSending"></i>
+            {{ isSending ? 'Sending...' : 'Resend OTP' }}
+          </button>
+        </div>
+
+        <!-- Info note -->
+        <div class="mt-6 flex items-start gap-2 bg-blue-50 border border-blue-100 rounded-xl px-4 py-3">
+          <i class="fa-solid fa-circle-info text-blue-400 text-sm flex-shrink-0 mt-0.5"></i>
+          <p class="text-xs text-blue-600 leading-relaxed">
+            OTP is valid for <strong>5 minutes</strong>. Check your phone's SMS inbox.
+            If you don't receive it, tap Resend after the timer expires.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

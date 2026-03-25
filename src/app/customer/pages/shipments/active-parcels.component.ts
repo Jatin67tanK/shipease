@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ParcelService } from 'src/app/core/services/parcel.service';
 import { environment } from 'src/environments/environment';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-active-parcels',
   templateUrl: './active-parcels.component.html'
@@ -18,7 +18,9 @@ export class ActiveParcelsComponent implements OnInit {
   selectedYear: string  = '';   // '2024', '2025' etc or ''
 // ✅ STATUS FILTER
 selectedStatus: string = '';
-
+ invoiceModal          = false;
+    invoiceParcel: any    = null;
+    isDownloadingInvoice  = false;
 statusList: string[] = [
   'Booked',
   'Picked Up',
@@ -50,8 +52,10 @@ statusList: string[] = [
   imageModalParcel: any = null;
   fullImageUrl: string | null = null;
 
-  constructor(private parcelService: ParcelService) {}
-
+constructor(
+  private parcelService: ParcelService,
+  private router: Router          // ← ADD THIS
+) {}
   ngOnInit() {
     this.buildYearList();
     this.loadParcels();
@@ -99,7 +103,57 @@ statusList: string[] = [
         this.isLoading = false;
       }
     });
+  }  
+
+   /* ═══════════════════════════════════════════
+      INVOICE MODAL
+    ═══════════════════════════════════════════ */
+    // Add a console.log to see what data is actually arriving
+openInvoiceModal(parcel: any): void {
+  console.log("Data received in modal:", parcel); 
+  this.invoiceParcel = parcel; 
+  this.invoiceModal = true;
+}
+
+    closeInvoiceModal(): void {
+      this.invoiceModal         = false;
+      this.invoiceParcel        = null;
+      this.isDownloadingInvoice = false;
+    }
+
+
+
+ downloadInvoicePDF(parcel: any): void {
+  if (!parcel) return;
+
+  // Attempt to find the ID even if the casing is different
+  const tId = parcel.tracking_id || parcel.trackingId || parcel.id;
+
+  if (!tId) {
+    alert('Critical Error: Tracking ID could not be identified in the data.');
+    return;
   }
+
+  this.isDownloadingInvoice = true;
+
+  this.parcelService.downloadInvoice(tId).subscribe({
+    next: (blob: Blob) => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Invoice_${tId}.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      this.isDownloadingInvoice = false;
+    },
+    error: (err) => {
+      console.error("PDF Download Failed:", err);
+      alert('Failed to generate invoice. Please try again.');
+      this.isDownloadingInvoice = false;
+    }
+  });
+}
+
 
   // ✅ MASTER FILTER — applies search + month + year together
  applyFilters(): void {
@@ -220,4 +274,35 @@ get hasActiveFilters(): boolean {
   onImageError(event: Event): void {
     (event.target as HTMLImageElement).src = 'assets/images/no-image.png';
   }
+
+  // ADD Router to constructor
+
+
+// ADD this method
+goToCheckout(parcel: any): void {
+  // Store the parcel as 'booking' in localStorage
+  // CheckoutComponent reads from localStorage.getItem('booking')
+  const bookingData = {
+    _id:               parcel.id,          // parcel._id used by proceedToPay()
+    sender_name:       parcel.sender_name,
+    sender_phone:      parcel.sender_phone,
+    sender_city:       parcel.sender_city,
+    sender_state:      parcel.sender_state,
+    pickup_address:    parcel.pickup_address,
+    receiver_name:     parcel.receiver_name,
+    receiver_phone:    parcel.receiver_phone,
+    receiver_city:     parcel.receiver_city,
+    receiver_state:    parcel.receiver_state,
+    drop_address:      parcel.drop_address,
+    parcel_type:       parcel.type,
+    parcel_weight:     parcel.weight,
+    distance_category: parcel.distance,
+    delivery_type:     parcel.delivery_type,
+    total_cost:        parcel.total_cost,
+    tracking_id:       parcel.id
+  };
+
+  localStorage.setItem('booking', JSON.stringify(bookingData));
+  this.router.navigate(['/customer/book/checkout']);
+}
 }

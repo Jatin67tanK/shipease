@@ -11,7 +11,15 @@ export class ParcelService {
   constructor(private http: HttpClient) {}
 
   // ── Customer ──────────────────────────────────────────────
+// GET /api/auth/admin/customers
+getAllCustomers(): Observable<any> {
+  return this.http.get(`${this.API}/api/auth/admin/customers`);
+}
 
+// PATCH /api/auth/admin/customers/:id/toggle
+toggleCustomerStatus(id: string): Observable<any> {
+  return this.http.patch(`${this.API}/api/auth/admin/customers/${id}/toggle`, {});
+}
 // parcel.service.ts
 bookParcel(data: any): Observable<any> {
   return this.http.post(`${this.API}/api/parcels/book`, data);
@@ -22,10 +30,9 @@ bookParcel(data: any): Observable<any> {
   }
 
   // ✅ KEPT — existing components call getParcels('active') / getParcels('non-active')
-getParcels(type: string): Observable<any> {
-  return this.http.get(`${this.API}/api/parcels/list?type=${type}`);
+getParcels(type: string, page: number = 1, limit: number = 10): Observable<any> {
+  return this.http.get(`${this.API}/api/parcels/list?type=${type}&page=${page}&limit=${limit}`);
 }
-
   // ✅ KEPT — checkout.component.ts calls this
   getPricing(): Observable<any> {
     return this.http.get(`${this.API}/api/pricing`);
@@ -123,7 +130,7 @@ downloadExcel(filters?: any): Observable<Blob> {
 
 // Download PDF for filtered parcels
 downloadPDF(filters?: any): Observable<Blob> {
-  return this.http.post(`${this.API}/api/admin/parcels/download-pdf`, filters || {}, { responseType: 'blob' });
+  return this.http.post(`${this.API}/api/parcels/download-pdf`, filters || {}, { responseType: 'blob' });
 }
 
   // ── Admin Cycle ───────────────────────────────────────────
@@ -185,4 +192,23 @@ downloadPDF(filters?: any): Observable<Blob> {
   statsSuccessRate(): Observable<any> {
     return this.http.get(`${this.API}/api/admin/stats/success-rate-trend`);
   }
+
+  // ── Payment ─────────────────────────────────────────────────────────
+
+createPaymentOrder(bookingId: string, amount: number): Observable<any> {
+  return this.http.post(`${this.API}/api/payment/create-order`, { bookingId, amount });
+}
+
+verifyPayment(payload: {
+  razorpay_order_id:   string;
+  razorpay_payment_id: string;
+  razorpay_signature:  string;
+  bookingId:           string;
+}): Observable<any> {
+  return this.http.post(`${this.API}/api/payment/verify`, payload);
+}
+
+getPaymentStatus(bookingId: string): Observable<any> {
+  return this.http.get(`${this.API}/api/payment/status/${bookingId}`);
+}
 }

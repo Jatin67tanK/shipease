@@ -1,123 +1,153 @@
-<header class="bg-white border-b sticky top-0 z-30">
+<header class="bg-white border-b border-gray-100 sticky top-0 z-30 shadow-sm">
+  <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
 
-    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <!-- LOGO -->
+    <div (click)="goToHome()"
+         class="flex items-center gap-2 cursor-pointer"
+         style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:#0a0a0a">
+      <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm"
+           style="background:#22c55e">📦</div>
+      ShipEase
+    </div>
 
-        <!-- LOGO -->
-        <div class="text-xl font-semibold text-green-600">
-            ShipEase
-        </div>
+    <!-- DESKTOP NAV -->
+    <nav class="hidden md:flex items-center gap-8 text-sm text-gray-600">
 
-        <!-- DESKTOP NAV -->
-        <nav class="hidden md:flex items-center space-x-10 text-sm text-gray-700">
+      <span (click)="goToHome()"
+            class="cursor-pointer hover:text-green-600 transition-colors font-medium"
+            [class.text-green-600]="isActive('/')">
+        Home
+      </span>
 
-            <!-- NORMAL LINKS -->
-            <a
-                *ngFor="let link of navLinks"
-                [routerLink]="link.path"
-                routerLinkActive="text-green-600 font-medium"
-                [routerLinkActiveOptions]="{ exact: true }"
-                class="cursor-pointer hover:text-green-600 transition"
-            >
-                {{ link.label }}
-            </a>
+      <span (click)="goToTrack()"
+            class="cursor-pointer hover:text-green-600 transition-colors font-medium"
+            [class.text-green-600]="isActive('/track')">
+        Track Parcel
+      </span>
 
-            <!-- LOGIN / REGISTER -->
-            <div class="flex items-center gap-2">
+      <span (click)="goToContact()"
+            class="cursor-pointer hover:text-green-600 transition-colors font-medium"
+            [class.text-green-600]="isActive('/contact')">
+        Contact Us
+      </span>
 
-                <a
-                    routerLink="/login"
-                    routerLinkActive="text-green-600 font-medium"
-                    [routerLinkActiveOptions]="{ exact: true }"
-                    class="cursor-pointer hover:text-green-600 transition"
-                >
-                    Login
-                </a>
+    </nav>
 
-                <!-- <span class="text-gray-400">/</span> -->
+    <!-- DESKTOP CTA -->
+    <div class="hidden md:flex items-center gap-3">
 
-                <!-- <a
-                    routerLink="/register"
-                    routerLinkActive="text-green-600 font-medium"
-                    [routerLinkActiveOptions]="{ exact: true }"
-                    class="cursor-pointer hover:text-green-600 transition"
-                >
-                    Register
-                </a> -->
-
-            </div>
-
-        </nav>
-
-        <!-- MOBILE HAMBURGER -->
-        <button
-            class="md:hidden text-2xl text-gray-700"
-            (click)="toggleSidebar()"
-        >
-            ☰
+      <!-- Not logged in -->
+      <ng-container *ngIf="!isLoggedIn">
+        <span (click)="goToLogin()"
+              class="text-sm font-medium text-gray-600 hover:text-green-600 transition-colors cursor-pointer">
+          Login
+        </span>
+        <!-- <span (click)="goToRegister()"
+              class="text-sm font-medium text-gray-600 hover:text-green-600 transition-colors cursor-pointer">
+          Register
+        </span> -->
+        <button (click)="bookParcel()"
+                class="text-white text-sm font-semibold px-5 py-2 rounded-lg transition-all hover:-translate-y-0.5"
+                style="background:#22c55e;box-shadow:0 4px 14px rgba(34,197,94,.35)">
+          Book Parcel
         </button>
+      </ng-container>
+
+      <!-- Logged in -->
+      <ng-container *ngIf="isLoggedIn">
+        <button (click)="goToDashboard()"
+                class="text-sm font-medium text-gray-600 hover:text-green-600 transition-colors border border-gray-200 px-4 py-2 rounded-lg">
+          Dashboard
+        </button>
+        <button (click)="logout()"
+                class="text-white text-sm font-semibold px-5 py-2 rounded-lg transition-all hover:-translate-y-0.5"
+                style="background:#22c55e;box-shadow:0 4px 14px rgba(34,197,94,.35)">
+          Logout
+        </button>
+      </ng-container>
 
     </div>
 
-    <!-- BACKDROP -->
-    <div
-        class="fixed inset-0 bg-black/40 z-40 md:hidden"
-        *ngIf="sidebarOpen"
-        (click)="toggleSidebar()"
-    ></div>
+    <!-- MOBILE HAMBURGER -->
+    <button class="md:hidden text-2xl text-gray-700 p-1" (click)="toggleSidebar()">☰</button>
 
-    <!-- SIDEBAR -->
-    <div
-        class="fixed top-0 right-0 h-full w-64 bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out md:hidden"
-        [class.translate-x-full]="!sidebarOpen"
-    >
+  </div>
 
-        <!-- SIDEBAR HEADER -->
-        <div class="p-5 border-b text-lg font-semibold text-green-600">
-            ShipEase
-        </div>
+  <!-- MOBILE BACKDROP -->
+  <div *ngIf="sidebarOpen"
+       class="fixed inset-0 bg-black/40 z-40 md:hidden"
+       (click)="closeSidebar()">
+  </div>
 
-        <!-- SIDEBAR NAV -->
-        <nav class="flex flex-col p-5 gap-5 text-sm text-gray-700">
+  <!-- MOBILE SIDEBAR -->
+  <div class="fixed top-0 right-0 h-full w-64 bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out md:hidden"
+       [class.translate-x-full]="!sidebarOpen">
 
-            <!-- NORMAL LINKS -->
-            <a
-                *ngFor="let link of navLinks"
-                [routerLink]="link.path"
-                routerLinkActive="text-green-600 font-medium"
-                [routerLinkActiveOptions]="{ exact: true }"
-                class="cursor-pointer hover:text-green-600 transition"
-                (click)="toggleSidebar()"
-            >
-                {{ link.label }}
-            </a>
-
-            <!-- AUTH LINKS -->
-            <div class="border-t pt-4 flex flex-col gap-4">
-
-                <a
-                    routerLink="/login"
-                    routerLinkActive="text-green-600 font-medium"
-                    [routerLinkActiveOptions]="{ exact: true }"
-                    class="cursor-pointer hover:text-green-600 transition"
-                    (click)="toggleSidebar()"
-                >
-                    Login
-                </a>
-
-                <a
-                    routerLink="/register"
-                    routerLinkActive="text-green-600 font-medium"
-                    [routerLinkActiveOptions]="{ exact: true }"
-                    class="cursor-pointer hover:text-green-600 transition"
-                    (click)="toggleSidebar()"
-                >
-                    Register
-                </a>
-
-            </div>
-
-        </nav>
-
+    <!-- Sidebar header -->
+    <div class="p-5 border-b flex items-center justify-between">
+      <span class="text-lg font-bold text-green-600"
+            style="font-family:'Syne',sans-serif">ShipEase</span>
+      <button class="text-gray-400 hover:text-gray-700 text-xl" (click)="closeSidebar()">✕</button>
     </div>
+
+    <!-- Sidebar nav -->
+    <nav class="flex flex-col p-5 gap-1 text-sm text-gray-700">
+
+      <span (click)="goToHome()"
+            class="py-3 px-2 rounded-lg cursor-pointer hover:bg-green-50 hover:text-green-600 transition-colors font-medium"
+            [class.text-green-600]="isActive('/')">
+        🏠 Home
+      </span>
+
+      <span (click)="goToTrack()"
+            class="py-3 px-2 rounded-lg cursor-pointer hover:bg-green-50 hover:text-green-600 transition-colors font-medium"
+            [class.text-green-600]="isActive('/track')">
+        📦 Track Parcel
+      </span>
+
+      <span (click)="goToContact()"
+            class="py-3 px-2 rounded-lg cursor-pointer hover:bg-green-50 hover:text-green-600 transition-colors font-medium"
+            [class.text-green-600]="isActive('/contact')">
+        📞 Contact Us
+      </span>
+
+      <div class="border-t border-gray-100 mt-3 pt-4 flex flex-col gap-1">
+
+        <!-- Not logged in -->
+        <ng-container *ngIf="!isLoggedIn">
+          <span (click)="goToLogin()"
+                class="py-3 px-2 rounded-lg cursor-pointer hover:bg-green-50 hover:text-green-600 transition-colors"
+                [class.text-green-600]="isActive('/login')">
+            🔐 Login
+          </span>
+          <!-- <span (click)="goToRegister()"
+                class="py-3 px-2 rounded-lg cursor-pointer hover:bg-green-50 hover:text-green-600 transition-colors"
+                [class.text-green-600]="isActive('/register')">
+            📝 Register
+          </span> -->
+          <button (click)="bookParcel()"
+                  class="mt-2 w-full text-center text-white text-sm font-semibold px-4 py-2.5 rounded-lg"
+                  style="background:#22c55e">
+            Book Parcel →
+          </button>
+        </ng-container>
+
+        <!-- Logged in -->
+        <ng-container *ngIf="isLoggedIn">
+          <span (click)="goToDashboard()"
+                class="py-3 px-2 rounded-lg cursor-pointer hover:bg-green-50 hover:text-green-600 transition-colors">
+            📊 Dashboard
+          </span>
+          <button (click)="logout()"
+                  class="mt-2 w-full text-center text-white text-sm font-semibold px-4 py-2.5 rounded-lg"
+                  style="background:#22c55e">
+            Logout
+          </button>
+        </ng-container>
+
+      </div>
+    </nav>
+
+  </div>
 
 </header>

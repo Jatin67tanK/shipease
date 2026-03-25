@@ -18,7 +18,7 @@
         <label class="text-sm font-medium text-gray-700">Full Name</label>
 
         <div class="mt-1 flex items-center border rounded-lg px-3 h-11">
-          <span class="text-gray-400 mr-2">👤</span>
+          <i class="fa-regular fa-user text-gray-400 mr-2"></i>
 
           <input
             type="text"
@@ -38,7 +38,7 @@
         <label class="text-sm font-medium text-gray-700">Email Address</label>
 
         <div class="mt-1 flex items-center border rounded-lg px-3 h-11">
-          <span class="text-gray-400 mr-2">✉️</span>
+          <i class="fa-regular fa-envelope text-gray-400 mr-2"></i>
 
           <input
             type="email"
@@ -58,7 +58,7 @@
         <label class="text-sm font-medium text-gray-700">Password</label>
 
         <div class="mt-1 flex items-center border rounded-lg px-3 h-11 relative">
-          <span class="text-gray-400 mr-2">🔒</span>
+          <i class="fa-solid fa-lock text-gray-400 mr-2"></i>
 
           <input
             [type]="showPassword ? 'text' : 'password'"
@@ -75,7 +75,7 @@
             (click)="togglePassword()"
             class="absolute right-3 text-gray-400 cursor-pointer"
           >
-            {{ showPassword ? '🙈' : '👁️' }}
+            <i [class]="showPassword ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'"></i>
           </span>
         </div>
       </div>
@@ -87,7 +87,7 @@
         </label>
 
         <div class="mt-1 flex items-center border rounded-lg px-3 h-11">
-          <span class="text-gray-400 mr-2">📞</span>
+          <i class="fa-solid fa-phone text-gray-400 mr-2"></i>
 
           <input
             type="text"
@@ -104,7 +104,7 @@
           />
         </div>
 
-        <div class="min-h-[32px] mt-1">
+        <div  *ngIf="submitted" class="min-h-[32px] mt-1">
           <p *ngIf="submitted && phone_number.errors?.['required']"
              class="text-red-500 text-xs">
             Phone number is required

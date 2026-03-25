@@ -7,14 +7,10 @@
     <div class="flex items-center justify-between p-4 border-b sticky top-0 bg-white z-40">
 
         <!-- LEFT SECTION -->
-        <div class="flex items-center gap-3 overflow-hidden">
+        <div (click)="goToHome()" class=" cursor-pointer flex items-center gap-3 overflow-hidden">
 
             <!-- ✅ LOGO (NOW HIDES WHEN COLLAPSED) -->
-            <span
-                *ngIf="!collapsed"
-                class="text-2xl flex-shrink-0">
-                🚚
-            </span>
+        <i *ngIf="!collapsed" class="fas fa-truck text-2xl"></i>
 
             <!-- ✅ TEXT -->
             <div
@@ -68,7 +64,9 @@
             routerLinkActive="bg-green-100 text-green-600"
             class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition">
 
-            <span class="text-lg flex-shrink-0">{{ item.icon }}</span>
+      <span class="text-lg flex-shrink-0">
+  <i [class]="item.icon + ''"></i>
+</span>
 
             <span
                 *ngIf="!collapsed"
@@ -84,10 +82,10 @@
     <div class="p-3 border-t">
 
         <a
-            routerLink="/"
+            (click)="logout()"
             class="flex items-center gap-3 p-3 rounded-lg hover:bg-red-50 text-red-500 transition">
 
-            <span class="text-lg flex-shrink-0">🚪</span>
+            <i class="fas fa-sign-out-alt text-lg flex-shrink-0"></i>
 
             <span
                 *ngIf="!collapsed"

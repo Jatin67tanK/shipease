@@ -14,7 +14,6 @@ import { HeaderComponent }              from './layout/header/header.component';
 // ── Existing Pages ───────────────────────────────────────
 import { DashboardComponent }           from './pages/dashboard/dashboard.component';
 import { ActiveParcelsComponent }       from './pages/active-parcels/active-parcels.component';
-import { NonActiveParcelsComponent }    from './pages/non-active-parcels/non-active-parcels.component';
 import { PricingManagementComponent }   from './pages/pricing-management/pricing-management.component';
 import { EditProfileComponent }         from './pages/edit-profile/edit-profile.component';
 import { EmployeeManagementComponent }  from './pages/employee-management/employee-management.component';
@@ -24,6 +23,7 @@ import { EmployeeProgressComponent }    from './pages/employee-progress/employee
 import { UnassignedParcelsComponent }   from './pages/unassigned-parcels/unassigned-parcels.component';
 import { CycleHistoryComponent }        from './pages/cycle-history/cycle-history.component';
 import { AdminChartsComponent }         from './pages/charts/admin-charts.component';
+import { CustomerManagementComponent } from './pages/customer-management/customer-management.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +35,6 @@ import { AdminChartsComponent }         from './pages/charts/admin-charts.compon
     // Existing
     DashboardComponent,
     ActiveParcelsComponent,
-    NonActiveParcelsComponent,
     PricingManagementComponent,
     EditProfileComponent,
     EmployeeManagementComponent,
@@ -45,6 +44,7 @@ import { AdminChartsComponent }         from './pages/charts/admin-charts.compon
     UnassignedParcelsComponent,
     CycleHistoryComponent,
     AdminChartsComponent,
+    CustomerManagementComponent
   ],
   imports: [
     CommonModule,

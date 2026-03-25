@@ -9,7 +9,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 export class LoginComponent {
 
   form = { email: '', password: '' };
-  isLoading = false;
+  isLoading    = false;
   errorMessage = '';
   showPassword = false;
 
@@ -27,6 +27,18 @@ export class LoginComponent {
 
     this.authService.login(this.form.email, this.form.password).subscribe({
       next: (res: any) => {
+
+        // ── Phone verification required (unverified customer) ──
+        if (res.requiresVerification) {
+          this.authService.setTempToken(res.tempToken); // store in sessionStorage
+          this.isLoading = false;
+          this.router.navigate(['/verify-otp'], {
+            state: { phone: res.phone }
+          });
+          return;
+        }
+
+        // ── Normal login ──────────────────────────────────────
         this.authService.saveToken(res.token);
         this.authService.redirectByRole(res.role);
         this.isLoading = false;

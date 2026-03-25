@@ -150,7 +150,7 @@ export class RegisterComponent {
 
     if (form.invalid) return;
 
-    console.log('Register Payload:', this.registerData);
+     console.log('Register Payload:', this.registerData);
 
     this.authService.register(this.registerData).subscribe({
       next: (response: any) => {

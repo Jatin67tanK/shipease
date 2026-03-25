@@ -26,6 +26,9 @@ export class AuthService {
     return this.http.post(`${this.API}/api/auth/register`, data);
   }
 
+  setTempToken(token: string): void {
+  sessionStorage.setItem('tempToken', token);
+}
 
   // ── Token helpers ─────────────────────────────────────────
 
@@ -101,10 +104,12 @@ saveToken(token: string): void {
 
   /** Update Customer profile */
   updateProfile(data: any): Observable<any> {
-    return this.http.put(`${this.API}/api/auth/update-profile`, data).pipe(
+    return this.http.put(`${this.API}/api/auth/updateprofile`, data).pipe(
       tap((res: any) => { if (res?.data) this._profile.next(res.data); })
     );
   }
+
+  
 
   /** Update Employee profile */
   updateEmployeeProfile(data: any): Observable<any> {
@@ -125,6 +130,8 @@ saveToken(token: string): void {
   sendOTP(): Observable<any> {
     return this.http.post(`${this.API}/api/otp/send`, {});
   }
+
+
 
   verifyOTP(otp: string): Observable<any> {
     return this.http.post(`${this.API}/api/otp/verify`, { otp });

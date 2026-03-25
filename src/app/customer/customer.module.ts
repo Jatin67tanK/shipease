@@ -23,7 +23,6 @@ import { RefundedHistoryComponent } from './pages/track-parcel/refunded-history.
 
 import { ProfileComponent } from './pages/profile/profile.component';
 import { EditProfileComponent } from './pages/profile/edit-profile.component';
-import { VerifyOtpComponent } from './pages/verify-otp/verify-otp.component';
 
 /* ✅ ADD THIS */
 
@@ -31,7 +30,6 @@ import { VerifyOtpComponent } from './pages/verify-otp/verify-otp.component';
   declarations: [
     CustomerLayoutComponent,
     SidebarComponent,
-
     ShipmentsComponent,
     ActiveParcelsComponent,
     InactiveParcelsComponent,
@@ -49,7 +47,6 @@ import { VerifyOtpComponent } from './pages/verify-otp/verify-otp.component';
     EditProfileComponent,
 
     /* ✅ ADD THIS */
-    VerifyOtpComponent
     
   ],
   imports: [

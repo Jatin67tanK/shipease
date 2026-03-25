@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 /* ✅ FULLSCREEN PAGE */
-import { VerifyOtpComponent } from './pages/verify-otp/verify-otp.component';
 
 /* ✅ LAYOUT */
 import { CustomerLayoutComponent } from './layout/customer-layout/customer-layout.component';
@@ -26,10 +25,10 @@ import { EditProfileComponent } from './pages/profile/edit-profile.component';
 const routes: Routes = [
 
   /* ✅ NO SIDEBAR ROUTE */
-  {
-    path: 'verify-otp',
-    component: VerifyOtpComponent
-  },
+  // {
+  //   path: 'verify-otp',
+  //   component: VerifyOtpComponent
+  // },
 
   /* ✅ SIDEBAR LAYOUT ROUTES */
   {

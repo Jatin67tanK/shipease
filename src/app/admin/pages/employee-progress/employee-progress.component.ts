@@ -57,19 +57,20 @@ export class EmployeeProgressComponent implements OnInit {
   }
 
   // ── Toggle Availability ───────────────────────────────────
-  toggleAvailability(emp: any): void {
-    this.http.patch<any>(`${this.API}/api/admin/employees/${emp._id}/toggle-availability`, {}).subscribe({
-      next: (r) => {
-        emp.isAvailable = r.data.isAvailable;
-        this.successMsg = r.message;
-        setTimeout(() => this.successMsg = '', 3000);
-      },
-      error: (err) => {
-        this.errorMsg = err?.error?.error || 'Toggle failed';
-        setTimeout(() => this.errorMsg = '', 3000);
-      }
-    });
-  }
+ toggleAvailability(emp: any): void {
+  const headers = { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } };
+  this.http.patch<any>(`${this.API}/api/admin/employees/${emp._id}/toggle-availability`, {}, headers).subscribe({
+    next: (r) => {
+      emp.isAvailable = r.data.isAvailable;
+      this.successMsg = r.message;
+      setTimeout(() => this.successMsg = '', 3000);
+    },
+    error: (err) => {
+      this.errorMsg = err?.error?.error || 'Toggle failed';
+      setTimeout(() => this.errorMsg = '', 3000);
+    }
+  });
+}
 
   // ── View Parcels Modal ────────────────────────────────────
   openParcelsModal(emp: any): void {

@@ -54,6 +54,7 @@ export class BookParcelComponent implements OnInit {
   stateList: string[] = Object.keys(this.stateCityMap);
   senderCities: string[] = [];
   receiverCities: string[] = [];
+  role ="";
 
   constructor(
     private parcelService: ParcelService,
@@ -63,10 +64,22 @@ export class BookParcelComponent implements OnInit {
 
   ngOnInit(): void {
     this.refreshProfile();
+    this.detectRole();
   }
+  detectRole(): void {
+    const token = localStorage.getItem('token');
+    try {
+      this.role = JSON.parse(atob(token!.split('.')[1])).role;
+    } catch {
+      this.role = 'Customer';
+    }
+  }
+ refreshProfile(): void {
+    const req = this.role === 'Admin'
+      ? this.authService.getAdminProfile()
+      : this.authService.getProfile();
 
-  refreshProfile(): void {
-    this.authService.getProfile().subscribe({
+    req.subscribe({
       next: (res: any) => {
         if (res?.data) {
           localStorage.setItem('profile', JSON.stringify(res.data));
@@ -133,10 +146,11 @@ export class BookParcelComponent implements OnInit {
     }
   }
 
-  proceedToCheckout(): void {
+ proceedToCheckout(): void {
     if (this.isLoading) return;
 
-    if (!this.isUserVerified()) {
+    // Admin skips phone verification check
+    if (this.role !== 'Admin' && !this.isUserVerified()) {
       alert('Verify your mobile number first 📲');
       return;
     }
@@ -172,11 +186,17 @@ export class BookParcelComponent implements OnInit {
       formData.append('parcel_images', img.file);
     });
 
-    this.parcelService.bookParcel(formData).subscribe({
+   this.parcelService.bookParcel(formData).subscribe({
       next: (res: any) => {
         localStorage.setItem('booking', JSON.stringify(res.data));
         this.isLoading = false;
-        this.router.navigate(['/customer/book/checkout']);
+
+        // FIX navigation by role
+        if (this.role === 'Admin') {
+          this.router.navigate(['/admin/book/checkout']);
+        } else {
+          this.router.navigate(['/customer/book/checkout']);
+        }
       },
       error: (err) => {
         console.error('Booking Error:', err);

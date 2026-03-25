@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ParcelService } from 'src/app/core/services/parcel.service';
 
 @Component({
@@ -9,12 +10,18 @@ export class DashboardComponent implements OnInit {
 
   cards: any[] = [];
 
-  constructor(private parcelService: ParcelService) {}
+  constructor(private parcelService: ParcelService, private router:Router) {}
 
   ngOnInit(): void {
     this.loadStats();
   }
-
+  goToPracel(title:string){
+    if(title === 'Total Parcels' || title === 'Active Parcels')
+      this.router.navigate(['/admin/parcels/active'])
+    else 
+      this.router.navigate(['//admin/parcels/non-active'])
+  }
+  
   loadStats(): void {
 
     this.parcelService.getAdminStats().subscribe({

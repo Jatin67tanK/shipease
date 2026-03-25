@@ -1,5 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ParcelService } from 'src/app/core/services/parcel.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-employee-management',
@@ -9,6 +11,7 @@ export class EmployeeManagementComponent implements OnInit {
 
   employees: any[] = [];
   isLoading = true;
+  private API = environment.apiUrl;
 
   // ── Add Employee ──────────────────────────────────────
   showAddModal = false;
@@ -50,7 +53,7 @@ export class EmployeeManagementComponent implements OnInit {
     'Delhi','Jammu & Kashmir','Ladakh','Puducherry'
   ];
 
-  constructor(private parcelService: ParcelService) {}
+  constructor(private http:HttpClient, private parcelService: ParcelService) {}
 
   ngOnInit(): void { this.loadEmployees(); }
 
@@ -137,6 +140,20 @@ export class EmployeeManagementComponent implements OnInit {
 
   removeCityTag(i: number): void { this.citiesList.splice(i, 1); }
 
+  toggleAvailability(emp: any): void {
+  const headers = { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } };
+  this.http.patch<any>(
+    `${this.API}/api/admin/employees/${emp._id}/toggle-availability`, {}, headers
+  ).subscribe({
+    next: (r) => {
+      emp.isAvailable = r.data.isAvailable;
+      // optional success message if you have one
+    },
+    error: (err) => {
+      console.error('Toggle failed', err);
+    }
+  });
+}
   saveCities(): void {
     this.isSavingCities = true; this.citiesError = '';
     this.parcelService.updateEmployeeCities(this.citiesEmployee._id, this.citiesList).subscribe({

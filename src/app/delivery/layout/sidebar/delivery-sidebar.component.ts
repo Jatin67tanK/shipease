@@ -9,10 +9,10 @@ export class DeliverySidebarComponent {
   @Input() collapsed = false;
   @Output() toggle = new EventEmitter<void>();
 
-  menuItems = [
-    { label: 'Dashboard', link: '/delivery/dashboard', icon: '📊' },
-    { label: 'My Parcels', link: '/delivery/parcels', icon: '📦' },
-    { label: 'Profile', link: '/delivery/profile', icon: '👤' },
+ menuItems = [
+    { label: 'Dashboard', link: '/delivery/dashboard', icon: 'fas fa-chart-line' },
+    { label: 'My Parcels', link: '/delivery/parcels', icon: 'fas fa-box' },
+    { label: 'Profile', link: '/delivery/profile', icon: 'fas fa-user' }
   ];
 
   constructor(private authService: AuthService) {}

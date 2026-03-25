@@ -1,6 +1,7 @@
+// landing.module.ts
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router'; // 👈 Import this
 
 import { LandingComponent } from './landing.component';
 import { LandingRoutingModule } from './landing-routing.module';
@@ -12,9 +13,9 @@ import { LayoutSharedModule } from '../../layout/layout-shared/layout-shared.mod
   ],
   imports: [
     CommonModule,
+    RouterModule, // 👈 Add this to imports
     LandingRoutingModule,
     LayoutSharedModule 
   ]
 })
-
 export class LandingModule {}

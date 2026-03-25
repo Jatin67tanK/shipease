@@ -1,4 +1,4 @@
-<!-- profile.component.html · Shared Admin & Customer · Pure Tailwind · FA Icons -->
+<!-- profile.component.html -->
 
 <div class="min-h-screen bg-slate-50 p-4 md:p-8" style="font-family:'DM Sans',sans-serif">
 
@@ -13,20 +13,14 @@
     <!-- SUCCESS TOAST -->
     <div *ngIf="successMessage"
          class="flex items-center justify-between gap-3 bg-[#DCFCE7] border border-green-200 text-[#16A34A] px-4 py-3 rounded-xl text-sm font-medium">
-      <div class="flex items-center gap-2">
-        <i class="fas fa-check-circle"></i>
-        <span>{{ successMessage }}</span>
-      </div>
+      <div class="flex items-center gap-2"><i class="fas fa-check-circle"></i><span>{{ successMessage }}</span></div>
       <button (click)="dismissSuccess()"><i class="fas fa-times text-green-400 hover:text-green-600"></i></button>
     </div>
 
     <!-- ERROR TOAST -->
     <div *ngIf="errorMessage"
          class="flex items-center justify-between gap-3 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-medium">
-      <div class="flex items-center gap-2">
-        <i class="fas fa-exclamation-triangle"></i>
-        <span>{{ errorMessage }}</span>
-      </div>
+      <div class="flex items-center gap-2"><i class="fas fa-exclamation-triangle"></i><span>{{ errorMessage }}</span></div>
       <button (click)="dismissError()"><i class="fas fa-times text-red-400 hover:text-red-600"></i></button>
     </div>
 
@@ -36,52 +30,59 @@
       <div class="p-6 md:p-8">
         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5 justify-between">
 
-          <!-- Avatar + Info -->
           <div class="flex items-center gap-5">
             <div class="relative shrink-0">
               <div class="w-20 h-20 rounded-2xl bg-[#DCFCE7] border-2 border-green-200 flex items-center justify-center text-2xl font-bold text-[#16A34A]"
-                   style="font-family:'Sora',sans-serif">
-                {{ avatarInitials }}
-              </div>
+                   style="font-family:'Sora',sans-serif">{{ avatarInitials }}</div>
               <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-[#16A34A] rounded-full border-2 border-white flex items-center justify-center">
                 <i class="fas fa-check text-white" style="font-size:7px"></i>
               </div>
             </div>
             <div>
               <h1 class="text-xl font-bold text-slate-800" style="font-family:'Sora',sans-serif">{{ profile.name }}</h1>
-              <!-- ✅ EMAIL -->
               <p class="text-sm text-slate-400 mt-0.5 flex items-center gap-1.5">
-                <i class="fas fa-envelope text-slate-300 text-xs"></i>
-                {{ profile.email }}
+                <i class="fas fa-envelope text-slate-300 text-xs"></i>{{ profile.email }}
               </p>
               <div class="flex flex-wrap items-center gap-2 mt-2">
 
                 <span class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full flex items-center gap-1"
                       [ngClass]="isAdmin ? 'bg-violet-100 text-violet-600 border border-violet-200' : 'bg-[#DCFCE7] text-[#16A34A] border border-green-200'">
-                  <i class="fas" [ngClass]="isAdmin ? 'fa-shield-alt' : 'fa-user'"></i>
-                  {{ profile.role }}
+                  <i class="fas" [ngClass]="isAdmin ? 'fa-shield-alt' : 'fa-user'"></i>{{ profile.role }}
                 </span>
 
                 <span class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full flex items-center gap-1"
                       [ngClass]="profile.status === 'Active' ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-red-50 text-red-500 border border-red-200'">
-                  <i class="fas fa-circle" style="font-size:6px"></i>
-                  {{ profile.status || 'Active' }}
+                  <i class="fas fa-circle" style="font-size:6px"></i>{{ profile.status || 'Active' }}
                 </span>
 
-                <span *ngIf="isCustomer && profile.isNumVerified"
-                      class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-200 flex items-center gap-1">
-                  <i class="fas fa-mobile-alt"></i> Verified
-                </span>
-                <span *ngIf="isCustomer && !profile.isNumVerified"
-                      class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-amber-50 text-amber-600 border border-amber-200 flex items-center gap-1">
-                  <i class="fas fa-exclamation-circle"></i> Unverified
-                </span>
+                <ng-container *ngIf="!isAdmin">
+                  <span *ngIf="profile.isNumVerified"
+                        class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-200 flex items-center gap-1">
+                    <i class="fas fa-mobile-alt"></i> Phone ✓
+                  </span>
+                  <span *ngIf="!profile.isNumVerified"
+                        class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-amber-50 text-amber-600 border border-amber-200 flex items-center gap-1 cursor-pointer hover:bg-amber-100 transition"
+                        (click)="openPhoneModal()">
+                    <i class="fas fa-exclamation-circle"></i> Phone Unverified
+                  </span>
+                </ng-container>
+
+                <ng-container *ngIf="!isAdmin">
+                  <span *ngIf="profile.isEmailVerified"
+                        class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-green-50 text-green-600 border border-green-200 flex items-center gap-1">
+                    <i class="fas fa-envelope-circle-check"></i> Email ✓
+                  </span>
+                  <span *ngIf="!profile.isEmailVerified"
+                        class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-rose-50 text-rose-600 border border-rose-200 flex items-center gap-1 cursor-pointer hover:bg-rose-100 transition"
+                        (click)="openEmailModal()">
+                    <i class="fas fa-envelope"></i> Email Unverified
+                  </span>
+                </ng-container>
 
               </div>
             </div>
           </div>
 
-          <!-- Buttons -->
           <div class="flex items-center gap-2 shrink-0">
             <button *ngIf="!isEditing" (click)="enterEditMode()"
               class="flex items-center gap-2 text-sm font-semibold bg-[#16A34A] text-white px-4 py-2.5 rounded-xl hover:bg-green-700 transition-all shadow-sm">
@@ -112,7 +113,6 @@
           <i class="fas fa-id-card"></i> Personal Information
         </span>
       </div>
-
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         <!-- Name -->
@@ -125,15 +125,25 @@
             class="w-full text-sm font-medium text-slate-800 border border-slate-200 rounded-xl px-3 py-2.5 outline-none focus:border-[#16A34A] focus:ring-2 focus:ring-[#DCFCE7] transition-all" />
         </div>
 
-        <!-- Email readonly -->
+        <!-- Email -->
         <div>
           <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 flex items-center gap-1.5">
             <i class="fas fa-envelope text-slate-300"></i> Email Address
           </p>
-          <div class="flex items-center gap-2 text-sm font-semibold text-slate-800">
-            {{ profile.email }}
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-sm font-semibold text-slate-800">{{ profile.email }}</span>
+            <span *ngIf="profile.isEmailVerified"
+                  class="text-[9px] font-bold text-green-600 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full flex items-center gap-1">
+              <i class="fas fa-check-circle" style="font-size:8px"></i> Verified
+            </span>
+            <ng-container *ngIf="!profile.isEmailVerified && !isAdmin">
+              <span class="text-[9px] font-bold text-rose-500 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-full flex items-center gap-1">
+                <i class="fas fa-times-circle" style="font-size:8px"></i> Unverified
+              </span>
+              <button (click)="openEmailModal()" class="text-[10px] font-semibold text-[#16A34A] underline hover:no-underline">Verify →</button>
+            </ng-container>
             <span class="text-[9px] text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full font-medium inline-flex items-center gap-1">
-              <i class="fas fa-lock" style="font-size:8px"></i> Read only
+              <i class="fas fa-lock" style="font-size:8px"></i> Read only in edit
             </span>
           </div>
         </div>
@@ -143,7 +153,19 @@
           <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 flex items-center gap-1.5">
             <i class="fas fa-phone text-slate-300"></i> Phone Number
           </p>
-          <div *ngIf="!isEditing" class="text-sm font-semibold text-slate-800">{{ profile.phone_number || '—' }}</div>
+          <div *ngIf="!isEditing" class="flex items-center gap-2 flex-wrap">
+            <span class="text-sm font-semibold text-slate-800">{{ profile.phone_number || '—' }}</span>
+            <span *ngIf="profile.isNumVerified"
+                  class="text-[9px] font-bold text-blue-600 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full flex items-center gap-1">
+              <i class="fas fa-check-circle" style="font-size:8px"></i> Verified
+            </span>
+            <ng-container *ngIf="!profile.isNumVerified && !isAdmin">
+              <span class="text-[9px] font-bold text-amber-600 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full flex items-center gap-1">
+                <i class="fas fa-exclamation-circle" style="font-size:8px"></i> Unverified
+              </span>
+              <button (click)="openPhoneModal()" class="text-[10px] font-semibold text-[#16A34A] underline hover:no-underline">Verify →</button>
+            </ng-container>
+          </div>
           <input *ngIf="isEditing" [(ngModel)]="editForm.phone_number" type="tel"
             class="w-full text-sm font-medium text-slate-800 border border-slate-200 rounded-xl px-3 py-2.5 outline-none focus:border-[#16A34A] focus:ring-2 focus:ring-[#DCFCE7] transition-all" />
         </div>
@@ -174,8 +196,7 @@
             <i class="fas fa-user-tag text-slate-300"></i> Account Role
           </p>
           <div class="flex items-center gap-2 text-sm font-semibold text-slate-800">
-            <i class="fas text-slate-400 text-xs" [ngClass]="isAdmin ? 'fa-shield-alt' : 'fa-user'"></i>
-            {{ profile.role }}
+            <i class="fas text-slate-400 text-xs" [ngClass]="isAdmin ? 'fa-shield-alt' : 'fa-user'"></i>{{ profile.role }}
           </div>
         </div>
 
@@ -189,7 +210,6 @@
           <i class="fas fa-info-circle"></i> Account Information
         </span>
       </div>
-
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
         <div class="bg-slate-50 border border-slate-100 rounded-xl p-4">
@@ -204,8 +224,7 @@
             <i class="fas fa-toggle-on text-slate-300"></i> Account Status
           </p>
           <div class="flex items-center gap-1.5">
-            <div class="w-2 h-2 rounded-full"
-                 [ngClass]="profile.status === 'Active' ? 'bg-[#16A34A]' : 'bg-red-500'"></div>
+            <div class="w-2 h-2 rounded-full" [ngClass]="profile.status === 'Active' ? 'bg-[#16A34A]' : 'bg-red-500'"></div>
             <p class="text-sm font-bold text-slate-700">{{ profile.status || 'Active' }}</p>
           </div>
         </div>
@@ -213,13 +232,21 @@
         <div class="bg-slate-50 border border-slate-100 rounded-xl p-4">
           <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-2 flex items-center gap-1.5">
             <i class="fas fa-shield-alt text-slate-300"></i>
-            {{ isCustomer ? 'Phone Verified' : 'Access Level' }}
+            {{ isAdmin ?'Access Level' :'Verifications' }}
           </p>
-          <p class="text-sm font-bold text-slate-700 flex items-center gap-1.5" *ngIf="isCustomer">
-            <i class="fas text-xs" [ngClass]="profile.isNumVerified ? 'fa-check-circle text-[#16A34A]' : 'fa-times-circle text-amber-500'"></i>
-            {{ profile.isNumVerified ? 'Verified' : 'Not Verified' }}
-          </p>
-          <p class="text-sm font-bold text-slate-700 flex items-center gap-1.5" *ngIf="isAdmin">
+          <div *ngIf="!isAdmin" class="flex flex-col gap-1">
+            <div class="flex items-center gap-1.5">
+              <i class="fas text-xs" [ngClass]="profile.isNumVerified ? 'fa-check-circle text-[#16A34A]' : 'fa-times-circle text-amber-500'"></i>
+              <span class="text-xs font-semibold text-slate-600">Phone {{ profile.isNumVerified ? 'Verified' : 'Unverified' }}</span>
+              <button *ngIf="!profile.isNumVerified" (click)="openPhoneModal()" class="text-[9px] text-[#16A34A] font-bold underline ml-1">Verify</button>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <i class="fas text-xs" [ngClass]="profile.isEmailVerified ? 'fa-check-circle text-[#16A34A]' : 'fa-times-circle text-rose-500'"></i>
+              <span class="text-xs font-semibold text-slate-600">Email {{ profile.isEmailVerified ? 'Verified' : 'Unverified' }}</span>
+              <button *ngIf="!profile.isEmailVerified" (click)="openEmailModal()" class="text-[9px] text-[#16A34A] font-bold underline ml-1">Verify</button>
+            </div>
+          </div>
+          <p *ngIf="isAdmin" class="text-sm font-bold text-slate-700 flex items-center gap-1.5">
             <i class="fas fa-shield-alt text-violet-500 text-xs"></i> Full Access
           </p>
         </div>
@@ -229,7 +256,6 @@
 
     <!-- ══ CHANGE PASSWORD ══ -->
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-
       <button (click)="togglePasswordSection()"
         class="w-full flex items-center justify-between px-6 md:px-8 py-5 hover:bg-slate-50 transition-colors">
         <div class="flex items-center gap-3">
@@ -241,67 +267,47 @@
             <p class="text-xs text-slate-400">Update your account password</p>
           </div>
         </div>
-        <i class="fas fa-chevron-down text-slate-400 text-xs transition-transform"
-           [class.rotate-180]="showPasswordSection"></i>
+        <i class="fas fa-chevron-down text-slate-400 text-xs transition-transform" [class.rotate-180]="showPasswordSection"></i>
       </button>
-
       <div *ngIf="showPasswordSection" class="px-6 md:px-8 pb-7 border-t border-slate-100 pt-6">
-
-        <div *ngIf="passwordError"
-             class="mb-4 text-xs font-medium text-red-600 bg-red-50 border border-red-200 px-4 py-3 rounded-xl flex items-center gap-2">
+        <div *ngIf="passwordError" class="mb-4 text-xs font-medium text-red-600 bg-red-50 border border-red-200 px-4 py-3 rounded-xl flex items-center gap-2">
           <i class="fas fa-exclamation-triangle"></i> {{ passwordError }}
         </div>
-        <div *ngIf="passwordSuccess"
-             class="mb-4 text-xs font-medium text-[#16A34A] bg-[#DCFCE7] border border-green-200 px-4 py-3 rounded-xl flex items-center gap-2">
+        <div *ngIf="passwordSuccess" class="mb-4 text-xs font-medium text-[#16A34A] bg-[#DCFCE7] border border-green-200 px-4 py-3 rounded-xl flex items-center gap-2">
           <i class="fas fa-check-circle"></i> {{ passwordSuccess }}
         </div>
-
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
-
           <div>
             <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5">Current Password</p>
             <div class="relative">
-              <input [(ngModel)]="passwordForm.current_password"
-                [type]="showCurrentPw ? 'text' : 'password'"
-                placeholder="Enter current password"
+              <input [(ngModel)]="passwordForm.current_password" [type]="showCurrentPw ? 'text' : 'password'" placeholder="Current password"
                 class="w-full text-sm border border-slate-200 rounded-xl px-3 py-2.5 pr-10 outline-none focus:border-[#16A34A] focus:ring-2 focus:ring-[#DCFCE7] transition-all" />
-              <button type="button" (click)="showCurrentPw = !showCurrentPw"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+              <button type="button" (click)="showCurrentPw = !showCurrentPw" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
                 <i class="fas text-xs" [ngClass]="showCurrentPw ? 'fa-eye-slash' : 'fa-eye'"></i>
               </button>
             </div>
           </div>
-
           <div>
             <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5">New Password</p>
             <div class="relative">
-              <input [(ngModel)]="passwordForm.new_password"
-                [type]="showNewPw ? 'text' : 'password'"
-                placeholder="Min. 6 characters"
+              <input [(ngModel)]="passwordForm.new_password" [type]="showNewPw ? 'text' : 'password'" placeholder="Min. 6 characters"
                 class="w-full text-sm border border-slate-200 rounded-xl px-3 py-2.5 pr-10 outline-none focus:border-[#16A34A] focus:ring-2 focus:ring-[#DCFCE7] transition-all" />
-              <button type="button" (click)="showNewPw = !showNewPw"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+              <button type="button" (click)="showNewPw = !showNewPw" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
                 <i class="fas text-xs" [ngClass]="showNewPw ? 'fa-eye-slash' : 'fa-eye'"></i>
               </button>
             </div>
           </div>
-
           <div>
             <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5">Confirm Password</p>
             <div class="relative">
-              <input [(ngModel)]="passwordForm.confirm_password"
-                [type]="showConfirmPw ? 'text' : 'password'"
-                placeholder="Repeat new password"
+              <input [(ngModel)]="passwordForm.confirm_password" [type]="showConfirmPw ? 'text' : 'password'" placeholder="Repeat password"
                 class="w-full text-sm border border-slate-200 rounded-xl px-3 py-2.5 pr-10 outline-none focus:border-[#16A34A] focus:ring-2 focus:ring-[#DCFCE7] transition-all" />
-              <button type="button" (click)="showConfirmPw = !showConfirmPw"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+              <button type="button" (click)="showConfirmPw = !showConfirmPw" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
                 <i class="fas text-xs" [ngClass]="showConfirmPw ? 'fa-eye-slash' : 'fa-eye'"></i>
               </button>
             </div>
           </div>
-
         </div>
-
         <div class="flex items-center gap-3">
           <button (click)="savePassword()" [disabled]="isSaving"
             class="flex items-center gap-2 text-sm font-semibold bg-[#16A34A] text-white px-5 py-2.5 rounded-xl hover:bg-green-700 transition-all shadow-sm disabled:opacity-50">
@@ -309,12 +315,8 @@
             <i *ngIf="!isSaving" class="fas fa-lock text-xs"></i>
             {{ isSaving ? 'Saving...' : 'Update Password' }}
           </button>
-          <button (click)="togglePasswordSection()"
-            class="text-sm font-semibold text-slate-500 hover:text-slate-700 transition-colors">
-            Cancel
-          </button>
+          <button (click)="togglePasswordSection()" class="text-sm font-semibold text-slate-500 hover:text-slate-700">Cancel</button>
         </div>
-
       </div>
     </div>
 
@@ -324,5 +326,167 @@
       Your information is encrypted and stored securely. Member since {{ memberSince }}.
     </p>
 
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     PHONE VERIFICATION MODAL
+══════════════════════════════════════════════════ -->
+<div *ngIf="showPhoneModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+      <div class="flex items-center gap-2">
+        <i class="fas fa-mobile-alt text-[#16A34A]"></i>
+        <span class="text-sm font-bold text-slate-800">Verify Phone Number</span>
+      </div>
+      <button (click)="closePhoneModal()" class="text-slate-400 hover:text-slate-600 transition">
+        <i class="fas fa-times text-sm"></i>
+      </button>
+    </div>
+
+    <div class="p-5">
+
+      <!-- Success -->
+      <div *ngIf="phoneOtpSuccess" class="text-center py-6">
+        <i class="fas fa-check-circle text-[#16A34A] text-4xl mb-3 block"></i>
+        <p class="text-sm font-semibold text-slate-800">Phone Verified!</p>
+        <p class="text-xs text-slate-400 mt-1">Closing...</p>
+      </div>
+
+      <ng-container *ngIf="!phoneOtpSuccess">
+        <p class="text-xs text-slate-500 mb-4">
+          A 6-digit OTP has been sent to your registered phone number. Enter it below.
+        </p>
+
+        <!-- Error -->
+        <div *ngIf="phoneOtpError"
+             class="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2 mb-3 flex items-center gap-2">
+          <i class="fas fa-exclamation-circle flex-shrink-0"></i> {{ phoneOtpError }}
+        </div>
+
+        <!-- Single OTP input -->
+        <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-1.5">Enter OTP</label>
+        <input
+          type="tel"
+          inputmode="numeric"
+          maxlength="6"
+          placeholder="- - - - - -"
+          [value]="phoneOtpDigits.join('')"
+          (input)="onPhoneInput($event)"
+          class="w-full text-center text-xl font-bold tracking-[0.5em] border border-slate-300 rounded-lg px-3 py-3 mb-4
+                 outline-none focus:border-[#16A34A] focus:ring-2 focus:ring-green-100 transition" />
+
+        <button (click)="verifyPhoneOTP()" [disabled]="phoneOtpVerifying || phoneOtpDigits.join('').length !== 6"
+          class="w-full bg-[#16A34A] text-white text-sm font-semibold py-2.5 rounded-xl hover:bg-green-700 transition disabled:opacity-50 mb-3">
+          <span *ngIf="phoneOtpVerifying" class="inline-block w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin mr-2 align-middle"></span>
+          {{ phoneOtpVerifying ? 'Verifying...' : 'Verify OTP' }}
+        </button>
+
+        <div class="text-center text-xs text-slate-400">
+          <span *ngIf="phoneResendCooldown > 0">
+            Resend in <strong class="text-slate-600">{{ phoneResendCooldown }}s</strong>
+          </span>
+          <button *ngIf="phoneResendCooldown === 0" (click)="resendPhoneOTP()" [disabled]="phoneOtpSending"
+            class="text-[#16A34A] font-semibold hover:underline disabled:opacity-50">
+            {{ phoneOtpSending ? 'Sending...' : 'Resend OTP' }}
+          </button>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     EMAIL VERIFICATION MODAL
+══════════════════════════════════════════════════ -->
+<div *ngIf="showEmailModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40">
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+      <div class="flex items-center gap-2">
+        <i class="fas fa-envelope text-[#16A34A]"></i>
+        <span class="text-sm font-bold text-slate-800">Verify Email Address</span>
+      </div>
+      <button (click)="closeEmailModal()" class="text-slate-400 hover:text-slate-600 transition">
+        <i class="fas fa-times text-sm"></i>
+      </button>
+    </div>
+
+    <div class="p-5">
+
+      <!-- Success -->
+      <div *ngIf="emailCodeSuccess" class="text-center py-6">
+        <i class="fas fa-envelope-circle-check text-[#16A34A] text-4xl mb-3 block"></i>
+        <p class="text-sm font-semibold text-slate-800">Email Verified!</p>
+        <p class="text-xs text-slate-400 mt-1">Closing...</p>
+      </div>
+
+      <ng-container *ngIf="!emailCodeSuccess">
+
+        <!-- Error -->
+        <div *ngIf="emailCodeError"
+             class="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2 mb-3 flex items-center gap-2">
+          <i class="fas fa-exclamation-circle flex-shrink-0"></i> {{ emailCodeError }}
+        </div>
+
+        <!-- Step 1: Enter email -->
+        <div *ngIf="!emailCodeSent">
+          <p class="text-xs text-slate-500 mb-3">Enter the email address you want to verify.</p>
+          <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-1.5">Email Address</label>
+          <input [(ngModel)]="emailToVerify" type="email" placeholder="you@example.com"
+            class="w-full text-sm border border-slate-300 rounded-lg px-3 py-2.5 mb-4
+                   outline-none focus:border-[#16A34A] focus:ring-2 focus:ring-green-100 transition" />
+          <button (click)="sendEmailCode()" [disabled]="emailCodeSending"
+            class="w-full bg-[#16A34A] text-white text-sm font-semibold py-2.5 rounded-xl hover:bg-green-700 transition disabled:opacity-50">
+            <span *ngIf="emailCodeSending" class="inline-block w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin mr-2 align-middle"></span>
+            {{ emailCodeSending ? 'Sending...' : 'Send Code' }}
+          </button>
+        </div>
+
+        <!-- Step 2: Enter code -->
+        <div *ngIf="emailCodeSent">
+          <p class="text-xs text-slate-500 mb-4">
+            Code sent to <strong class="text-slate-700">{{ emailToVerify }}</strong>
+          </p>
+
+          <!-- Single code input -->
+          <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 block mb-1.5">Enter Code</label>
+          <input
+            type="tel"
+            inputmode="numeric"
+            maxlength="6"
+            placeholder="- - - - - -"
+            [value]="emailCodeDigits.join('')"
+            (input)="onEmailInput($event)"
+            class="w-full text-center text-xl font-bold tracking-[0.5em] border border-slate-300 rounded-lg px-3 py-3 mb-4
+                   outline-none focus:border-[#16A34A] focus:ring-2 focus:ring-green-100 transition" />
+
+          <button (click)="verifyEmailCode()" [disabled]="emailCodeVerifying || emailCodeDigits.join('').length !== 6"
+            class="w-full bg-[#16A34A] text-white text-sm font-semibold py-2.5 rounded-xl hover:bg-green-700 transition disabled:opacity-50 mb-3">
+            <span *ngIf="emailCodeVerifying" class="inline-block w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin mr-2 align-middle"></span>
+            {{ emailCodeVerifying ? 'Verifying...' : 'Verify Code' }}
+          </button>
+
+          <div class="flex items-center justify-between text-xs text-slate-400">
+            <button (click)="emailCodeSent = false; emailCodeDigits = ['','','','','','']"
+              class="hover:text-slate-600 underline">← Change email</button>
+            <span *ngIf="emailResendCooldown > 0">
+              Resend in <strong class="text-slate-600">{{ emailResendCooldown }}s</strong>
+            </span>
+            <button *ngIf="emailResendCooldown === 0" (click)="resendEmailCode()" [disabled]="emailCodeSending"
+              class="text-[#16A34A] font-semibold hover:underline disabled:opacity-50">
+              {{ emailCodeSending ? 'Sending...' : 'Resend' }}
+            </button>
+          </div>
+        </div>
+
+      </ng-container>
+    </div>
   </div>
 </div>

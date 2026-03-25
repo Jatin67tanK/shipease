@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ShipEase — Book. Track. Deliver.</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --green:#22c55e; --green-dark:#16a34a; --green-light:#bbf7d0;
+  --black:#0a0a0a; --dark:#0d1117; --white:#ffffff;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:#ffffff;color:#1a1a1a;overflow-x:hidden;}
+
+/* ── fixed canvas particle network behind everything ── */
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:1rem 4rem;background:rgba(255,255,255,0.88);backdrop-filter:blur(18px);border-bottom:1px solid rgba(34,197,94,.12);transition:box-shadow .3s;}
+nav.scrolled{box-shadow:0 4px 30px rgba(0,0,0,.08);}
+.nav-logo{display:flex;align-items:center;gap:8px;font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--black);}
+.logo-icon{width:32px;height:32px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;animation:pulse-logo 2.5s infinite;}
+@keyframes pulse-logo{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.4);}50%{box-shadow:0 0 0 8px rgba(34,197,94,0);}}
+.logo-icon svg{width:18px;height:18px;fill:white;}
+.nav-links{display:flex;gap:2.5rem;list-style:none;}
+.nav-links a{font-size:.9rem;font-weight:500;color:#374151;text-decoration:none;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--green-dark);}
+.nav-cta{display:flex;gap:1rem;align-items:center;}
+.btn-ghost{background:transparent;border:1.5px solid var(--green);color:var(--green-dark);padding:.5rem 1.2rem;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s;}
+.btn-ghost:hover{background:var(--green);color:white;}
+.btn-green{background:var(--green);color:white;padding:.55rem 1.4rem;border:none;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .25s;box-shadow:0 4px 15px rgba(34,197,94,.35);}
+.btn-green:hover{background:var(--green-dark);transform:translateY(-2px);box-shadow:0 8px 25px rgba(34,197,94,.45);}
+
+/* ── HERO ── */
+#hero{min-height:100vh;padding:8rem 4rem 4rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#f0fdf4 0%,#ffffff 50%,#f0fdf4 100%);}
+
+/* dot grid overlay */
+.dot-overlay{position:absolute;inset:0;z-index:1;pointer-events:none;background-image:radial-gradient(circle,rgba(34,197,94,.2) 1.2px,transparent 1.2px);background-size:28px 28px;}
+
+/* glowing orbs */
+.orb{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;z-index:1;animation:orb-drift 10s ease-in-out infinite;}
+@keyframes orb-drift{0%,100%{transform:translate(0,0);}33%{transform:translate(25px,-18px);}66%{transform:translate(-18px,14px);}}
+
+/* rings */
+.ring{position:absolute;border-radius:50%;border:1.5px solid rgba(34,197,94,.2);pointer-events:none;z-index:1;animation:ring-pulse 5s ease-in-out infinite;}
+@keyframes ring-pulse{0%,100%{transform:scale(1);opacity:.45;}50%{transform:scale(1.07);opacity:1;}}
+
+/* hexagons */
+.hex-shape{position:absolute;pointer-events:none;z-index:1;opacity:.14;animation:hex-spin 20s linear infinite;}
+@keyframes hex-spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+/* 3d box shapes */
+.box3d{position:absolute;pointer-events:none;z-index:2;animation:box-float 6s ease-in-out infinite;}
+@keyframes box-float{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-20px) rotate(7deg);}}
+
+/* sparks */
+.spark{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--green);pointer-events:none;z-index:2;animation:spark-anim 4s ease-in-out infinite;}
+@keyframes spark-anim{0%,100%{transform:scale(1);opacity:.55;}50%{transform:scale(2.2);opacity:1;}}
+
+/* nodes */
+.node{position:absolute;width:11px;height:11px;border-radius:50%;border:2px solid var(--green);background:white;pointer-events:none;z-index:2;animation:node-pulse 3s ease-in-out infinite;}
+@keyframes node-pulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.5);}50%{box-shadow:0 0 0 9px rgba(34,197,94,0);}}
+
+/* floating chips */
+.float-chip{position:absolute;background:rgba(255,255,255,.93);backdrop-filter:blur(10px);border:1px solid rgba(34,197,94,.3);border-radius:40px;padding:.42rem 1rem;font-size:.72rem;font-weight:600;color:#15803d;display:flex;align-items:center;gap:7px;pointer-events:none;box-shadow:0 4px 18px rgba(0,0,0,.09);z-index:3;animation:chip-float 5s ease-in-out infinite;}
+@keyframes chip-float{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+.chip-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;animation:blink 1.4s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.25;}}
+
+/* hero content */
+.hero-left,.hero-visual{position:relative;z-index:5;}
+
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:var(--green-dark);padding:.3rem .9rem;border-radius:50px;font-size:.75rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:1.2rem;animation:slide-up .6s ease both;}
+.hero-title{font-family:'Syne',sans-serif;font-size:clamp(2.8rem,5vw,4.2rem);font-weight:800;line-height:1.05;color:var(--black);animation:slide-up .7s .1s ease both;}
+.hero-title .accent{color:var(--green);}
+.hero-sub{margin-top:1.2rem;font-size:1.05rem;color:#4b5563;max-width:450px;line-height:1.7;animation:slide-up .7s .2s ease both;}
+.hero-btns{display:flex;gap:1rem;margin-top:2rem;animation:slide-up .7s .3s ease both;}
+.btn-primary{background:var(--green);color:white;padding:.75rem 1.8rem;border:none;border-radius:10px;font-size:.95rem;font-weight:600;cursor:pointer;box-shadow:0 6px 20px rgba(34,197,94,.4);transition:all .25s;position:relative;overflow:hidden;}
+.btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);transform:translateX(-100%);transition:.4s;}
+.btn-primary:hover::after{transform:translateX(100%);}
+.btn-primary:hover{background:var(--green-dark);transform:translateY(-3px);box-shadow:0 12px 30px rgba(34,197,94,.5);}
+.btn-outline{background:transparent;border:2px solid #d1d5db;color:#374151;padding:.75rem 1.8rem;border-radius:10px;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .25s;}
+.btn-outline:hover{border-color:var(--green);color:var(--green-dark);transform:translateY(-3px);}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2.5rem;animation:slide-up .7s .4s ease both;}
+.stat-card{background:white;border-radius:14px;padding:1rem 1.2rem;border:1px solid rgba(34,197,94,.1);box-shadow:0 4px 15px rgba(0,0,0,.05);transition:all .3s;position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--green);transform:scaleY(0);transform-origin:bottom;transition:transform .3s;}
+.stat-card:hover{transform:translateY(-4px);box-shadow:0 8px 25px rgba(0,0,0,.1);}
+.stat-card:hover::before{transform:scaleY(1);}
+.stat-num{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--black);}
+.stat-label{font-size:.75rem;color:#6b7280;margin-top:2px;}
+
+/* hero visual */
+.hero-visual{perspective:1000px;animation:slide-right .8s .2s ease both;}
+.card-3d{width:100%;aspect-ratio:4/3;border-radius:24px;overflow:hidden;position:relative;transform:rotateY(-8deg) rotateX(4deg);transition:transform .6s;box-shadow:0 25px 60px rgba(0,0,0,.15),0 8px 20px rgba(34,197,94,.1);cursor:pointer;}
+.card-3d:hover{transform:rotateY(0deg) rotateX(0deg) scale(1.02);}
+.card-3d img{width:100%;height:100%;object-fit:cover;}
+.card-3d-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(34,197,94,.1),transparent 60%);}
+.status-badge{position:absolute;bottom:1.5rem;right:1.5rem;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-radius:14px;padding:.8rem 1.2rem;display:flex;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,.12);animation:badge-float 3s ease-in-out infinite;}
+@keyframes badge-float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.status-dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:blink 1.5s infinite;}
+.s-title{font-size:.78rem;font-weight:600;color:#111;}
+.s-sub{font-size:.7rem;color:#6b7280;}
+
+/* ── QUICK TRACK ── */
+#quick-track{padding:3rem 4rem;background:white;position:relative;z-index:5;}
+.track-box{background:white;border-radius:20px;padding:2.5rem;box-shadow:0 8px 40px rgba(0,0,0,.08);border:1px solid rgba(34,197,94,.15);max-width:700px;margin:0 auto;position:relative;overflow:hidden;transition:box-shadow .3s;}
+.track-box:hover{box-shadow:0 16px 60px rgba(34,197,94,.15);}
+.track-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green),var(--green-light),var(--green));background-size:200%;animation:shimmer 2s infinite;}
+@keyframes shimmer{0%{background-position:0%}100%{background-position:200%}}
+.track-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:.3rem;}
+.track-sub{font-size:.85rem;color:#6b7280;margin-bottom:1.2rem;}
+.track-row{display:flex;gap:.8rem;}
+.track-input{flex:1;padding:.9rem 1.2rem;border:1.5px solid #e5e7eb;border-radius:10px;font-size:.9rem;outline:none;transition:border-color .2s,box-shadow .2s;font-family:'DM Sans',sans-serif;}
+.track-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(34,197,94,.1);}
+.btn-track{background:var(--green);color:white;padding:.9rem 1.8rem;border:none;border-radius:10px;font-weight:600;font-size:.9rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .25s;white-space:nowrap;box-shadow:0 4px 15px rgba(34,197,94,.3);}
+.btn-track:hover{background:var(--green-dark);transform:translateX(3px);}
+.btn-track svg{width:16px;height:16px;}
+
+/* ── WHY CHOOSE ── */
+#why{padding:5rem 4rem;background:#f9fafb;position:relative;overflow:hidden;}
+#why .dot-overlay{position:absolute;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(circle,rgba(34,197,94,.15) 1px,transparent 1px);background-size:24px 24px;}
+.why-ring{position:absolute;border-radius:50%;border:1px dashed rgba(34,197,94,.2);pointer-events:none;z-index:0;}
+.section-header{text-align:center;margin-bottom:3.5rem;position:relative;z-index:2;}
+.section-title{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;color:var(--black);}
+.section-sub{color:#6b7280;margin-top:.5rem;font-size:.95rem;max-width:500px;margin-inline:auto;line-height:1.7;}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:1000px;margin:0 auto;position:relative;z-index:2;}
+.feat-card{background:white;border-radius:18px;padding:2rem;border:1px solid #e5e7eb;transition:all .4s cubic-bezier(.175,.885,.32,1.275);position:relative;overflow:hidden;cursor:default;}
+.feat-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(34,197,94,.03),transparent 60%);opacity:0;transition:opacity .3s;}
+.feat-card:hover{transform:translateY(-8px) rotateX(3deg);box-shadow:0 20px 50px rgba(0,0,0,.1),0 0 0 1px rgba(34,197,94,.2);}
+.feat-card:hover::after{opacity:1;}
+.feat-icon{width:52px;height:52px;border-radius:14px;background:rgba(34,197,94,.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem;transition:all .3s;}
+.feat-card:hover .feat-icon{background:var(--green);transform:scale(1.1) rotate(5deg);}
+.feat-card:hover .feat-icon svg{stroke:white;}
+.feat-icon svg{width:24px;height:24px;stroke:var(--green);stroke-width:2;fill:none;}
+.feat-name{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;color:var(--black);margin-bottom:.5rem;}
+.feat-desc{font-size:.85rem;color:#6b7280;line-height:1.65;}
+
+/* ── COVERAGE ── */
+#coverage{padding:5rem 4rem;background:white;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;position:relative;overflow:hidden;}
+.cov-text{position:relative;z-index:2;}
+.cov-text h2{font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;line-height:1.2;color:var(--black);}
+.cov-text h2 span{color:var(--green);}
+.cov-text p{margin-top:1rem;color:#4b5563;line-height:1.7;}
+.cov-link{display:inline-flex;align-items:center;gap:6px;margin-top:1.5rem;color:var(--green-dark);font-weight:600;text-decoration:none;font-size:.9rem;transition:gap .2s;}
+.cov-link:hover{gap:10px;}
+.globe-wrap{position:relative;display:flex;align-items:center;justify-content:center;perspective:800px;z-index:2;}
+.globe{width:280px;height:280px;border-radius:50%;background:conic-gradient(from 0deg,#22c55e,#86efac,#22c55e,#16a34a,#22c55e);position:relative;animation:spin-globe 12s linear infinite;box-shadow:0 0 60px rgba(34,197,94,.3),inset -20px -20px 40px rgba(0,0,0,.15);}
+@keyframes spin-globe{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
+.globe::before{content:'';position:absolute;inset:10px;border-radius:50%;border:2px dashed rgba(255,255,255,.3);}
+.globe::after{content:'';position:absolute;left:50%;top:0;bottom:0;width:2px;background:rgba(255,255,255,.2);transform:translateX(-50%);}
+.globe-ring{position:absolute;inset:-20px;border-radius:50%;border:2px solid rgba(34,197,94,.2);animation:ring-spin 8s linear infinite;}
+@keyframes ring-spin{from{transform:rotateX(70deg) rotateZ(0)}to{transform:rotateX(70deg) rotateZ(360deg)}}
+.ping{position:absolute;width:10px;height:10px;background:white;border-radius:50%;animation:ping-anim 1.5s infinite;}
+@keyframes ping-anim{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.6);transform:scale(1);}50%{box-shadow:0 0 0 8px rgba(255,255,255,0);transform:scale(1.2);}}
+
+/* ── FOOTER ── */
+footer{background:var(--dark);color:white;padding:4rem 4rem 2rem;position:relative;overflow:hidden;}
+footer .ft-grid{position:absolute;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:40px 40px;}
+footer::before{content:'';position:absolute;top:-120px;right:-120px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(34,197,94,.07),transparent 70%);pointer-events:none;z-index:1;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;padding-bottom:3rem;border-bottom:1px solid rgba(255,255,255,.08);position:relative;z-index:2;}
+.footer-brand p{font-size:.85rem;color:#9ca3af;line-height:1.7;margin-top:1rem;max-width:260px;}
+.footer-brand .nav-logo{color:white;margin-bottom:.8rem;}
+.ft-ci{display:flex;align-items:flex-start;gap:10px;margin-bottom:.8rem;}
+.ft-ico{width:18px;height:18px;flex-shrink:0;margin-top:2px;}
+.ft-ico svg{width:100%;height:100%;stroke:var(--green);stroke-width:2;fill:none;}
+.ft-txt{font-size:.83rem;color:#9ca3af;line-height:1.5;}
+.ft-h{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:1.2rem;color:white;}
+.ft-links{list-style:none;}
+.ft-links li{margin-bottom:.6rem;}
+.ft-links a{font-size:.83rem;color:#9ca3af;text-decoration:none;transition:color .2s;}
+.ft-links a:hover{color:var(--green);}
+.socials{display:flex;gap:.8rem;margin-top:.5rem;}
+.soc-btn{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;}
+.soc-btn:hover{background:var(--green);border-color:var(--green);transform:translateY(-3px);}
+.soc-btn svg{width:16px;height:16px;stroke:#9ca3af;stroke-width:2;fill:none;}
+.soc-btn:hover svg{stroke:white;}
+.footer-bot{display:flex;justify-content:space-between;align-items:center;padding-top:1.5rem;font-size:.78rem;color:#6b7280;position:relative;z-index:2;}
+.ft-bot-links{display:flex;gap:1.5rem;}
+.ft-bot-links a{color:#6b7280;text-decoration:none;transition:color .2s;}
+.ft-bot-links a:hover{color:var(--green);}
+
+/* ── ANIMATIONS ── */
+@keyframes slide-up{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+@keyframes slide-right{from{opacity:0;transform:translateX(40px);}to{opacity:1;transform:translateX(0);}}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .6s,transform .6s;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}
+</style>
+</head>
+<body>
+
+<!-- ===== CANVAS PARTICLE + BOX NETWORK ===== -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M5 8h14l-2 9H7L5 8z"/><path d="M5 8l-1-4H2M9 21a1 1 0 100-2 1 1 0 000 2zM17 21a1 1 0 100-2 1 1 0 000 2z"/></svg>
+    </div>
+    ShipEase
+  </div>
+  <ul class="nav-links">
+    <li><a href="#hero" class="active">Home</a></li>
+    <li><a href="#quick-track">Track Parcel</a></li>
+    <li><a href="#why">Login / Register</a></li>
+    <li><a href="#coverage">Contact Us</a></li>
+  </ul>
+  <div class="nav-cta">
+    <button class="btn-ghost">Login</button>
+    <button class="btn-green">Get Started</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <!-- dot grid -->
+  <div class="dot-overlay"></div>
+
+  <!-- glowing orbs -->
+  <div class="orb" style="width:380px;height:380px;background:radial-gradient(circle,rgba(34,197,94,.14),transparent 70%);top:0%;left:-8%;animation-duration:12s;z-index:1;"></div>
+  <div class="orb" style="width:260px;height:260px;background:radial-gradient(circle,rgba(34,197,94,.1),transparent 70%);bottom:8%;right:4%;animation-duration:9s;animation-delay:3s;z-index:1;"></div>
+  <div class="orb" style="width:180px;height:180px;background:radial-gradient(circle,rgba(134,239,172,.18),transparent 70%);top:55%;left:42%;animation-duration:14s;animation-delay:2s;z-index:1;"></div>
+
+  <!-- concentric rings -->
+  <div class="ring" style="width:210px;height:210px;top:8%;left:6%;animation-delay:0s;"></div>
+  <div class="ring" style="width:130px;height:130px;top:13%;left:10%;animation-delay:.7s;"></div>
+  <div class="ring" style="width:320px;height:320px;bottom:2%;right:1%;animation-delay:1.4s;"></div>
+  <div class="ring" style="width:190px;height:190px;bottom:8%;right:5%;animation-delay:.3s;"></div>
+
+  <!-- hexagons -->
+  <svg class="hex-shape" style="width:110px;height:110px;top:14%;right:53%;" viewBox="0 0 100 100">
+    <polygon points="50,5 93,27 93,73 50,95 7,73 7,27" fill="none" stroke="rgba(34,197,94,1)" stroke-width="2"/>
+  </svg>
+  <svg class="hex-shape" style="width:75px;height:75px;bottom:22%;left:44%;animation-duration:28s;" viewBox="0 0 100 100">
+    <polygon points="50,5 93,27 93,73 50,95 7,73 7,27" fill="none" stroke="rgba(34,197,94,1)" stroke-width="2"/>
+  </svg>
+  <svg class="hex-shape" style="width:50px;height:50px;top:62%;left:1%;animation-duration:22s;" viewBox="0 0 100 100">
+    <polygon points="50,5 93,27 93,73 50,95 7,73 7,27" fill="none" stroke="rgba(34,197,94,.9)" stroke-width="2"/>
+  </svg>
+  <svg class="hex-shape" style="width:62px;height:62px;top:38%;left:30%;animation-duration:18s;animation-direction:reverse;" viewBox="0 0 100 100">
+    <polygon points="50,5 93,27 93,73 50,95 7,73 7,27" fill="none" stroke="rgba(34,197,94,.8)" stroke-width="2"/>
+  </svg>
+
+  <!-- 3D floating boxes -->
+  <div class="box3d" style="top:17%;left:2%;animation-delay:0s;width:54px;height:54px;">
+    <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="30,4 56,18 56,42 30,56 4,42 4,18" fill="rgba(34,197,94,.1)" stroke="rgba(34,197,94,.5)" stroke-width="1.5"/>
+      <polygon points="30,4 56,18 30,32 4,18" fill="rgba(34,197,94,.18)" stroke="rgba(34,197,94,.5)" stroke-width="1.5"/>
+      <line x1="30" y1="32" x2="30" y2="56" stroke="rgba(34,197,94,.4)" stroke-width="1.5"/>
+    </svg>
+  </div>
+  <div class="box3d" style="bottom:24%;left:5%;animation-delay:1.6s;width:38px;height:38px;">
+    <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="30,4 56,18 56,42 30,56 4,42 4,18" fill="rgba(34,197,94,.08)" stroke="rgba(34,197,94,.45)" stroke-width="1.5"/>
+      <polygon points="30,4 56,18 30,32 4,18" fill="rgba(34,197,94,.15)" stroke="rgba(34,197,94,.45)" stroke-width="1.5"/>
+    </svg>
+  </div>
+  <div class="box3d" style="top:52%;right:49%;animation-delay:.9s;width:46px;height:46px;">
+    <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="30,4 56,18 56,42 30,56 4,42 4,18" fill="rgba(22,163,74,.1)" stroke="rgba(22,163,74,.5)" stroke-width="1.5"/>
+      <polygon points="30,4 56,18 30,32 4,18" fill="rgba(22,163,74,.18)" stroke="rgba(22,163,74,.5)" stroke-width="1.5"/>
+    </svg>
+  </div>
+
+  <!-- animated route paths with moving dots -->
+  <svg style="position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:visible;">
+    <defs>
+      <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="rgba(34,197,94,0.5)"/>
+      </marker>
+    </defs>
+    <path id="r1" d="M 60 90 Q 220 200 400 130 T 740 310" fill="none" stroke="rgba(34,197,94,.22)" stroke-width="1.5" stroke-dasharray="8,5" marker-end="url(#arrowhead)"/>
+    <path id="r2" d="M 10 360 Q 190 290 360 390 T 660 220" fill="none" stroke="rgba(34,197,94,.16)" stroke-width="1" stroke-dasharray="5,8"/>
+    <path id="r3" d="M 150 480 Q 280 420 440 480 T 680 380" fill="none" stroke="rgba(134,239,172,.2)" stroke-width="1" stroke-dasharray="4,7"/>
+    <!-- animated dots along routes -->
+    <circle r="4.5" fill="#22c55e" opacity=".8"><animateMotion dur="7s" repeatCount="indefinite"><mpath href="#r1"/></animateMotion></circle>
+    <circle r="3" fill="#86efac" opacity=".9"><animateMotion dur="10s" repeatCount="indefinite" begin="2s"><mpath href="#r2"/></animateMotion></circle>
+    <circle r="3.5" fill="#22c55e" opacity=".7"><animateMotion dur="12s" repeatCount="indefinite" begin="1s"><mpath href="#r3"/></animateMotion></circle>
+  </svg>
+
+  <!-- connection nodes -->
+  <div class="node" style="top:24%;left:26%;animation-delay:0s;"></div>
+  <div class="node" style="top:47%;left:43%;animation-delay:.8s;"></div>
+  <div class="node" style="bottom:32%;left:19%;animation-delay:1.6s;"></div>
+  <div class="node" style="top:38%;left:8%;animation-delay:1s;width:8px;height:8px;border-color:rgba(34,197,94,.6);"></div>
+
+  <!-- sparks -->
+  <div class="spark" style="top:32%;left:36%;animation-delay:0s;"></div>
+  <div class="spark" style="top:56%;left:11%;animation-delay:1s;background:#86efac;"></div>
+  <div class="spark" style="top:72%;left:39%;animation-delay:2.2s;"></div>
+  <div class="spark" style="top:21%;left:49%;animation-delay:1.6s;background:#16a34a;"></div>
+  <div class="spark" style="top:44%;left:22%;animation-delay:.5s;width:3px;height:3px;background:#bbf7d0;"></div>
+
+  <!-- floating chips -->
+  <div class="float-chip" style="top:28%;left:1%;animation-delay:0s;"><span class="chip-dot"></span> Delivered ✓</div>
+  <div class="float-chip" style="bottom:36%;left:0%;animation-delay:1.8s;">📦 In Transit</div>
+  <div class="float-chip" style="top:73%;left:36%;animation-delay:1s;"><span class="chip-dot"></span> 99.2% On Time</div>
+  <div class="float-chip" style="top:10%;left:28%;animation-delay:2.5s;font-size:.68rem;">🌍 200+ Countries</div>
+
+  <!-- HERO CONTENT -->
+  <div class="hero-left">
+    <div class="hero-badge"><span class="chip-dot"></span> Trusted by 10K+ Businesses</div>
+    <h1 class="hero-title">ShipEase<br><span class="accent">Book. Track.</span><br>Deliver.</h1>
+    <p class="hero-sub">The fastest way to send parcels anywhere in the world with real-time updates. We simplify global logistics for you.</p>
+    <div class="hero-btns">
+      <button class="btn-primary">Book Parcel</button>
+      <button class="btn-outline">Track Parcel →</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-card"><div class="stat-num" data-count="200">0</div><div class="stat-label">Countries</div></div>
+      <div class="stat-card"><div class="stat-num" data-count="10">0</div><div class="stat-label">K+ Businesses</div></div>
+      <div class="stat-card"><div class="stat-num" data-count="99">0</div><div class="stat-label">% On-Time Rate</div></div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="card-3d" id="heroCard">
+      <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80" alt="Packages" onerror="this.style.background='linear-gradient(135deg,#22c55e,#16a34a)';this.removeAttribute('src')"/>
+      <div class="card-3d-overlay"></div>
+      <div class="status-badge">
+        <div class="status-dot"></div>
+        <div><div class="s-title">Status: In Transit</div><div class="s-sub">On Time · ETA 2h</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK TRACK -->
+<section id="quick-track">
+  <div class="track-box reveal">
+    <div class="track-title">
+      <svg viewBox="0 0 24 24" style="width:20px;height:20px;stroke:var(--green);stroke-width:2;fill:none"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Quick Track
+    </div>
+    <p class="track-sub">Enter your tracking ID to see your shipment status instantly.</p>
+    <div class="track-row">
+      <input class="track-input" type="text" placeholder="Enter Tracking ID (e.g., SE-4842108)"/>
+      <button class="btn-track">
+        Track Now
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE -->
+<section id="why">
+  <div class="dot-overlay"></div>
+  <div class="why-ring" style="width:500px;height:500px;top:-150px;right:-150px;"></div>
+  <div class="why-ring" style="width:280px;height:280px;bottom:-70px;left:-70px;"></div>
+  <!-- small crosses -->
+  <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="rgba(34,197,94,.35)" stroke-width="1.5">
+      <line x1="55" y1="50" x2="55" y2="68"/><line x1="46" y1="59" x2="64" y2="59"/>
+      <line x1="180" y1="30" x2="180" y2="48"/><line x1="171" y1="39" x2="189" y2="39"/>
+      <line x1="95" y1="180" x2="95" y2="198"/><line x1="86" y1="189" x2="104" y2="189"/>
+      <line x1="920" y1="60" x2="920" y2="78"/><line x1="911" y1="69" x2="929" y2="69"/>
+      <circle cx="280" cy="70" r="14" fill="none" stroke-dasharray="4,4"/>
+      <circle cx="350" cy="170" r="7" fill="none"/>
+      <circle cx="820" cy="40" r="18" fill="none" stroke-dasharray="5,5"/>
+    </g>
+  </svg>
+
+  <div class="section-header reveal">
+    <h2 class="section-title">Why Choose ShipEase?</h2>
+    <p class="section-sub">We optimize every step of the logistics journey to make it simple, transparent, and secure for everyone.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feat-card reveal d1">
+      <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+      <div class="feat-name">Fast Booking</div>
+      <p class="feat-desc">Book your shipment in seconds with our optimized flow. No paperwork, just digital speed.</p>
+    </div>
+    <div class="feat-card reveal d2">
+      <div class="feat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+      <div class="feat-name">Real-Time Tracking</div>
+      <p class="feat-desc">Know exactly where your package is at every step of the journey with live map updates.</p>
+    </div>
+    <div class="feat-card reveal d3">
+      <div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="feat-name">Secure Payments</div>
+      <p class="feat-desc">Safe and encrypted transactions for peace of mind. We protect your data and your cargo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- COVERAGE -->
+<section id="coverage">
+  <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;" xmlns="http://www.w3.org/2000/svg">
+    <defs><pattern id="cov-dots" x="0" y="0" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="rgba(34,197,94,.12)"/></pattern></defs>
+    <rect width="100%" height="100%" fill="url(#cov-dots)"/>
+    <g stroke="rgba(34,197,94,.2)" stroke-width="1" fill="none">
+      <circle cx="80" cy="80" r="40" stroke-dasharray="4,6"/>
+      <line x1="50" y1="50" x2="50" y2="70"/><line x1="40" y1="60" x2="60" y2="60"/>
+      <line x1="140" y1="200" x2="140" y2="220"/><line x1="130" y1="210" x2="150" y2="210"/>
+    </g>
+  </svg>
+  <div class="cov-text reveal">
+    <h2>Delivering to over <span>200 countries</span></h2>
+    <p>From local streets to global destinations, our network ensures your package arrives safely and on time, every single time.</p>
+    <a href="#" class="cov-link">View our coverage map →</a>
+  </div>
+  <div class="globe-wrap reveal d2">
+    <div class="globe">
+      <div class="ping" style="top:30%;left:40%;"></div>
+      <div class="ping" style="top:55%;left:60%;animation-delay:.5s;"></div>
+      <div class="ping" style="top:40%;left:75%;animation-delay:1s;"></div>
+    </div>
+    <div class="globe-ring"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-grid"></div>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="nav-logo">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M5 8h14l-2 9H7L5 8z"/></svg></div>
+        ShipEase
+      </div>
+      <p>Making logistics simple and efficient for everyone. Book, track, and deliver with ShipEase.</p>
+    </div>
+    <div>
+      <div class="ft-h">Contact Us</div>
+      <div class="ft-ci"><div class="ft-ico"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="ft-txt">1413 Logistics Way,<br>Shipping City, SC 80210</div></div>
+      <div class="ft-ci"><div class="ft-ico"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.03 1.23 2 2 0 012 .03h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div><div class="ft-txt">+1 234 567 8900</div></div>
+      <div class="ft-ci"><div class="ft-ico"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div class="ft-txt">support@shipease.com</div></div>
+    </div>
+    <div>
+      <div class="ft-h">Quick Links</div>
+      <ul class="ft-links"><li><a href="#">About Us</a></li><li><a href="#">Services</a></li><li><a href="#">Pricing</a></li><li><a href="#">Terms & Conditions</a></li></ul>
+    </div>
+    <div>
+      <div class="ft-h">Follow Us</div>
+      <div class="socials">
+        <div class="soc-btn"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></div>
+        <div class="soc-btn"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#9ca3af" stroke="none"/></svg></div>
+        <div class="soc-btn"><svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bot">
+    <span>ShipEase © 2025. All rights reserved.</span>
+    <div class="ft-bot-links"><a href="#">Privacy Policy</a><a href="#">Cookie Policy</a></div>
+  </div>
+</footer>
+
+<script>
+/* ── CANVAS: particle network + 3D shapes ── */
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+const mouse = {x:-9999,y:-9999};
+
+function resize(){ W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
+resize(); addEventListener('resize', resize);
+addEventListener('mousemove', e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
+
+// ── Particles ──
+class Pt {
+  constructor(){ this.reset(true); }
+  reset(init){
+    this.x = Math.random()*W; this.y = Math.random()*H;
+    this.vx=(Math.random()-.5)*.55; this.vy=(Math.random()-.5)*.45;
+    this.r=Math.random()*2.2+.8;
+    this.alpha=Math.random()*.45+.18;
+    this.c=Math.random()>.55?'34,197,94':'134,239,172';
+    if(init) this.y=Math.random()*H;
+  }
+  update(){
+    this.x+=this.vx; this.y+=this.vy;
+    if(this.x<-10||this.x>W+10||this.y<-10||this.y>H+10) this.reset(false);
+    const dx=this.x-mouse.x,dy=this.y-mouse.y,d=Math.hypot(dx,dy);
+    if(d<110){this.x+=dx/d*1.8;this.y+=dy/d*1.8;}
+  }
+  draw(){
+    ctx.beginPath(); ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${this.c},${this.alpha})`; ctx.fill();
+  }
+}
+const pts = Array.from({length:130},()=>new Pt());
+
+// ── 3D isometric boxes ──
+class Box3D {
+  constructor(){
+    this.x=Math.random()*W; this.y=Math.random()*H;
+    this.s=Math.random()*28+14;
+    this.vx=(Math.random()-.5)*.4; this.vy=(Math.random()-.5)*.35;
+    this.rot=Math.random()*Math.PI*2; this.vr=(Math.random()-.5)*.009;
+    this.a=Math.random()*.14+.05;
+  }
+  update(){
+    this.x+=this.vx; this.y+=this.vy; this.rot+=this.vr;
+    if(this.x<-60)this.x=W+60; if(this.x>W+60)this.x=-60;
+    if(this.y<-60)this.y=H+60; if(this.y>H+60)this.y=-60;
+  }
+  draw(){
+    const {x,y,s,rot,a}=this;
+    const h=s*.5,o=s*.26;
+    ctx.save(); ctx.translate(x,y); ctx.rotate(rot);
+    ctx.strokeStyle=`rgba(34,197,94,${a*2.8})`; ctx.lineWidth=1;
+    // top
+    ctx.fillStyle=`rgba(34,197,94,${a*1.5})`;
+    ctx.beginPath(); ctx.moveTo(0,-h); ctx.lineTo(o,-h+o*.55); ctx.lineTo(0,-h+o*1.1); ctx.lineTo(-o,-h+o*.55); ctx.closePath(); ctx.fill(); ctx.stroke();
+    // left
+    ctx.fillStyle=`rgba(34,197,94,${a})`;
+    ctx.beginPath(); ctx.moveTo(-o,-h+o*.55); ctx.lineTo(0,-h+o*1.1); ctx.lineTo(0,h); ctx.lineTo(-o,h-o*.55); ctx.closePath(); ctx.fill(); ctx.stroke();
+    // right
+    ctx.fillStyle=`rgba(22,163,74,${a*1.2})`;
+    ctx.beginPath(); ctx.moveTo(o,-h+o*.55); ctx.lineTo(0,-h+o*1.1); ctx.lineTo(0,h); ctx.lineTo(o,h-o*.55); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.restore();
+  }
+}
+const boxes = Array.from({length:12},()=>new Box3D());
+
+// ── Triangles ──
+class Tri {
+  constructor(){
+    this.x=Math.random()*W; this.y=Math.random()*H;
+    this.s=Math.random()*20+10;
+    this.vx=(Math.random()-.5)*.3; this.vy=(Math.random()-.5)*.28;
+    this.rot=Math.random()*Math.PI*2; this.vr=(Math.random()-.5)*.007;
+    this.a=Math.random()*.1+.04;
+  }
+  update(){
+    this.x+=this.vx; this.y+=this.vy; this.rot+=this.vr;
+    if(this.x<-60)this.x=W+60; if(this.x>W+60)this.x=-60;
+    if(this.y<-60)this.y=H+60; if(this.y>H+60)this.y=-60;
+  }
+  draw(){
+    const {x,y,s,rot,a}=this;
+    ctx.save(); ctx.translate(x,y); ctx.rotate(rot);
+    ctx.beginPath(); ctx.moveTo(0,-s); ctx.lineTo(s*.87,s*.5); ctx.lineTo(-s*.87,s*.5); ctx.closePath();
+    ctx.strokeStyle=`rgba(34,197,94,${a*2.2})`; ctx.lineWidth=1; ctx.stroke();
+    ctx.restore();
+  }
+}
+const tris = Array.from({length:8},()=>new Tri());
+
+// ── Diamond shapes ──
+class Diamond {
+  constructor(){
+    this.x=Math.random()*W; this.y=Math.random()*H;
+    this.s=Math.random()*18+8;
+    this.vx=(Math.random()-.5)*.25; this.vy=(Math.random()-.5)*.25;
+    this.rot=Math.random()*Math.PI*2; this.vr=(Math.random()-.5)*.005;
+    this.a=Math.random()*.1+.04;
+  }
+  update(){
+    this.x+=this.vx; this.y+=this.vy; this.rot+=this.vr;
+    if(this.x<-60)this.x=W+60; if(this.x>W+60)this.x=-60;
+    if(this.y<-60)this.y=H+60; if(this.y>H+60)this.y=-60;
+  }
+  draw(){
+    const {x,y,s,rot,a}=this;
+    ctx.save(); ctx.translate(x,y); ctx.rotate(rot);
+    ctx.beginPath(); ctx.moveTo(0,-s); ctx.lineTo(s*.6,0); ctx.lineTo(0,s); ctx.lineTo(-s*.6,0); ctx.closePath();
+    ctx.strokeStyle=`rgba(34,197,94,${a*2})`; ctx.lineWidth=1; ctx.stroke();
+    ctx.restore();
+  }
+}
+const diamonds = Array.from({length:7},()=>new Diamond());
+
+// ── Circles (hollow) ──
+class Ring2 {
+  constructor(){
+    this.x=Math.random()*W; this.y=Math.random()*H;
+    this.r=Math.random()*18+8;
+    this.vx=(Math.random()-.5)*.2; this.vy=(Math.random()-.5)*.2;
+    this.a=Math.random()*.12+.04;
+  }
+  update(){
+    this.x+=this.vx; this.y+=this.vy;
+    if(this.x<-60)this.x=W+60; if(this.x>W+60)this.x=-60;
+    if(this.y<-60)this.y=H+60; if(this.y>H+60)this.y=-60;
+  }
+  draw(){
+    ctx.beginPath(); ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(34,197,94,${this.a*2})`; ctx.lineWidth=1; ctx.stroke();
+    // inner
+    ctx.beginPath(); ctx.arc(this.x,this.y,this.r*.5,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(134,239,172,${this.a})`; ctx.lineWidth=.6; ctx.stroke();
+  }
+}
+const rings2 = Array.from({length:8},()=>new Ring2());
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+
+  // connections between particles
+  for(let i=0;i<pts.length;i++){
+    for(let j=i+1;j<pts.length;j++){
+      const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y;
+      const d=Math.hypot(dx,dy);
+      if(d<115){
+        ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y);
+        ctx.strokeStyle=`rgba(34,197,94,${(1-d/115)*.16})`; ctx.lineWidth=.7; ctx.stroke();
+      }
+    }
+    // mouse connections
+    const md=Math.hypot(pts[i].x-mouse.x,pts[i].y-mouse.y);
+    if(md<150){
+      ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(mouse.x,mouse.y);
+      ctx.strokeStyle=`rgba(34,197,94,${(1-md/150)*.38})`; ctx.lineWidth=1; ctx.stroke();
+    }
+  }
+
+  pts.forEach(p=>{p.update();p.draw();});
+  boxes.forEach(b=>{b.update();b.draw();});
+  tris.forEach(t=>{t.update();t.draw();});
+  diamonds.forEach(d=>{d.update();d.draw();});
+  rings2.forEach(r=>{r.update();r.draw();});
+
+  requestAnimationFrame(draw);
+}
+draw();
+
+/* ── NAVBAR ── */
+addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',scrollY>20));
+
+/* ── SCROLL REVEAL ── */
+const ro = new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add('visible')),{threshold:.15});
+document.querySelectorAll('.reveal').forEach(r=>ro.observe(r));
+
+/* ── COUNTER ── */
+function cnt(el,tgt){
+  let s,t0;
+  const f=ts=>{
+    if(!t0)t0=ts;
+    const p=Math.min((ts-t0)/1800,1),e=1-Math.pow(1-p,3);
+    el.textContent=Math.floor(e*tgt);
+    if(p<1)requestAnimationFrame(f);
+    else el.textContent=tgt+(el.dataset.count==='99'?'%':el.dataset.count==='10'?'K+':'+');
+  };
+  requestAnimationFrame(f);
+}
+const co=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('[data-count]').forEach(el=>cnt(el,+el.dataset.count));co.unobserve(e.target);}}),{threshold:.5});
+co.observe(document.querySelector('.hero-stats'));
+
+/* ── HERO CARD TILT ── */
+const hc=document.getElementById('heroCard');
+document.querySelector('#hero').addEventListener('mousemove',e=>{
+  const r=hc.getBoundingClientRect();
+  hc.style.transform=`rotateX(${-(e.clientY-r.top-r.height/2)/28}deg) rotateY(${(e.clientX-r.left-r.width/2)/28}deg) scale(1.02)`;
+});
+document.querySelector('#hero').addEventListener('mouseleave',()=>{hc.style.transform='rotateY(-8deg) rotateX(4deg)';});
+
+/* ── FEATURE CARD TILT ── */
+document.querySelectorAll('.feat-card').forEach(c=>{
+  c.addEventListener('mousemove',e=>{
+    const r=c.getBoundingClientRect();
+    c.style.transform=`translateY(-8px) rotateX(${-((e.clientY-r.top)/r.height-.5)*10}deg) rotateY(${((e.clientX-r.left)/r.width-.5)*10}deg)`;
+  });
+  c.addEventListener('mouseleave',()=>c.style.transform='');
+});
+</script>
+</body>
+</html>

@@ -51,7 +51,17 @@ export class AdminChartsComponent implements OnInit, OnDestroy {
 
   constructor(private http: HttpClient) {}
 
-  ngOnInit(): void { this.loadTab('bookings'); }
+ngOnInit(): void {
+  this.loadAllCharts();
+}
+
+loadAllCharts(): void {
+  this.loadBarChart();
+  this.loadHBarChart();
+  this.loadDoughnut();
+  this.loadGroupedBar();
+  this.loadLineChart();
+}
 
   ngOnDestroy(): void { this.charts.forEach(c => c.destroy()); }
 

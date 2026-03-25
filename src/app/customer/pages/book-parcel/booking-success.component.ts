@@ -8,62 +8,95 @@ import { Router } from '@angular/router';
 export class BookingSuccessComponent implements OnInit {
 
   trackingId = '';
-  isLoading = true;
+  isLoading  = true;
+  role       = '';
 
-  constructor(private router: Router) {}
+  // ── Razorpay payment details (populated after real payment) ──
+  paymentId  = '';   // razorpay_payment_id
+  orderId    = '';   // razorpay_order_id
+  amount     = 0;    // in rupees/dollars (already divided from paise)
+  bookingId  = '';
+  isPaidFlow = false; // true = came from Razorpay, false = old mock flow
 
-  ngOnInit(): void {
-    this.loadTrackingId();
+  constructor(private router: Router) {
+    // ── Read Razorpay state passed from checkout.component.ts ──
+    // Must be read in constructor — router state is only available here
+    const nav   = this.router.getCurrentNavigation();
+    const state = nav?.extras?.state as any;
+
+    if (state?.paymentId) {
+      this.isPaidFlow = true;
+      this.paymentId  = state.paymentId  ?? '';
+      this.orderId    = state.orderId    ?? '';
+      this.amount     = state.amount     ?? 0;
+      this.bookingId  = state.bookingId  ?? '';
+      // trackingId may come from backend response via state,
+      // or fall back to localStorage set by finalBooking()
+      this.trackingId = state.trackingId ?? localStorage.getItem('trackingId') ?? '';
+    }
   }
 
-  /* =====================================================
-     ✅ SAFE TRACKING LOAD 😈🔥
-  ===================================================== */
+  ngOnInit(): void {
+    this.detectRole();
 
+    if (this.isPaidFlow) {
+      // Came from Razorpay — trackingId already set in constructor
+      if (!this.trackingId && !this.paymentId) {
+        this.redirectByRole();
+        return;
+      }
+      requestAnimationFrame(() => {
+        setTimeout(() => { this.isLoading = false; }, 250);
+      });
+    } else {
+      // Old mock flow — read trackingId from localStorage
+      this.loadTrackingId();
+    }
+  }
+
+  detectRole(): void {
+    const token = localStorage.getItem('token');
+    try {
+      this.role = JSON.parse(atob(token!.split('.')[1])).role;
+    } catch {
+      this.role = 'Customer';
+    }
+  }
+
+  // ── Used only by old mock flow ────────────────────────────
   loadTrackingId(): void {
-
     const storedId = localStorage.getItem('trackingId');
-
     if (!storedId) {
-      this.router.navigate(['/customer']);
+      this.redirectByRole();
       return;
     }
-
     this.trackingId = storedId;
-
-    /* ✅ Smooth UI transition */
     requestAnimationFrame(() => {
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 250);
+      setTimeout(() => { this.isLoading = false; }, 250);
     });
   }
 
-  /* =====================================================
-     ✅ TRACK ACTION 😈🔥
-  ===================================================== */
+  private redirectByRole(): void {
+    this.role === 'Admin'
+      ? this.router.navigate(['/admin/dashboard'])
+      : this.router.navigate(['/customer']);
+  }
 
   trackParcel(): void {
-
     if (!this.trackingId) {
-      alert("Tracking ID missing 😑");
+      alert('Tracking ID missing 😑');
       return;
     }
-
-    /* ✅ Clean success state (optional but smart) */
     localStorage.removeItem('trackingId');
-
     this.router.navigate(
       ['/customer/track'],
       { queryParams: { trackingId: this.trackingId } }
     );
   }
 
-  /* =====================================================
-     ✅ DASHBOARD ACTION (Optional UX)
-  ===================================================== */
-
   goToDashboard(): void {
-    this.router.navigate(['/customer']);
+    this.role === 'Admin'
+      ? this.router.navigate(['/admin/dashboard'])
+      : this.router.navigate(['/customer']);
   }
 }

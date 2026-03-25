@@ -9,7 +9,7 @@ export class SidebarComponent {
   @Input() collapsed = false;
 
   menuItems = [
-    { icon: '📊', label: 'Dashboard', route: '/customer' },
+    { icon: 'fas fa-chart-line', label: 'Dashboard', route: '/customer' },
     { icon: '📦', label: 'Book Parcel', route: '/customer/book' },
     { icon: '🔍', label: 'Track Parcel', route: '/customer/track' },
     { icon: '👤', label: 'My Profile', route: '/customer/profile' },

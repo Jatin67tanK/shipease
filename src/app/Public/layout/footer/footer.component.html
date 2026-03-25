@@ -3,8 +3,14 @@
 
     <!-- BRAND -->
     <div>
-      <h3 class="text-white font-semibold mb-3">ShipEase</h3>
-      <p>
+      <a routerLink="/"
+         class="flex items-center gap-2 mb-3 no-underline"
+         style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:white">
+        <div class="w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs"
+             style="background:#22c55e">📦</div>
+        ShipEase
+      </a>
+      <p class="leading-relaxed text-xs">
         We simplify logistics so businesses can deliver faster and smarter
         across the globe.
       </p>
@@ -12,34 +18,78 @@
 
     <!-- CONTACT -->
     <div>
-      <h4 class="text-white font-medium mb-3">Contact Us</h4>
-      <p>📍 173, Hidayat Nagar, Surat</p>
-      <p>📞 +91 90000 00000</p>
-      <p>✉️ support@shipease.com</p>
+      <h4 class="text-white font-semibold mb-4">Contact Us</h4>
+      <div class="flex flex-col gap-2 text-xs">
+        <p>📍 173, Hidayat Nagar, Surat</p>
+        <p>📞 +91 90000 00000</p>
+        <a href="mailto:support@shipease.com"
+           class="hover:text-white transition-colors no-underline">
+          ✉️ support&#64;shipease.com
+        </a>
+      </div>
     </div>
 
     <!-- QUICK LINKS -->
     <div>
-      <h4 class="text-white font-medium mb-3">Quick Links</h4>
-      <p class="hover:text-white cursor-pointer">Home</p>
-      <p class="hover:text-white cursor-pointer">Services</p>
-      <p class="hover:text-white cursor-pointer">Pricing</p>
-      <p class="hover:text-white cursor-pointer">Terms & Conditions</p>
+      <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+      <div class="flex flex-col gap-2 text-xs">
+        <a routerLink="/"
+           routerLinkActive="text-green-400"
+           [routerLinkActiveOptions]="{ exact: true }"
+           class="hover:text-white transition-colors cursor-pointer no-underline">
+          Home
+        </a>
+        <a routerLink="/track"
+           routerLinkActive="text-green-400"
+           class="hover:text-white transition-colors cursor-pointer no-underline">
+          Track Parcel
+        </a>
+        <a routerLink="/contact"
+           routerLinkActive="text-green-400"
+           class="hover:text-white transition-colors cursor-pointer no-underline">
+          Contact Us
+        </a>
+        <a routerLink="/login"
+           routerLinkActive="text-green-400"
+           class="hover:text-white transition-colors cursor-pointer no-underline">
+          Login
+        </a>
+        <a routerLink="/register"
+           routerLinkActive="text-green-400"
+           class="hover:text-white transition-colors cursor-pointer no-underline">
+          Register
+        </a>
+      </div>
     </div>
 
     <!-- SOCIAL -->
     <div>
-      <h4 class="text-white font-medium mb-3">Follow Us</h4>
-      <div class="flex space-x-4 mt-2">
-        <span class="cursor-pointer hover:text-white">🌐</span>
-        <span class="cursor-pointer hover:text-white">🐦</span>
-        <span class="cursor-pointer hover:text-white">📸</span>
+      <h4 class="text-white font-semibold mb-4">Follow Us</h4>
+      <div class="flex gap-3 mt-1">
+        <a href="https://facebook.com" target="_blank" rel="noopener"
+           class="w-9 h-9 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:-translate-y-1 transition-all cursor-pointer no-underline"
+           style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)">
+          f
+        </a>
+        <a href="https://twitter.com" target="_blank" rel="noopener"
+           class="w-9 h-9 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:-translate-y-1 transition-all cursor-pointer no-underline"
+           style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)">
+          𝕏
+        </a>
+        <a href="https://instagram.com" target="_blank" rel="noopener"
+           class="w-9 h-9 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:-translate-y-1 transition-all cursor-pointer no-underline"
+           style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)">
+          📸
+        </a>
       </div>
     </div>
 
   </div>
 
-  <div class="text-center text-xs text-gray-500 mt-10">
-    © 2026 ShipEase. All rights reserved.
+  <div class="text-center text-xs text-gray-500 mt-10 border-t border-gray-800 pt-6 mx-6">
+    © 2026 ShipEase. All rights reserved. &nbsp;·&nbsp;
+    <a class="hover:text-green-400 transition-colors cursor-pointer">Privacy Policy</a>
+    &nbsp;·&nbsp;
+    <a class="hover:text-green-400 transition-colors cursor-pointer">Terms of Service</a>
   </div>
 </footer>
