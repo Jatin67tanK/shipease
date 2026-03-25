@@ -1,17 +1,20 @@
-<div class="min-h-screen bg-[#F0FDF4] p-4 md:p-6">
+<!-- cycle-history.component.html — Fully Responsive -->
+<div class="min-h-screen bg-[#F0FDF4] p-3 sm:p-4 md:p-6">
 
   <!-- Header -->
-  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
     <div>
-      <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2"><i class="fa-solid fa-rotate text-[#16A34A]"></i> Assignment Cycle History</h1>
-      <p class="text-sm text-gray-500 mt-1">Auto-runs every 6 hours · {{ total }} cycles total</p>
+      <h1 class="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-2">
+        <i class="fa-solid fa-rotate text-[#16A34A]"></i> Assignment Cycle History
+      </h1>
+      <p class="text-xs sm:text-sm text-gray-500 mt-1">Auto-runs every 6 hours · {{ total }} cycles total</p>
     </div>
     <button (click)="runCycle()"
             [disabled]="isRunning"
-            class="flex items-center gap-2 px-5 py-2.5 bg-[#16A34A] text-white text-sm font-semibold
-                   rounded-xl shadow-md hover:bg-green-700 transition-all active:scale-95 disabled:opacity-60">
+            class="flex items-center gap-2 px-4 sm:px-5 py-2.5 bg-[#16A34A] text-white text-sm font-semibold
+                   rounded-xl shadow-md hover:bg-green-700 transition-all active:scale-95 disabled:opacity-60 self-start sm:self-auto whitespace-nowrap">
       <i class="fa-solid" [class.fa-spinner]="isRunning" [class.fa-spin]="isRunning" [class.fa-play]="!isRunning"></i>
-      {{ isRunning ? 'Running Cycle...' : 'Run Cycle Now' }}
+      {{ isRunning ? 'Running...' : 'Run Cycle Now' }}
     </button>
   </div>
 
@@ -28,9 +31,11 @@
     <div class="w-10 h-10 border-4 border-[#16A34A] border-t-transparent rounded-full animate-spin"></div>
   </div>
 
-  <!-- Table -->
+  <!-- Table Container -->
   <div *ngIf="!isLoading" class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-    <div class="overflow-x-auto">
+
+    <!-- Desktop Table -->
+    <div class="hidden md:block overflow-x-auto">
       <table class="w-full text-sm">
         <thead class="bg-gray-50 border-b border-gray-100">
           <tr>
@@ -45,22 +50,20 @@
           </tr>
         </thead>
         <tbody>
-
           <ng-container *ngFor="let cycle of cycles">
-            <!-- Main Row -->
             <tr (click)="toggleExpand(cycle)"
                 class="border-b border-gray-50 hover:bg-[#F0FDF4] transition-colors cursor-pointer">
               <td class="px-4 py-3 text-center text-gray-400">
-               <i class="fa-solid fa-chevron-right transition-transform duration-200"
-   [class.rotate-90]="expandedId === cycle._id"></i>
+                <i class="fa-solid fa-chevron-right transition-transform duration-200"
+                   [class.rotate-90]="expandedId === cycle._id"></i>
               </td>
               <td class="px-4 py-3">
                 <span class="font-bold text-gray-800">#{{ cycle.cycleNumber }}</span>
               </td>
-              <td class="px-4 py-3 text-gray-600 text-xs">
+              <td class="px-4 py-3 text-gray-600 text-xs whitespace-nowrap">
                 {{ cycle.startedAt | date:'dd MMM yyyy, HH:mm' }}
               </td>
-              <td class="px-4 py-3 text-gray-600 text-xs">
+              <td class="px-4 py-3 text-gray-600 text-xs whitespace-nowrap">
                 {{ cycle.completedAt ? (cycle.completedAt | date:'dd MMM yyyy, HH:mm') : '—' }}
               </td>
               <td class="px-4 py-3 text-center text-gray-500 text-xs">{{ duration(cycle) }}</td>
@@ -70,12 +73,12 @@
               <td class="px-4 py-3">
                 <div *ngIf="cycle.unassignedCities?.length; else noUnassigned" class="flex flex-wrap gap-1">
                   <span *ngFor="let city of cycle.unassignedCities"
-                        class="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">
-                    {{ city }}
-                  </span>
+                        class="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">{{ city }}</span>
                 </div>
                 <ng-template #noUnassigned>
-                  <span class="text-xs text-gray-400 flex items-center gap-1"><i class="fa-solid fa-circle-check text-green-400"></i> None</span>
+                  <span class="text-xs text-gray-400 flex items-center gap-1">
+                    <i class="fa-solid fa-circle-check text-green-400"></i> None
+                  </span>
                 </ng-template>
               </td>
               <td class="px-4 py-3 text-center">
@@ -87,22 +90,21 @@
 
             <!-- Expanded Detail Row -->
             <tr *ngIf="expandedId === cycle._id">
-              <td colspan="8" class="bg-[#F0FDF4] px-6 py-4">
-
+              <td colspan="8" class="bg-[#F0FDF4] px-4 sm:px-6 py-4">
                 <div *ngIf="detailLoading" class="flex justify-center py-6">
-                  <div class="w-6 h-6 border-3 border-[#16A34A] border-t-transparent rounded-full animate-spin"></div>
+                  <div class="w-6 h-6 border-4 border-[#16A34A] border-t-transparent rounded-full animate-spin"></div>
                 </div>
-
                 <div *ngIf="!detailLoading && cycleDetail">
                   <p class="text-sm font-semibold text-gray-700 mb-3">
                     Assignment Breakdown — {{ cycleDetail.assignments?.length }} employee(s) involved
                   </p>
-
-                  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
                     <div *ngFor="let a of cycleDetail.assignments"
                          class="bg-white rounded-xl border border-green-100 p-3 shadow-sm">
                       <p class="font-semibold text-gray-800 text-sm">{{ a.employeeName }}</p>
-                      <p class="text-xs text-gray-400 mb-2 flex items-center gap-1"><i class="fa-solid fa-location-dot text-red-400"></i> {{ a.city }}</p>
+                      <p class="text-xs text-gray-400 mb-2 flex items-center gap-1">
+                        <i class="fa-solid fa-location-dot text-red-400"></i> {{ a.city }}
+                      </p>
                       <div class="flex flex-wrap gap-1">
                         <span *ngFor="let p of (a.parcelIds || [])"
                               class="bg-green-50 text-green-700 text-xs px-2 py-0.5 rounded font-mono">
@@ -111,7 +113,6 @@
                       </div>
                       <p class="text-xs text-gray-400 mt-2">{{ a.parcelIds?.length }} parcel(s)</p>
                     </div>
-
                     <div *ngIf="!cycleDetail.assignments?.length"
                          class="col-span-full text-center py-4 text-gray-400 text-sm">
                       No assignments in this cycle
@@ -125,7 +126,6 @@
           <tr *ngIf="cycles.length === 0">
             <td colspan="8" class="py-16 text-center text-gray-400">
               <i class="fa-solid fa-rotate text-4xl block mb-2"></i>
-No cycles run yet
               No cycles run yet
             </td>
           </tr>
@@ -133,8 +133,84 @@ No cycles run yet
       </table>
     </div>
 
+    <!-- Mobile Cards -->
+    <div class="md:hidden divide-y divide-gray-50">
+      <ng-container *ngFor="let cycle of cycles">
+        <div (click)="toggleExpand(cycle)"
+             class="p-3 sm:p-4 hover:bg-[#F0FDF4] transition-colors cursor-pointer">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+              <i class="fa-solid fa-chevron-right text-gray-400 transition-transform duration-200 flex-shrink-0 mt-0.5"
+                 [class.rotate-90]="expandedId === cycle._id"></i>
+              <div class="min-w-0">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="font-bold text-gray-800">#{{ cycle.cycleNumber }}</span>
+                  <span class="px-2 py-0.5 rounded-full text-xs font-semibold {{ statusClass(cycle.status) }}">
+                    {{ cycle.status }}
+                  </span>
+                </div>
+                <p class="text-xs text-gray-500 mt-0.5">{{ cycle.startedAt | date:'dd MMM yyyy, HH:mm' }}</p>
+              </div>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <span class="font-bold text-green-600 text-lg">{{ cycle.totalParcels }}</span>
+              <p class="text-[10px] text-gray-400">parcels</p>
+            </div>
+          </div>
+
+          <div class="ml-7 mt-2 flex flex-wrap gap-2 text-xs text-gray-500">
+            <span>⏱ {{ duration(cycle) }}</span>
+            <span *ngIf="cycle.unassignedCities?.length" class="flex flex-wrap gap-1">
+              <span *ngFor="let city of cycle.unassignedCities"
+                class="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full">{{ city }}</span>
+            </span>
+            <span *ngIf="!cycle.unassignedCities?.length" class="text-green-600">
+              <i class="fa-solid fa-circle-check mr-1"></i>All assigned
+            </span>
+          </div>
+        </div>
+
+        <!-- Expanded Mobile -->
+        <div *ngIf="expandedId === cycle._id" class="bg-[#F0FDF4] px-4 py-4">
+          <div *ngIf="detailLoading" class="flex justify-center py-4">
+            <div class="w-6 h-6 border-4 border-[#16A34A] border-t-transparent rounded-full animate-spin"></div>
+          </div>
+          <div *ngIf="!detailLoading && cycleDetail">
+            <p class="text-sm font-semibold text-gray-700 mb-3">
+              {{ cycleDetail.assignments?.length }} employee(s) involved
+            </p>
+            <div class="grid grid-cols-1 gap-3">
+              <div *ngFor="let a of cycleDetail.assignments"
+                   class="bg-white rounded-xl border border-green-100 p-3 shadow-sm">
+                <p class="font-semibold text-gray-800 text-sm">{{ a.employeeName }}</p>
+                <p class="text-xs text-gray-400 mb-2 flex items-center gap-1">
+                  <i class="fa-solid fa-location-dot text-red-400"></i> {{ a.city }}
+                </p>
+                <div class="flex flex-wrap gap-1">
+                  <span *ngFor="let p of (a.parcelIds || [])"
+                        class="bg-green-50 text-green-700 text-xs px-2 py-0.5 rounded font-mono">
+                    {{ p.tracking_id || p }}
+                  </span>
+                </div>
+                <p class="text-xs text-gray-400 mt-2">{{ a.parcelIds?.length }} parcel(s)</p>
+              </div>
+              <div *ngIf="!cycleDetail.assignments?.length"
+                   class="text-center py-4 text-gray-400 text-sm">
+                No assignments in this cycle
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <div *ngIf="cycles.length === 0" class="py-16 text-center text-gray-400">
+        <i class="fa-solid fa-rotate text-4xl block mb-2"></i>
+        No cycles run yet
+      </div>
+    </div>
+
     <!-- Pagination -->
-    <div *ngIf="pages > 1" class="flex items-center justify-between px-5 py-3 border-t border-gray-100">
+    <div *ngIf="pages > 1" class="flex items-center justify-between px-4 sm:px-5 py-3 border-t border-gray-100">
       <p class="text-xs text-gray-400">Page {{ page }} of {{ pages }}</p>
       <div class="flex gap-2">
         <button (click)="prevPage()" [disabled]="page === 1"

@@ -1,186 +1,195 @@
-<div class="min-h-screen bg-[#F0FDF4] p-4 md:p-6" (click)="onDocClick()">
+<!-- customer-management.component.html — Fully Responsive -->
+<div class="min-h-screen bg-[#F0FDF4] p-3 sm:p-4 md:p-6" (click)="onDocClick()">
 
-  <!-- ══ PAGE HEADER ══════════════════════════════════════════ -->
-  <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+  <!-- PAGE HEADER -->
+  <div class="mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
     <div>
-      <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+      <h1 class="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-2">
         <i class="fa-solid fa-users text-[#16A34A]"></i> Customer Management
       </h1>
-      <p class="text-gray-500 text-sm mt-1">Activate or deactivate customer accounts</p>
+      <p class="text-gray-500 text-xs sm:text-sm mt-1">Activate or deactivate customer accounts</p>
     </div>
     <button (click)="loadCustomers()"
       class="flex items-center gap-2 text-sm font-semibold text-[#16A34A] bg-white border border-green-200
-             px-4 py-2 rounded-xl hover:bg-[#F0FDF4] transition shadow-sm">
+             px-4 py-2 rounded-xl hover:bg-[#F0FDF4] transition shadow-sm self-start sm:self-auto">
       <i class="fa-solid fa-rotate-right"></i> Refresh
     </button>
   </div>
 
-  <!-- ══ STAT CARDS ════════════════════════════════════════════ -->
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
-      <div class="w-10 h-10 bg-[#F0FDF4] rounded-xl flex items-center justify-center">
-        <i class="fa-solid fa-users text-[#16A34A] text-lg"></i>
+  <!-- STAT CARDS -->
+  <div class="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6">
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-3 sm:p-4 flex items-center gap-2 sm:gap-4">
+      <div class="w-8 h-8 sm:w-10 sm:h-10 bg-[#F0FDF4] rounded-xl flex items-center justify-center flex-shrink-0">
+        <i class="fa-solid fa-users text-[#16A34A] text-base sm:text-lg"></i>
       </div>
-      <div>
-        <p class="text-xs text-gray-400">Total Customers</p>
-        <p class="text-2xl font-bold text-gray-800">{{ totalCustomers }}</p>
-      </div>
-    </div>
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
-      <div class="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center">
-        <i class="fa-solid fa-circle-check text-green-500 text-lg"></i>
-      </div>
-      <div>
-        <p class="text-xs text-gray-400">Active</p>
-        <p class="text-2xl font-bold text-green-600">{{ activeCustomers }}</p>
+      <div class="min-w-0">
+        <p class="text-[10px] sm:text-xs text-gray-400 truncate">Total</p>
+        <p class="text-xl sm:text-2xl font-bold text-gray-800">{{ totalCustomers }}</p>
       </div>
     </div>
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
-      <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center">
-        <i class="fa-solid fa-ban text-red-400 text-lg"></i>
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-3 sm:p-4 flex items-center gap-2 sm:gap-4">
+      <div class="w-8 h-8 sm:w-10 sm:h-10 bg-green-50 rounded-xl flex items-center justify-center flex-shrink-0">
+        <i class="fa-solid fa-circle-check text-green-500 text-base sm:text-lg"></i>
       </div>
-      <div>
-        <p class="text-xs text-gray-400">Deactivated</p>
-        <p class="text-2xl font-bold text-red-500">{{ inactiveCustomers }}</p>
+      <div class="min-w-0">
+        <p class="text-[10px] sm:text-xs text-gray-400 truncate">Active</p>
+        <p class="text-xl sm:text-2xl font-bold text-green-600">{{ activeCustomers }}</p>
+      </div>
+    </div>
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-3 sm:p-4 flex items-center gap-2 sm:gap-4">
+      <div class="w-8 h-8 sm:w-10 sm:h-10 bg-red-50 rounded-xl flex items-center justify-center flex-shrink-0">
+        <i class="fa-solid fa-ban text-red-400 text-base sm:text-lg"></i>
+      </div>
+      <div class="min-w-0">
+        <p class="text-[10px] sm:text-xs text-gray-400 truncate">Deactivated</p>
+        <p class="text-xl sm:text-2xl font-bold text-red-500">{{ inactiveCustomers }}</p>
       </div>
     </div>
   </div>
 
-  <!-- ══ SEARCH + FILTERS ══════════════════════════════════════ -->
-  <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 mb-5">
-    <div class="flex flex-wrap items-center gap-3" (click)="$event.stopPropagation()">
+  <!-- SEARCH + FILTERS -->
+  <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-3 sm:p-4 mb-4 sm:mb-5">
+    <div class="flex flex-wrap items-center gap-2 sm:gap-3" (click)="$event.stopPropagation()">
 
       <!-- Search -->
-      <div class="flex items-center gap-2 bg-[#F0FDF4] border border-green-100 rounded-xl px-3 py-2.5 w-full sm:max-w-xs">
+      <div class="flex items-center gap-2 bg-[#F0FDF4] border border-green-100 rounded-xl px-3 py-2 w-full sm:max-w-xs">
         <i class="fa-solid fa-magnifying-glass text-green-500 text-xs flex-shrink-0"></i>
         <input type="text" [(ngModel)]="searchQuery" (ngModelChange)="onSearch($event)"
           placeholder="Search name, email or phone…"
-          class="flex-1 text-xs text-gray-700 placeholder-gray-400 outline-none bg-transparent" />
+          class="flex-1 text-xs text-gray-700 placeholder-gray-400 outline-none bg-transparent min-w-0" />
         <button *ngIf="searchQuery" (click)="clearSearch()"
-          class="text-gray-400 hover:text-red-400 transition">
+          class="text-gray-400 hover:text-red-400 transition flex-shrink-0">
           <i class="fa-solid fa-xmark text-xs"></i>
         </button>
       </div>
 
-      <!-- STATUS filter -->
-      <div class="relative">
-        <button type="button" (click)="$event.stopPropagation(); toggleDropdown('status')"
-          class="flex items-center gap-2 text-xs font-semibold border rounded-xl px-3 py-2 bg-white shadow-sm outline-none transition"
-          [ngClass]="selectedStatuses.length ? 'border-[#16A34A] text-[#16A34A] bg-[#DCFCE7]' : 'border-green-100 text-gray-600'">
-          <i class="fa-solid fa-toggle-on"></i>
-          {{ selectedStatuses.length ? selectedStatuses.length + ' Status(es)' : 'Status' }}
-          <i class="fa-solid fa-chevron-down text-xs transition-transform" [class.rotate-180]="openDropdown==='status'"></i>
-        </button>
-        <div *ngIf="openDropdown==='status'"
-          class="absolute top-full left-0 mt-1.5 z-50 bg-white border border-green-100 rounded-2xl shadow-lg w-40 py-2">
-          <label *ngFor="let s of statusList" (click)="$event.stopPropagation()"
-            class="flex items-center gap-2.5 px-4 py-2 hover:bg-[#DCFCE7] cursor-pointer">
-            <input type="checkbox" [checked]="selectedStatuses.includes(s)"
-              (change)="toggleItem(selectedStatuses, s)" class="w-3.5 h-3.5 accent-[#16A34A]" />
-            <span class="text-xs text-gray-700 font-medium">{{ s }}</span>
-          </label>
+      <div class="flex items-center gap-2 flex-wrap">
+        <!-- STATUS filter -->
+        <div class="relative">
+          <button type="button" (click)="$event.stopPropagation(); toggleDropdown('status')"
+            class="flex items-center gap-1.5 text-xs font-semibold border rounded-xl px-3 py-2 bg-white shadow-sm outline-none transition"
+            [ngClass]="selectedStatuses.length ? 'border-[#16A34A] text-[#16A34A] bg-[#DCFCE7]' : 'border-green-100 text-gray-600'">
+            <i class="fa-solid fa-toggle-on"></i>
+            <span class="hidden xs:inline">{{ selectedStatuses.length ? selectedStatuses.length + ' Status(es)' : 'Status' }}</span>
+            <span class="xs:hidden">Status</span>
+            <i class="fa-solid fa-chevron-down text-xs transition-transform" [class.rotate-180]="openDropdown==='status'"></i>
+          </button>
+          <div *ngIf="openDropdown==='status'"
+            class="absolute top-full left-0 mt-1.5 z-50 bg-white border border-green-100 rounded-2xl shadow-lg w-40 py-2">
+            <label *ngFor="let s of statusList" (click)="$event.stopPropagation()"
+              class="flex items-center gap-2.5 px-4 py-2 hover:bg-[#DCFCE7] cursor-pointer">
+              <input type="checkbox" [checked]="selectedStatuses.includes(s)"
+                (change)="toggleItem(selectedStatuses, s)" class="w-3.5 h-3.5 accent-[#16A34A]" />
+              <span class="text-xs text-gray-700 font-medium">{{ s }}</span>
+            </label>
+          </div>
         </div>
-      </div>
 
-      <!-- MONTH filter -->
-      <div class="relative">
-        <button type="button" (click)="$event.stopPropagation(); toggleDropdown('month')"
-          class="flex items-center gap-2 text-xs font-semibold border rounded-xl px-3 py-2 bg-white shadow-sm outline-none"
-          [ngClass]="selectedMonths.length ? 'border-[#16A34A] text-[#16A34A] bg-[#DCFCE7]' : 'border-green-100 text-gray-600'">
-          <i class="fa-solid fa-calendar"></i>
-          {{ selectedMonths.length ? selectedMonths.length + ' Month(s)' : 'Month' }}
-          <i class="fa-solid fa-chevron-down text-xs" [class.rotate-180]="openDropdown==='month'"></i>
-        </button>
-        <div *ngIf="openDropdown==='month'"
-          class="absolute top-full left-0 mt-1.5 z-50 bg-white border border-green-100 rounded-2xl shadow-lg w-48 py-2 max-h-64 overflow-y-auto">
-          <label *ngFor="let m of monthList" (click)="$event.stopPropagation()"
-            class="flex items-center gap-2.5 px-4 py-2 hover:bg-[#DCFCE7] cursor-pointer">
-            <input type="checkbox" [checked]="selectedMonths.includes(m.value)"
-              (change)="toggleItem(selectedMonths, m.value)" class="w-3.5 h-3.5 accent-[#16A34A]" />
-            <span class="text-xs text-gray-700 font-medium">{{ m.label }}</span>
-          </label>
+        <!-- MONTH filter -->
+        <div class="relative">
+          <button type="button" (click)="$event.stopPropagation(); toggleDropdown('month')"
+            class="flex items-center gap-1.5 text-xs font-semibold border rounded-xl px-3 py-2 bg-white shadow-sm outline-none"
+            [ngClass]="selectedMonths.length ? 'border-[#16A34A] text-[#16A34A] bg-[#DCFCE7]' : 'border-green-100 text-gray-600'">
+            <i class="fa-solid fa-calendar"></i>
+            <span class="hidden xs:inline">{{ selectedMonths.length ? selectedMonths.length + ' Month(s)' : 'Month' }}</span>
+            <span class="xs:hidden">Month</span>
+            <i class="fa-solid fa-chevron-down text-xs" [class.rotate-180]="openDropdown==='month'"></i>
+          </button>
+          <div *ngIf="openDropdown==='month'"
+            class="absolute top-full left-0 mt-1.5 z-50 bg-white border border-green-100 rounded-2xl shadow-lg w-48 py-2 max-h-60 overflow-y-auto">
+            <label *ngFor="let m of monthList" (click)="$event.stopPropagation()"
+              class="flex items-center gap-2.5 px-4 py-2 hover:bg-[#DCFCE7] cursor-pointer">
+              <input type="checkbox" [checked]="selectedMonths.includes(m.value)"
+                (change)="toggleItem(selectedMonths, m.value)" class="w-3.5 h-3.5 accent-[#16A34A]" />
+              <span class="text-xs text-gray-700 font-medium">{{ m.label }}</span>
+            </label>
+          </div>
         </div>
-      </div>
 
-      <!-- YEAR filter -->
-      <div class="relative">
-        <button type="button" (click)="$event.stopPropagation(); toggleDropdown('year')"
-          class="flex items-center gap-2 text-xs font-semibold border rounded-xl px-3 py-2 bg-white shadow-sm outline-none"
-          [ngClass]="selectedYears.length ? 'border-[#16A34A] text-[#16A34A] bg-[#DCFCE7]' : 'border-green-100 text-gray-600'">
-          <i class="fa-solid fa-calendar-days"></i>
-          {{ selectedYears.length ? selectedYears.length + ' Year(s)' : 'Year' }}
-          <i class="fa-solid fa-chevron-down text-xs" [class.rotate-180]="openDropdown==='year'"></i>
-        </button>
-        <div *ngIf="openDropdown==='year'"
-          class="absolute top-full left-0 mt-1.5 z-50 bg-white border border-green-100 rounded-2xl shadow-lg w-36 py-2">
-          <label *ngFor="let y of yearList" (click)="$event.stopPropagation()"
-            class="flex items-center gap-2.5 px-4 py-2 hover:bg-[#DCFCE7] cursor-pointer">
-            <input type="checkbox" [checked]="selectedYears.includes(y)"
-              (change)="toggleItem(selectedYears, y)" class="w-3.5 h-3.5 accent-[#16A34A]" />
-            <span class="text-xs text-gray-700 font-medium">{{ y }}</span>
-          </label>
+        <!-- YEAR filter -->
+        <div class="relative">
+          <button type="button" (click)="$event.stopPropagation(); toggleDropdown('year')"
+            class="flex items-center gap-1.5 text-xs font-semibold border rounded-xl px-3 py-2 bg-white shadow-sm outline-none"
+            [ngClass]="selectedYears.length ? 'border-[#16A34A] text-[#16A34A] bg-[#DCFCE7]' : 'border-green-100 text-gray-600'">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span class="hidden xs:inline">{{ selectedYears.length ? selectedYears.length + ' Year(s)' : 'Year' }}</span>
+            <span class="xs:hidden">Year</span>
+            <i class="fa-solid fa-chevron-down text-xs" [class.rotate-180]="openDropdown==='year'"></i>
+          </button>
+          <div *ngIf="openDropdown==='year'"
+            class="absolute top-full left-0 mt-1.5 z-50 bg-white border border-green-100 rounded-2xl shadow-lg w-36 py-2">
+            <label *ngFor="let y of yearList" (click)="$event.stopPropagation()"
+              class="flex items-center gap-2.5 px-4 py-2 hover:bg-[#DCFCE7] cursor-pointer">
+              <input type="checkbox" [checked]="selectedYears.includes(y)"
+                (change)="toggleItem(selectedYears, y)" class="w-3.5 h-3.5 accent-[#16A34A]" />
+              <span class="text-xs text-gray-700 font-medium">{{ y }}</span>
+            </label>
+          </div>
         </div>
-      </div>
 
-      <!-- CLEAR ALL -->
-      <button *ngIf="hasActiveFilters" (click)="clearFilters()"
-        class="flex items-center gap-1.5 text-xs font-semibold text-red-500 bg-red-50 border border-red-100
-               hover:bg-red-100 px-3 py-2 rounded-xl transition">
-        <i class="fa-solid fa-xmark"></i> Clear All
-      </button>
+        <!-- CLEAR ALL -->
+        <button *ngIf="hasActiveFilters" (click)="clearFilters()"
+          class="flex items-center gap-1.5 text-xs font-semibold text-red-500 bg-red-50 border border-red-100
+                 hover:bg-red-100 px-3 py-2 rounded-xl transition">
+          <i class="fa-solid fa-xmark"></i>
+          <span class="hidden xs:inline">Clear All</span>
+        </button>
+      </div>
     </div>
 
     <!-- Active filter tags -->
-    <div *ngIf="hasActiveFilters" class="flex flex-wrap gap-2 mt-3 pt-3 border-t border-gray-100">
+    <div *ngIf="hasActiveFilters" class="flex flex-wrap gap-1.5 sm:gap-2 mt-3 pt-3 border-t border-gray-100">
       <span *ngFor="let s of selectedStatuses"
-        class="text-xs px-3 py-1 rounded-full font-medium"
+        class="text-xs px-2.5 py-1 rounded-full font-medium"
         [class.bg-green-50]="s === 'Active'" [class.text-green-700]="s === 'Active'"
         [class.bg-red-50]="s === 'Inactive'" [class.text-red-600]="s === 'Inactive'">
         <i class="fa-solid fa-circle-dot mr-1"></i>{{ s }}
       </span>
       <span *ngFor="let m of selectedMonths"
-        class="text-xs bg-[#DCFCE7] text-[#16A34A] px-3 py-1 rounded-full font-medium">
+        class="text-xs bg-[#DCFCE7] text-[#16A34A] px-2.5 py-1 rounded-full font-medium">
         <i class="fa-solid fa-calendar mr-1"></i>{{ monthList[+m - 1].label }}
       </span>
       <span *ngFor="let y of selectedYears"
-        class="text-xs bg-[#DCFCE7] text-[#16A34A] px-3 py-1 rounded-full font-medium">
+        class="text-xs bg-[#DCFCE7] text-[#16A34A] px-2.5 py-1 rounded-full font-medium">
         <i class="fa-solid fa-calendar-days mr-1"></i>{{ y }}
       </span>
     </div>
 
     <!-- Result count -->
-    <p class="text-xs text-gray-400 mt-3">
+    <p class="text-xs text-gray-400 mt-2 sm:mt-3">
       Showing <strong class="text-gray-600">{{ filteredCustomers.length }}</strong> of
       <strong class="text-gray-600">{{ totalCustomers }}</strong> customers
     </p>
   </div>
 
-  <!-- ══ LOADING ═══════════════════════════════════════════════ -->
+  <!-- LOADING -->
   <div *ngIf="isLoading" class="flex justify-center py-24">
     <div class="w-10 h-10 border-4 border-[#16A34A] border-t-transparent rounded-full animate-spin"></div>
   </div>
 
-  <!-- ══ EMPTY ══════════════════════════════════════════════════ -->
+  <!-- EMPTY -->
   <div *ngIf="!isLoading && filteredCustomers.length === 0"
-    class="bg-white rounded-2xl border border-gray-100 shadow-sm py-20 text-center">
-    <i class="fa-solid fa-users-slash text-5xl text-gray-200 mb-4 block"></i>
+    class="bg-white rounded-2xl border border-gray-100 shadow-sm py-16 sm:py-20 text-center">
+    <i class="fa-solid fa-users-slash text-4xl sm:text-5xl text-gray-200 mb-4 block"></i>
     <p class="font-semibold text-gray-500">No customers found</p>
-    <p class="text-sm text-gray-400 mt-1">Try adjusting your search or filters</p>
+    <p class="text-xs sm:text-sm text-gray-400 mt-1">Try adjusting your search or filters</p>
   </div>
 
-  <!-- ══ TABLE ══════════════════════════════════════════════════ -->
+  <!-- TABLE (Desktop) -->
   <div *ngIf="!isLoading && filteredCustomers.length > 0"
     class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-    <div class="overflow-x-auto">
+
+    <!-- Desktop Table -->
+    <div class="hidden md:block overflow-x-auto">
       <table class="w-full min-w-[700px] text-sm">
         <thead class="bg-gray-50 border-b border-gray-100">
           <tr>
-            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Customer</th>
-            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Contact</th>
-            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Location</th>
-            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Joined</th>
-            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Status</th>
-            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Action</th>
+            <th class="px-4 lg:px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Customer</th>
+            <th class="px-4 lg:px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Contact</th>
+            <th class="px-4 lg:px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Location</th>
+            <th class="px-4 lg:px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Joined</th>
+            <th class="px-4 lg:px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Status</th>
+            <th class="px-4 lg:px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Action</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-50">
@@ -188,41 +197,39 @@
             class="hover:bg-[#F0FDF4] transition-colors"
             [class.opacity-60]="c.status !== 'Active'">
 
-            <!-- Customer -->
-            <td class="px-5 py-4">
+            <td class="px-4 lg:px-5 py-4">
               <div class="flex items-center gap-3">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-bold flex-shrink-0"
                   [class.bg-[#F0FDF4]]="c.status === 'Active'" [class.text-[#16A34A]]="c.status === 'Active'"
                   [class.bg-gray-100]="c.status !== 'Active'" [class.text-gray-400]="c.status !== 'Active'">
                   {{ getInitials(c.name) }}
                 </div>
-                <div>
-                  <p class="font-semibold text-gray-800 text-sm">{{ c.name }}</p>
-                  <p class="text-xs text-gray-400">{{ c.email }}</p>
+                <div class="min-w-0">
+                  <p class="font-semibold text-gray-800 text-sm truncate max-w-[140px]">{{ c.name }}</p>
+                  <p class="text-xs text-gray-400 truncate max-w-[140px]">{{ c.email }}</p>
                 </div>
               </div>
             </td>
 
-            <!-- Contact -->
-            <td class="px-5 py-4">
+            <td class="px-4 lg:px-5 py-4">
               <div class="flex items-center gap-1.5 text-xs text-gray-600">
                 <i class="fa-solid fa-phone text-gray-300"></i>
                 {{ c.phone || '—' }}
               </div>
             </td>
-  <td class="px-5 py-4">
-               <div>
-                  <p class="font-semibold text-gray-800 text-sm">{{ c.state }}</p>
-                  <p class="text-xs text-gray-400">{{ c.country }}</p>
-                </div>
+
+            <td class="px-4 lg:px-5 py-4">
+              <div>
+                <p class="font-semibold text-gray-800 text-sm">{{ c.state }}</p>
+                <p class="text-xs text-gray-400">{{ c.country }}</p>
+              </div>
             </td>
-            <!-- Joined -->
-            <td class="px-5 py-4 text-xs text-gray-500">
+
+            <td class="px-4 lg:px-5 py-4 text-xs text-gray-500 whitespace-nowrap">
               {{ c.createdAt | date:'dd MMM yyyy' }}
             </td>
 
-            <!-- Status badge -->
-            <td class="px-5 py-4">
+            <td class="px-4 lg:px-5 py-4">
               <span class="flex items-center gap-1.5 w-fit px-3 py-1 rounded-full text-xs font-semibold"
                 [class.bg-green-100]="c.status === 'Active'"   [class.text-green-700]="c.status === 'Active'"
                 [class.bg-red-50]="c.status !== 'Active'"     [class.text-red-500]="c.status !== 'Active'">
@@ -231,13 +238,12 @@
               </span>
             </td>
 
-            <!-- Action -->
-            <td class="px-5 py-4">
+            <td class="px-4 lg:px-5 py-4">
               <button (click)="openConfirm(c)"
-                class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border transition"
-                [class.bg-red-50]="c.status === 'Active'"     [class.text-red-600]="c.status === 'Active'"
+                class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border transition whitespace-nowrap"
+                [class.bg-red-50]="c.status === 'Active'"      [class.text-red-600]="c.status === 'Active'"
                 [class.border-red-200]="c.status === 'Active'" [class.hover:bg-red-100]="c.status === 'Active'"
-                [class.bg-green-50]="c.status !== 'Active'"   [class.text-[#16A34A]]="c.status !== 'Active'"
+                [class.bg-green-50]="c.status !== 'Active'"    [class.text-[#16A34A]]="c.status !== 'Active'"
                 [class.border-green-200]="c.status !== 'Active'" [class.hover:bg-green-100]="c.status !== 'Active'">
                 <i class="fa-solid text-xs" [class.fa-ban]="c.status === 'Active'" [class.fa-circle-check]="c.status !== 'Active'"></i>
                 {{ c.status === 'Active' ? 'Deactivate' : 'Activate' }}
@@ -247,26 +253,68 @@
         </tbody>
       </table>
     </div>
+
+    <!-- Mobile Cards -->
+    <div class="md:hidden divide-y divide-gray-50">
+      <div *ngFor="let c of filteredCustomers"
+           class="p-3 sm:p-4 hover:bg-[#F0FDF4] transition-colors"
+           [class.opacity-60]="c.status !== 'Active'">
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-bold flex-shrink-0"
+              [class.bg-[#F0FDF4]]="c.status === 'Active'" [class.text-[#16A34A]]="c.status === 'Active'"
+              [class.bg-gray-100]="c.status !== 'Active'" [class.text-gray-400]="c.status !== 'Active'">
+              {{ getInitials(c.name) }}
+            </div>
+            <div class="min-w-0">
+              <p class="font-semibold text-gray-800 text-sm truncate">{{ c.name }}</p>
+              <p class="text-xs text-gray-400 truncate">{{ c.email }}</p>
+              <p class="text-xs text-gray-500 mt-0.5 flex items-center gap-1">
+                <i class="fa-solid fa-phone text-gray-300 text-[10px]"></i>{{ c.phone || '—' }}
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-col items-end gap-2 flex-shrink-0">
+            <span class="flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold"
+              [class.bg-green-100]="c.status === 'Active'"   [class.text-green-700]="c.status === 'Active'"
+              [class.bg-red-50]="c.status !== 'Active'"     [class.text-red-500]="c.status !== 'Active'">
+              <i class="fa-solid" [class.fa-circle-check]="c.status === 'Active'" [class.fa-ban]="c.status !== 'Active'"></i>
+              {{ c.status === 'Active' ? 'Active' : 'Off' }}
+            </span>
+            <button (click)="openConfirm(c)"
+              class="text-xs font-semibold px-3 py-1.5 rounded-lg border transition"
+              [class.bg-red-50]="c.status === 'Active'"      [class.text-red-600]="c.status === 'Active'"
+              [class.border-red-200]="c.status === 'Active'"
+              [class.bg-green-50]="c.status !== 'Active'"    [class.text-[#16A34A]]="c.status !== 'Active'"
+              [class.border-green-200]="c.status !== 'Active'">
+              {{ c.status === 'Active' ? 'Deactivate' : 'Activate' }}
+            </button>
+          </div>
+        </div>
+        <div class="mt-2 flex items-center gap-3 text-xs text-gray-400">
+          <span><i class="fa-solid fa-location-dot mr-1"></i>{{ c.state }}, {{ c.country }}</span>
+          <span><i class="fa-solid fa-calendar mr-1"></i>{{ c.createdAt | date:'dd MMM yyyy' }}</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
 
-<!-- ══════════════════════════════════════════════
-     CONFIRM TOGGLE MODAL
-══════════════════════════════════════════════ -->
+<!-- CONFIRM TOGGLE MODAL -->
 <div *ngIf="showConfirmModal"
   class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4"
   (click)="closeConfirm()">
-  <div class="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-6"
+  <div class="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-5 sm:p-6"
     (click)="$event.stopPropagation()">
 
-    <!-- Icon + Title -->
     <div class="flex flex-col items-center text-center mb-5">
       <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-3 text-2xl"
         [class.bg-red-50]="confirmTarget?.status === 'Active'"
         [class.bg-green-50]="confirmTarget?.status !== 'Active'">
         <i class="fa-solid"
-          [class.fa-ban]="confirmTarget?.status === 'Active'"       [class.text-red-500]="confirmTarget?.status === 'Active'"
+          [class.fa-ban]="confirmTarget?.status === 'Active'"        [class.text-red-500]="confirmTarget?.status === 'Active'"
           [class.fa-circle-check]="confirmTarget?.status !== 'Active'" [class.text-[#16A34A]]="confirmTarget?.status !== 'Active'"></i>
       </div>
       <h3 class="text-lg font-bold text-gray-800">
@@ -277,8 +325,7 @@
       </p>
     </div>
 
-    <!-- What happens notice -->
-    <div class="rounded-xl p-4 text-xs mb-4"
+    <div class="rounded-xl p-3 sm:p-4 text-xs mb-4"
       [class.bg-red-50]="confirmTarget?.status === 'Active'"   [class.border]="true"
       [class.border-red-100]="confirmTarget?.status === 'Active'"
       [class.bg-green-50]="confirmTarget?.status !== 'Active'"
@@ -305,7 +352,6 @@
       </ul>
     </div>
 
-    <!-- Result feedback -->
     <div *ngIf="toggleResult" class="mb-4 flex items-center gap-2 rounded-xl px-4 py-3 text-sm"
       [class.bg-green-50]="toggleResult.success"   [class.text-green-700]="toggleResult.success"
       [class.border-green-200]="toggleResult.success" [class.border]="true"
@@ -315,7 +361,6 @@
       {{ toggleResult.message }}
     </div>
 
-    <!-- Buttons -->
     <div *ngIf="!toggleResult" class="flex gap-3">
       <button (click)="closeConfirm()"
         class="flex-1 border border-gray-200 text-gray-600 py-2.5 rounded-xl text-sm font-semibold hover:bg-gray-50 transition">
@@ -323,7 +368,7 @@
       </button>
       <button (click)="confirmToggle()" [disabled]="isToggling"
         class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition disabled:opacity-60 flex items-center justify-center gap-2 text-white"
-        [class.bg-red-500]="confirmTarget?.status === 'Active'"     [class.hover:bg-red-600]="confirmTarget?.status === 'Active'"
+        [class.bg-red-500]="confirmTarget?.status === 'Active'"    [class.hover:bg-red-600]="confirmTarget?.status === 'Active'"
         [class.bg-[#16A34A]]="confirmTarget?.status !== 'Active'"  [class.hover:bg-green-700]="confirmTarget?.status !== 'Active'">
         <i class="fa-solid" [class.fa-spinner]="isToggling" [class.fa-spin]="isToggling"
           [class.fa-ban]="!isToggling && confirmTarget?.status === 'Active'"
@@ -332,7 +377,6 @@
       </button>
     </div>
 
-    <!-- Close after result -->
     <button *ngIf="toggleResult" (click)="closeConfirm()"
       class="w-full mt-2 py-2.5 rounded-xl text-sm font-semibold bg-[#16A34A] text-white hover:bg-green-700 transition">
       Close

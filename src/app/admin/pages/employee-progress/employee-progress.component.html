@@ -1,20 +1,22 @@
-<div class="min-h-screen bg-[#F0FDF4] p-4 md:p-6">
+<!-- employee-progress.component.html — Fully Responsive -->
+<div class="min-h-screen bg-[#F0FDF4] p-3 sm:p-4 md:p-6">
 
   <!-- Header -->
-  <div class="mb-6">
-    <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2"><i
-        class="fa-solid fa-hard-hat text-[#16A34A]"></i> Employee Progress</h1>
-    <p class="text-sm text-gray-500 mt-1">Monitor performance and manage assignments</p>
+  <div class="mb-4 sm:mb-6">
+    <h1 class="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-2">
+      <i class="fa-solid fa-hard-hat text-[#16A34A]"></i> Employee Progress
+    </h1>
+    <p class="text-xs sm:text-sm text-gray-500 mt-1">Monitor performance and manage assignments</p>
   </div>
 
   <!-- Alerts -->
   <div *ngIf="successMsg"
     class="mb-4 flex items-center gap-3 bg-green-50 border border-green-200 rounded-xl px-4 py-3 text-green-700 text-sm">
-    <i class="fa-solid fa-circle-check"></i> {{ successMsg }}
+    <i class="fa-solid fa-circle-check flex-shrink-0"></i> {{ successMsg }}
   </div>
   <div *ngIf="errorMsg"
     class="mb-4 flex items-center gap-3 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-red-700 text-sm">
-    <i class="fa-solid fa-circle-xmark"></i> {{ errorMsg }}
+    <i class="fa-solid fa-circle-xmark flex-shrink-0"></i> {{ errorMsg }}
   </div>
 
   <!-- Loading -->
@@ -25,8 +27,8 @@
   <!-- Table -->
   <div *ngIf="!isLoading" class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
 
-    <!-- Desktop -->
-    <div class="hidden md:block overflow-x-auto">
+    <!-- Desktop Table -->
+    <div class="hidden lg:block overflow-x-auto">
       <table class="w-full text-sm">
         <thead class="bg-gray-50 border-b border-gray-100">
           <tr>
@@ -50,11 +52,9 @@
             </td>
 
             <td class="px-4 py-3">
-              <div class="flex flex-wrap gap-1 max-w-xs">
+              <div class="flex flex-wrap gap-1 max-w-[200px]">
                 <span *ngFor="let city of (emp.assignedCities || [])"
-                  class="bg-blue-50 text-blue-600 text-xs px-2 py-0.5 rounded-full">
-                  {{ city }}
-                </span>
+                  class="bg-blue-50 text-blue-600 text-xs px-2 py-0.5 rounded-full">{{ city }}</span>
                 <span *ngIf="!emp.assignedCities?.length" class="text-xs text-gray-400">None</span>
               </div>
             </td>
@@ -73,26 +73,23 @@
             </td>
 
             <td class="px-4 py-3 text-center">
-              <span class="font-bold text-base {{ rateColor(emp.successRate) }}">
-                {{ emp.successRate }}%
-              </span>
+              <span class="font-bold text-base {{ rateColor(emp.successRate) }}">{{ emp.successRate }}%</span>
             </td>
 
-           <td class="px-4 py-3 text-center">
-  <button (click)="toggleAvailability(emp)"
-    [ngClass]="emp.isAvailable ? 'bg-[#16A34A]' : 'bg-gray-300'"
-    class="relative inline-flex w-12 h-6 rounded-full transition-all duration-300 cursor-pointer">
-    <span
-      [ngClass]="emp.isAvailable ? 'translate-x-6' : 'translate-x-1'"
-      class="inline-block w-4 h-4 bg-white rounded-full shadow-md 
-             transition-transform duration-300 self-center">
-    </span>
-  </button>
-</td>
+            <td class="px-4 py-3 text-center">
+              <button (click)="toggleAvailability(emp)"
+                [ngClass]="emp.isAvailable ? 'bg-[#16A34A]' : 'bg-gray-300'"
+                class="relative inline-flex w-12 h-6 rounded-full transition-all duration-300 cursor-pointer">
+                <span [ngClass]="emp.isAvailable ? 'translate-x-6' : 'translate-x-1'"
+                  class="inline-block w-4 h-4 bg-white rounded-full shadow-md transition-transform duration-300 self-center">
+                </span>
+              </button>
+            </td>
 
             <td class="px-4 py-3 text-center">
-              <button (click)="openParcelsModal(emp)" class="px-3 py-1.5 bg-[#16A34A] text-white text-xs font-semibold
-                             rounded-lg hover:bg-green-700 transition-all active:scale-95">
+              <button (click)="openParcelsModal(emp)"
+                class="px-3 py-1.5 bg-[#16A34A] text-white text-xs font-semibold
+                       rounded-lg hover:bg-green-700 transition-all active:scale-95 whitespace-nowrap">
                 View Parcels
               </button>
             </td>
@@ -108,107 +105,121 @@
       </table>
     </div>
 
-    <!-- Mobile Cards -->
-    <div class="md:hidden divide-y divide-gray-100">
-      <div *ngFor="let emp of employees" class="p-4">
+    <!-- Mobile / Tablet Cards -->
+    <div class="lg:hidden divide-y divide-gray-100">
+      <div *ngFor="let emp of employees" class="p-3 sm:p-4">
+
+        <!-- Top row -->
         <div class="flex items-start justify-between mb-3">
-          <div>
+          <div class="min-w-0">
             <p class="font-semibold text-gray-800">{{ emp.name }}</p>
-            <p class="text-xs text-gray-400">{{ emp.employee_id }}</p>
+            <p class="text-xs text-gray-400 truncate">{{ emp.employee_id }}</p>
           </div>
-         <button (click)="toggleAvailability(emp)"
-  [ngClass]="emp.isAvailable ? 'bg-[#16A34A]' : 'bg-gray-300'"
-  class="relative inline-flex w-12 h-6 rounded-full transition-all duration-300 cursor-pointer">
-  <span
-    [ngClass]="emp.isAvailable ? 'translate-x-6' : 'translate-x-1'"
-    class="inline-block w-4 h-4 bg-white rounded-full shadow-md 
-           transition-transform duration-300 self-center">
-  </span>
-</button>
+          <button (click)="toggleAvailability(emp)"
+            [ngClass]="emp.isAvailable ? 'bg-[#16A34A]' : 'bg-gray-300'"
+            class="relative inline-flex w-12 h-6 rounded-full transition-all duration-300 cursor-pointer flex-shrink-0 ml-3">
+            <span [ngClass]="emp.isAvailable ? 'translate-x-6' : 'translate-x-1'"
+              class="inline-block w-4 h-4 bg-white rounded-full shadow-md transition-transform duration-300 self-center">
+            </span>
+          </button>
         </div>
-        <div class="grid grid-cols-4 gap-2 mb-3 text-center">
-          <div class="bg-blue-50 rounded-lg py-1.5">
-            <div class="font-bold text-blue-600">{{ emp.assigned }}</div>
-            <div class="text-xs text-gray-400">Assigned</div>
+
+        <!-- Cities -->
+        <div *ngIf="(emp.assignedCities || []).length > 0" class="flex flex-wrap gap-1 mb-3">
+          <span *ngFor="let city of (emp.assignedCities || []).slice(0, 4)"
+            class="bg-blue-50 text-blue-600 text-xs px-2 py-0.5 rounded-full">{{ city }}</span>
+          <span *ngIf="(emp.assignedCities || []).length > 4"
+            class="bg-gray-100 text-gray-500 text-xs px-2 py-0.5 rounded-full">+{{ emp.assignedCities.length - 4 }}</span>
+        </div>
+
+        <!-- Stats grid -->
+        <div class="grid grid-cols-4 gap-1.5 sm:gap-2 mb-3 text-center">
+          <div class="bg-blue-50 rounded-lg py-2">
+            <div class="font-bold text-blue-600 text-sm">{{ emp.assigned }}</div>
+            <div class="text-[10px] text-gray-400">Assigned</div>
           </div>
-          <div class="bg-yellow-50 rounded-lg py-1.5">
-            <div class="font-bold text-yellow-600">{{ emp.inTransit }}</div>
-            <div class="text-xs text-gray-400">Transit</div>
+          <div class="bg-yellow-50 rounded-lg py-2">
+            <div class="font-bold text-yellow-600 text-sm">{{ emp.inTransit }}</div>
+            <div class="text-[10px] text-gray-400">Transit</div>
           </div>
-          <div class="bg-green-50 rounded-lg py-1.5">
-            <div class="font-bold text-green-600">{{ emp.delivered }}</div>
-            <div class="text-xs text-gray-400">Done</div>
+          <div class="bg-green-50 rounded-lg py-2">
+            <div class="font-bold text-green-600 text-sm">{{ emp.delivered }}</div>
+            <div class="text-[10px] text-gray-400">Done</div>
           </div>
-          <div class="bg-red-50 rounded-lg py-1.5">
-            <div class="font-bold {{ rateColor(emp.successRate) }}">{{ emp.successRate }}%</div>
-            <div class="text-xs text-gray-400">Rate</div>
+          <div class="bg-red-50 rounded-lg py-2">
+            <div class="font-bold {{ rateColor(emp.successRate) }} text-sm">{{ emp.successRate }}%</div>
+            <div class="text-[10px] text-gray-400">Rate</div>
           </div>
         </div>
+
         <button (click)="openParcelsModal(emp)"
           class="w-full py-2 bg-[#16A34A] text-white text-sm font-semibold rounded-xl hover:bg-green-700 transition-all">
           View Parcels
         </button>
       </div>
+
+      <div *ngIf="employees.length === 0" class="py-16 text-center text-gray-400">
+        <i class="fa-solid fa-hard-hat text-4xl block mb-2"></i>
+        No employees found
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     VIEW PARCELS MODAL
-══════════════════════════════════════════════ -->
-<div *ngIf="showParcelsModal"
-  class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-  <div class="bg-white rounded-3xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col">
 
-    <!-- Modal Header -->
-    <div class="flex items-center justify-between p-5 border-b border-gray-100">
-      <div>
-        <h3 class="text-lg font-bold text-gray-800">{{ selectedEmployee?.name }}'s Parcels</h3>
+<!-- VIEW PARCELS MODAL -->
+<div *ngIf="showParcelsModal"
+  class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-sm p-0 sm:p-4">
+  <div class="bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl w-full sm:max-w-3xl max-h-[90vh] flex flex-col">
+
+    <div class="flex items-center justify-between p-4 sm:p-5 border-b border-gray-100 flex-shrink-0">
+      <div class="min-w-0">
+        <h3 class="text-base sm:text-lg font-bold text-gray-800 truncate">{{ selectedEmployee?.name }}'s Parcels</h3>
         <p class="text-xs text-gray-400 mt-0.5">{{ employeeParcels.length }} parcels total</p>
       </div>
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 flex-shrink-0 ml-3">
         <button *ngIf="selectedParcelIds.length > 0" (click)="openReassignModal()"
-          class="px-4 py-2 bg-orange-500 text-white text-sm font-semibold rounded-xl hover:bg-orange-600 transition-all">
-          Reassign {{ selectedParcelIds.length }} Selected
+          class="px-3 sm:px-4 py-1.5 sm:py-2 bg-orange-500 text-white text-xs sm:text-sm font-semibold rounded-xl hover:bg-orange-600 transition-all whitespace-nowrap">
+          Reassign {{ selectedParcelIds.length }}
         </button>
         <button (click)="closeParcelsModal()"
-          class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200">✕</button>
+          class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 flex-shrink-0">✕</button>
       </div>
     </div>
 
-    <!-- Loading -->
     <div *ngIf="parcelsLoading" class="flex justify-center py-12">
       <div class="w-8 h-8 border-4 border-[#16A34A] border-t-transparent rounded-full animate-spin"></div>
     </div>
 
-    <!-- Parcel Table -->
     <div *ngIf="!parcelsLoading" class="overflow-y-auto flex-1">
       <table class="w-full text-sm">
         <thead class="bg-gray-50 sticky top-0">
           <tr>
-            <th class="px-4 py-3 text-left text-gray-400 font-medium text-xs w-8"><i class="fa-regular fa-square"></i>
+            <th class="px-3 sm:px-4 py-3 text-left text-gray-400 font-medium text-xs w-8">
+              <i class="fa-regular fa-square"></i>
             </th>
-            <th class="px-4 py-3 text-left text-gray-500 font-semibold">Tracking ID</th>
-            <th class="px-4 py-3 text-left text-gray-500 font-semibold">Receiver</th>
-            <th class="px-4 py-3 text-left text-gray-500 font-semibold">City</th>
-            <th class="px-4 py-3 text-left text-gray-500 font-semibold">Status</th>
+            <th class="px-3 sm:px-4 py-3 text-left text-gray-500 font-semibold text-xs">Tracking ID</th>
+            <th class="px-3 sm:px-4 py-3 text-left text-gray-500 font-semibold text-xs hidden sm:table-cell">Receiver</th>
+            <th class="px-3 sm:px-4 py-3 text-left text-gray-500 font-semibold text-xs hidden xs:table-cell">City</th>
+            <th class="px-3 sm:px-4 py-3 text-left text-gray-500 font-semibold text-xs">Status</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-50">
-          <tr *ngFor="let p of employeeParcels" (click)="toggleParcel(p._id)" [class.bg-green-50]="isSelected(p._id)"
+          <tr *ngFor="let p of employeeParcels" (click)="toggleParcel(p._id)"
+            [class.bg-green-50]="isSelected(p._id)"
             class="cursor-pointer hover:bg-[#F0FDF4] transition-colors">
-            <td class="px-4 py-3">
+            <td class="px-3 sm:px-4 py-3">
               <div [class.bg-[#16A34A]]="isSelected(p._id)" [class.border-[#16A34A]]="isSelected(p._id)"
                 [class.border-gray-300]="!isSelected(p._id)"
                 class="w-4 h-4 rounded border-2 flex items-center justify-center">
                 <i *ngIf="isSelected(p._id)" class="fa-solid fa-check text-white text-xs"></i>
               </div>
             </td>
-            <td class="px-4 py-3 font-mono text-xs font-bold text-green-700">{{ p.tracking_id }}</td>
-            <td class="px-4 py-3 font-medium text-gray-800">{{ p.receiver_name }}</td>
-            <td class="px-4 py-3 text-gray-600">{{ p.receiver_city }}</td>
-            <td class="px-4 py-3">
-              <span class="px-2.5 py-1 rounded-full text-xs font-semibold {{ statusBadge(p.cycle_status) }}">
+            <td class="px-3 sm:px-4 py-3 font-mono text-xs font-bold text-green-700">{{ p.tracking_id }}</td>
+            <td class="px-3 sm:px-4 py-3 font-medium text-gray-800 hidden sm:table-cell">{{ p.receiver_name }}</td>
+            <td class="px-3 sm:px-4 py-3 text-gray-600 hidden xs:table-cell">{{ p.receiver_city }}</td>
+            <td class="px-3 sm:px-4 py-3">
+              <span class="px-2 py-0.5 rounded-full text-xs font-semibold {{ statusBadge(p.cycle_status) }}">
                 {{ p.cycle_status }}
               </span>
             </td>
@@ -222,20 +233,18 @@
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     REASSIGN MODAL
-══════════════════════════════════════════════ -->
+
+<!-- REASSIGN MODAL -->
 <div *ngIf="showReassignModal"
-  class="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-  <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-6">
+  class="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-0 sm:p-4">
+  <div class="bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl w-full sm:max-w-md p-5 sm:p-6">
     <h3 class="text-lg font-bold text-gray-800 mb-1">Reassign Parcels</h3>
-    <p class="text-sm text-gray-500 mb-5">
-      Moving {{ selectedParcelIds.length }} parcel(s) to another employee
-    </p>
+    <p class="text-sm text-gray-500 mb-5">Moving {{ selectedParcelIds.length }} parcel(s) to another employee</p>
 
     <label class="block text-sm font-medium text-gray-700 mb-2">Select Target Employee</label>
-    <select [(ngModel)]="toEmployeeId" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-[#F0FDF4]
-                   focus:outline-none focus:ring-2 focus:ring-green-300 mb-4">
+    <select [(ngModel)]="toEmployeeId"
+      class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-[#F0FDF4]
+             focus:outline-none focus:ring-2 focus:ring-green-300 mb-4">
       <option value="" disabled>— Choose employee —</option>
       <option *ngFor="let e of otherEmployees()" [value]="e._id">
         {{ e.name }} ({{ e.employee_id }}) · {{ e.assignedCities?.join(', ') }}

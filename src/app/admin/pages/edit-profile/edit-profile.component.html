@@ -1,226 +1,129 @@
+<!-- edit-profile.component.html — Fully Responsive -->
 <div class="h-full flex flex-col bg-[#F5FFF7]">
 
-    <!-- ✅ HEADER BAR (CONSISTENT) -->
-    <div class="h-16 bg-white border-b flex items-center justify-between px-6 sticky top-0 z-30">
-
-        <div class="text-lg font-semibold text-gray-800">
-            Edit Profile
-        </div>
-
-        <div class="flex items-center gap-3">
-
-            <div class="text-right leading-tight">
-                <div class="text-sm font-semibold text-gray-800">
-                    Alex Morgan
-                </div>
-                <div class="text-xs text-gray-500">
-                    Admin
-                </div>
-            </div>
-
-            <img src="https://i.pravatar.cc/40"
-                 class="w-9 h-9 rounded-full border border-gray-200" />
-
-        </div>
-
+  <!-- HEADER BAR -->
+  <div class="h-14 sm:h-16 bg-white border-b flex items-center justify-between px-4 sm:px-6 sticky top-0 z-30 flex-shrink-0">
+    <div class="text-base sm:text-lg font-semibold text-gray-800">Edit Profile</div>
+    <div class="flex items-center gap-2 sm:gap-3">
+      <div class="text-right leading-tight hidden sm:block">
+        <div class="text-sm font-semibold text-gray-800">Alex Morgan</div>
+        <div class="text-xs text-gray-500">Admin</div>
+      </div>
+      <img src="https://i.pravatar.cc/40" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-gray-200" />
     </div>
+  </div>
 
-    <!-- ✅ PAGE CONTENT -->
-    <div class="p-6 lg:p-8">
+  <!-- PAGE CONTENT -->
+  <div class="flex-1 overflow-auto">
+    <div class="p-4 sm:p-6 lg:p-8 max-w-3xl mx-auto">
 
-        <!-- ✅ PAGE TITLE -->
-        <h1 class="text-2xl font-semibold text-gray-900 mb-6">
-            Edit Admin Profile
-        </h1>
+      <!-- PAGE TITLE -->
+      <h1 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-4 sm:mb-6">Edit Admin Profile</h1>
 
-        <!-- ✅ CARD -->
-        <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+      <!-- CARD -->
+      <div class="bg-white rounded-2xl p-4 sm:p-6 lg:p-8 shadow-sm border border-gray-100">
 
-            <!-- ✅ HEADER -->
-            <div class="flex items-start justify-between">
+        <!-- HEADER -->
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <h2 class="text-base sm:text-lg font-semibold text-gray-900">Update Information</h2>
+            <p class="text-xs sm:text-sm text-gray-500 mt-1">Update your personal details and account settings below.</p>
+          </div>
+          <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 sm:px-4 py-1.5 rounded-full flex-shrink-0">
+            Active
+          </span>
+        </div>
 
-                <div>
-                    <h2 class="text-lg font-semibold text-gray-900">
-                        Update Information
-                    </h2>
+        <!-- DIVIDER -->
+        <div class="my-5 sm:my-6 border-t border-gray-100"></div>
 
-                    <p class="text-sm text-gray-500 mt-1">
-                        Update your personal details and account settings below.
-                    </p>
-                </div>
+        <!-- FORM GRID -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
 
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-4 py-1.5 rounded-full">
-                    Active Account
-                </span>
-
+          <!-- FULL NAME -->
+          <div class="sm:col-span-2">
+            <label class="text-sm font-medium text-gray-700">Full Name <span class="text-red-500">*</span></label>
+            <div class="relative mt-2">
+              <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+              <input type="text" [(ngModel)]="profile.fullName"
+                class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-sm
+                       focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-500 transition" />
             </div>
+          </div>
 
-            <!-- ✅ DIVIDER -->
-            <div class="my-6 border-t border-gray-100"></div>
-
-            <!-- ✅ FORM GRID -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                <!-- FULL NAME -->
-                <div class="md:col-span-2">
-
-                    <label class="text-sm font-medium text-gray-700">
-                        Full Name <span class="text-red-500">*</span>
-                    </label>
-
-                    <div class="relative mt-2">
-
-                        <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-
-                        <input
-                            type="text"
-                            [(ngModel)]="profile.fullName"
-                            class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-sm
-                                   focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-500 transition"
-                        />
-
-                    </div>
-
-                </div>
-
-                <!-- EMAIL -->
-                <div class="md:col-span-2">
-
-                    <label class="text-sm font-medium text-gray-700">
-                        Email Address <span class="text-red-500">*</span>
-                    </label>
-
-                    <div class="relative mt-2">
-
-                        <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-
-                        <input
-                            type="email"
-                            [(ngModel)]="profile.email"
-                            class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-sm
-                                   focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-500 transition"
-                        />
-
-                    </div>
-
-                </div>
-
-                <!-- PHONE -->
-                <div>
-
-                    <label class="text-sm font-medium text-gray-700">
-                        Phone Number <span class="text-red-500">*</span>
-                    </label>
-
-                    <div class="relative mt-2">
-
-                        <i class="fas fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-
-                        <input
-                            type="text"
-                            [(ngModel)]="profile.phone"
-                            class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-sm
-                                   focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-500 transition"
-                        />
-
-                    </div>
-
-                </div>
-
-                <!-- PASSWORD -->
-                <div>
-
-                    <label class="text-sm font-medium text-gray-700">
-                        Change Password
-                    </label>
-
-                    <div class="relative mt-2">
-
-                        <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-
-                        <input
-                            type="password"
-                            value="********"
-                            class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-sm
-                                   focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-500 transition"
-                        />
-
-                    </div>
-
-                </div>
-
-                <!-- STATE -->
-                <div>
-
-                    <label class="text-sm font-medium text-gray-700">
-                        State / Province <span class="text-red-500">*</span>
-                    </label>
-
-                    <div class="relative mt-2">
-
-                        <i class="fas fa-map-marker-alt absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                        <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-
-                        <input
-                            type="text"
-                            [(ngModel)]="profile.state"
-                            class="w-full pl-11 pr-10 py-3 rounded-xl border border-gray-200 text-sm
-                                   focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-500 transition"
-                        />
-
-                    </div>
-
-                </div>
-
-                <!-- COUNTRY -->
-                <div>
-
-                    <label class="text-sm font-medium text-gray-700">
-                        Country <span class="text-red-500">*</span>
-                    </label>
-
-                    <div class="relative mt-2">
-
-                        <i class="fas fa-globe absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-                        <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-
-                        <input
-                            type="text"
-                            [(ngModel)]="profile.country"
-                            class="w-full pl-11 pr-10 py-3 rounded-xl border border-gray-200 text-sm
-                                   focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-500 transition"
-                        />
-
-                    </div>
-
-                </div>
-
+          <!-- EMAIL -->
+          <div class="sm:col-span-2">
+            <label class="text-sm font-medium text-gray-700">Email Address <span class="text-red-500">*</span></label>
+            <div class="relative mt-2">
+              <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+              <input type="email" [(ngModel)]="profile.email"
+                class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-sm
+                       focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-500 transition" />
             </div>
+          </div>
 
-            <!-- ✅ BUTTON ROW -->
-            <div class="flex justify-end gap-3 mt-8">
-
-                <button
-                    (click)="cancel()"
-                    class="px-5 py-2.5 rounded-lg border border-gray-300 text-sm font-medium
-                           hover:bg-gray-50 transition"
-                >
-                    Cancel
-                </button>
-
-                <button
-                    (click)="saveChanges()"
-                    class="px-6 py-2.5 rounded-lg bg-green-600 text-white text-sm font-medium
-                           flex items-center gap-2 shadow-sm hover:bg-green-700 transition"
-                >
-                    <i class="fas fa-check text-xs"></i>
-                    Save Changes
-                </button>
-
+          <!-- PHONE -->
+          <div>
+            <label class="text-sm font-medium text-gray-700">Phone Number <span class="text-red-500">*</span></label>
+            <div class="relative mt-2">
+              <i class="fas fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+              <input type="text" [(ngModel)]="profile.phone"
+                class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-sm
+                       focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-500 transition" />
             </div>
+          </div>
+
+          <!-- PASSWORD -->
+          <div>
+            <label class="text-sm font-medium text-gray-700">Change Password</label>
+            <div class="relative mt-2">
+              <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+              <input type="password" value="********"
+                class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-sm
+                       focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-500 transition" />
+            </div>
+          </div>
+
+          <!-- STATE -->
+          <div>
+            <label class="text-sm font-medium text-gray-700">State / Province <span class="text-red-500">*</span></label>
+            <div class="relative mt-2">
+              <i class="fas fa-map-marker-alt absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+              <input type="text" [(ngModel)]="profile.state"
+                class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-sm
+                       focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-500 transition" />
+            </div>
+          </div>
+
+          <!-- COUNTRY -->
+          <div>
+            <label class="text-sm font-medium text-gray-700">Country <span class="text-red-500">*</span></label>
+            <div class="relative mt-2">
+              <i class="fas fa-globe absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+              <input type="text" [(ngModel)]="profile.country"
+                class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-sm
+                       focus:outline-none focus:ring-2 focus:ring-green-100 focus:border-green-500 transition" />
+            </div>
+          </div>
 
         </div>
 
+        <!-- BUTTON ROW -->
+        <div class="flex flex-col-reverse sm:flex-row justify-end gap-3 mt-6 sm:mt-8">
+          <button (click)="cancel()"
+              class="w-full sm:w-auto px-5 py-2.5 rounded-lg border border-gray-300 text-sm font-medium hover:bg-gray-50 transition">
+            Cancel
+          </button>
+          <button (click)="saveChanges()"
+              class="w-full sm:w-auto px-6 py-2.5 rounded-lg bg-green-600 text-white text-sm font-medium
+                     flex items-center justify-center gap-2 shadow-sm hover:bg-green-700 transition">
+            <i class="fas fa-check text-xs"></i>
+            Save Changes
+          </button>
+        </div>
+
+      </div>
     </div>
+  </div>
 
 </div>

@@ -1,8 +1,11 @@
-<div class="min-h-screen bg-[#F0FDF4] p-4 md:p-6">
+<!-- unassigned-parcels.component.html — Fully Responsive -->
+<div class="min-h-screen bg-[#F0FDF4] p-3 sm:p-4 md:p-6">
 
-  <div class="mb-6">
-    <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation text-amber-500"></i> Unassigned Parcels</h1>
-    <p class="text-sm text-gray-500 mt-1">Parcels that could not be auto-assigned — no employee covers their city</p>
+  <div class="mb-4 sm:mb-6">
+    <h1 class="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-2">
+      <i class="fa-solid fa-triangle-exclamation text-amber-500"></i> Unassigned Parcels
+    </h1>
+    <p class="text-xs sm:text-sm text-gray-500 mt-1">Parcels that could not be auto-assigned — no employee covers their city</p>
   </div>
 
   <!-- Success -->
@@ -18,35 +21,36 @@
 
   <!-- Alert Banner -->
   <div *ngIf="!isLoading && parcels.length > 0"
-       class="mb-5 flex items-center gap-3 bg-red-50 border border-red-200 rounded-2xl px-5 py-4">
-    <i class="fa-solid fa-bell text-red-500 text-xl flex-shrink-0"></i>
+       class="mb-4 sm:mb-5 flex items-start sm:items-center gap-3 bg-red-50 border border-red-200 rounded-2xl px-4 sm:px-5 py-4">
+    <i class="fa-solid fa-bell text-red-500 text-xl flex-shrink-0 mt-0.5 sm:mt-0"></i>
     <div>
-      <p class="font-semibold text-red-700">{{ parcels.length }} parcel(s) could not be assigned</p>
-      <p class="text-sm text-red-500 mt-0.5">No employee is available for the receiver city of these parcels. Assign manually below.</p>
+      <p class="font-semibold text-red-700 text-sm sm:text-base">{{ parcels.length }} parcel(s) could not be assigned</p>
+      <p class="text-xs sm:text-sm text-red-500 mt-0.5">No employee is available for the receiver city. Assign manually below.</p>
     </div>
   </div>
 
   <!-- Empty -->
   <div *ngIf="!isLoading && parcels.length === 0"
-       class="flex flex-col items-center justify-center py-24 text-gray-400">
-    <i class="fa-solid fa-circle-check text-6xl mb-4 text-green-400"></i>
-    <p class="text-xl font-semibold text-gray-600">All parcels assigned!</p>
-    <p class="text-sm mt-1">No unassigned parcels at this time.</p>
+       class="flex flex-col items-center justify-center py-20 sm:py-24 text-gray-400">
+    <i class="fa-solid fa-circle-check text-5xl sm:text-6xl mb-4 text-green-400"></i>
+    <p class="text-lg sm:text-xl font-semibold text-gray-600">All parcels assigned!</p>
+    <p class="text-xs sm:text-sm mt-1">No unassigned parcels at this time.</p>
   </div>
 
-  <!-- Table -->
+  <!-- Desktop Table -->
   <div *ngIf="!isLoading && parcels.length > 0"
        class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-    <div class="overflow-x-auto">
+
+    <div class="hidden sm:block overflow-x-auto">
       <table class="w-full text-sm">
         <thead class="bg-gray-50 border-b border-gray-100">
           <tr>
             <th class="px-4 py-3 text-left font-semibold text-gray-500">Tracking ID</th>
             <th class="px-4 py-3 text-left font-semibold text-gray-500">Receiver City</th>
             <th class="px-4 py-3 text-left font-semibold text-gray-500">Receiver Name</th>
-            <th class="px-4 py-3 text-left font-semibold text-gray-500">Type</th>
-            <th class="px-4 py-3 text-left font-semibold text-gray-500">Weight</th>
-            <th class="px-4 py-3 text-left font-semibold text-gray-500">Booked</th>
+            <th class="px-4 py-3 text-left font-semibold text-gray-500 hidden md:table-cell">Type</th>
+            <th class="px-4 py-3 text-left font-semibold text-gray-500 hidden md:table-cell">Weight</th>
+            <th class="px-4 py-3 text-left font-semibold text-gray-500 hidden lg:table-cell">Booked</th>
             <th class="px-4 py-3 text-center font-semibold text-gray-500">Action</th>
           </tr>
         </thead>
@@ -59,39 +63,71 @@
               </span>
             </td>
             <td class="px-4 py-3 font-medium text-gray-800">{{ p.receiver_name }}</td>
-            <td class="px-4 py-3 text-gray-600 capitalize">{{ p.parcel_type }}</td>
-            <td class="px-4 py-3 text-gray-600">{{ p.parcel_weight }}kg</td>
-            <td class="px-4 py-3 text-gray-500 text-xs">{{ p.createdAt | date:'dd MMM yyyy' }}</td>
+            <td class="px-4 py-3 text-gray-600 capitalize hidden md:table-cell">{{ p.parcel_type }}</td>
+            <td class="px-4 py-3 text-gray-600 hidden md:table-cell">{{ p.parcel_weight }}kg</td>
+            <td class="px-4 py-3 text-gray-500 text-xs hidden lg:table-cell">{{ p.createdAt | date:'dd MMM yyyy' }}</td>
             <td class="px-4 py-3 text-center">
               <button (click)="openAssignModal(p)"
                       class="px-3 py-1.5 bg-[#16A34A] text-white text-xs font-semibold
-                             rounded-lg hover:bg-green-700 transition-all active:scale-95">
-                Assign Manually
+                             rounded-lg hover:bg-green-700 transition-all active:scale-95 whitespace-nowrap">
+                Assign
               </button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+
+    <!-- Mobile Cards -->
+    <div class="sm:hidden divide-y divide-gray-50">
+      <div *ngFor="let p of parcels" class="p-3">
+        <div class="flex items-start justify-between gap-3 mb-2">
+          <div class="min-w-0">
+            <p class="font-mono text-xs font-bold text-green-700">{{ p.tracking_id }}</p>
+            <p class="font-medium text-gray-800 text-sm mt-0.5">{{ p.receiver_name }}</p>
+          </div>
+          <button (click)="openAssignModal(p)"
+                  class="flex-shrink-0 px-3 py-1.5 bg-[#16A34A] text-white text-xs font-semibold
+                         rounded-lg hover:bg-green-700 transition-all active:scale-95">
+            Assign
+          </button>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500">
+          <span class="bg-red-100 text-red-600 text-xs font-semibold px-2 py-0.5 rounded-full">{{ p.receiver_city }}</span>
+          <span class="capitalize">{{ p.parcel_type }}</span>
+          <span>{{ p.parcel_weight }}kg</span>
+          <span>{{ p.createdAt | date:'dd MMM yyyy' }}</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
+
 <!-- Assign Modal -->
 <div *ngIf="showAssignModal"
-     class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-  <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-6">
+     class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-sm p-0 sm:p-4">
+  <div class="bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl w-full sm:max-w-md p-5 sm:p-6">
+
     <div class="flex items-center justify-between mb-5">
       <h3 class="text-lg font-bold text-gray-800">Manual Assignment</h3>
-      <button (click)="closeModal()" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200">✕</button>
+      <button (click)="closeModal()"
+        class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200">✕</button>
     </div>
 
     <!-- Parcel Summary -->
     <div class="bg-red-50 border border-red-100 rounded-2xl p-4 mb-4">
       <p class="text-xs text-gray-400 mb-1">Parcel</p>
       <p class="font-mono font-bold text-green-700 text-sm">{{ assigningParcel?.tracking_id }}</p>
-     <p class="text-sm text-gray-700 mt-1 flex items-center gap-1.5"><i class="fa-solid fa-location-dot text-red-400"></i> Receiver City: <strong>{{ assigningParcel?.receiver_city }}</strong></p>
-<p class="text-sm text-gray-700 flex items-center gap-1.5"><i class="fa-solid fa-user text-gray-400"></i> {{ assigningParcel?.receiver_name }} &nbsp;<i class="fa-solid fa-phone text-gray-400"></i> {{ assigningParcel?.receiver_phone }}</p>
-   </div>
+      <p class="text-sm text-gray-700 mt-1 flex items-center gap-1.5">
+        <i class="fa-solid fa-location-dot text-red-400"></i> Receiver City: <strong>{{ assigningParcel?.receiver_city }}</strong>
+      </p>
+      <p class="text-sm text-gray-700 flex items-center gap-1.5 mt-0.5">
+        <i class="fa-solid fa-user text-gray-400"></i> {{ assigningParcel?.receiver_name }}
+        &nbsp;<i class="fa-solid fa-phone text-gray-400"></i> {{ assigningParcel?.receiver_phone }}
+      </p>
+    </div>
 
     <label class="block text-sm font-medium text-gray-700 mb-2">Assign to Employee</label>
     <select [(ngModel)]="selectedEmployeeId"
@@ -113,7 +149,7 @@
       <button (click)="confirmAssign()"
               [disabled]="isAssigning"
               class="flex-1 py-2.5 bg-[#16A34A] text-white rounded-xl text-sm font-semibold hover:bg-green-700 transition-all disabled:opacity-60">
-      <i class="fa-solid fa-circle-check"></i> {{ isAssigning ? 'Assigning...' : 'Confirm Assign' }}
+        <i class="fa-solid fa-circle-check"></i> {{ isAssigning ? 'Assigning...' : 'Confirm Assign' }}
       </button>
     </div>
   </div>
