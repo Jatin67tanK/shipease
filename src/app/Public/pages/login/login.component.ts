@@ -3,10 +3,14 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms'; // ⬅️ Add this
 import { CommonModule } from '@angular/common';
 import { AuthService } from 'src/app/core/services/auth.service';
+   // For ngModel
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html'
+  standalone: true,           // ⬅️ This must be true
+  imports: [CommonModule, FormsModule], // ⬅️ Add these two here
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
 
