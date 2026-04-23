@@ -1,7 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:5000',
-  // razorpayKeyId: 'rzp_test_SJKd963szQmbW5'
+  apiUrl: 'https://shipease-backend.onrender.com',
   razorpayKeyId: 'rzp_test_STLxKcGEohnOty'
 
 };

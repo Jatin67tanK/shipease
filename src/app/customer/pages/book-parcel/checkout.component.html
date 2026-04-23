@@ -1,407 +1,407 @@
-<!-- ╔══════════════════════════════════════════════════╗
-     ║  checkout.component.html                        ║
-     ║  Light theme · Pure Tailwind · No SCSS          ║
-     ║  Add to index.html once:                        ║
-     ║  <link href="https://fonts.googleapis.com/css2  ║
-     ║  ?family=Sora:wght@400;600;700;800&family=DM+   ║
-     ║  Sans:wght@300;400;500;600&display=swap"        ║
-     ║  rel="stylesheet">                              ║
-     ╚══════════════════════════════════════════════════╝ -->
+  <!-- ╔══════════════════════════════════════════════════╗
+      ║  checkout.component.html                        ║
+      ║  Light theme · Pure Tailwind · No SCSS          ║
+      ║  Add to index.html once:                        ║
+      ║  <link href="https://fonts.googleapis.com/css2  ║
+      ║  ?family=Sora:wght@400;600;700;800&family=DM+   ║
+      ║  Sans:wght@300;400;500;600&display=swap"        ║
+      ║  rel="stylesheet">                              ║
+      ╚══════════════════════════════════════════════════╝ -->
 
-<div class="min-h-screen bg-slate-50 text-slate-800" style="font-family:'DM Sans',sans-serif">
+  <div class="min-h-screen bg-slate-50 text-slate-800" style="font-family:'DM Sans',sans-serif">
 
-  <!-- ══════════════════════════════════════
-       TOP NAV
-  ══════════════════════════════════════ -->
-  <header class="sticky top-0 z-20 bg-white border-b border-slate-200 shadow-sm">
-    <div class="max-w-6xl mx-auto px-4 md:px-8 flex flex-wrap items-center justify-between gap-3 py-3 md:h-16 md:py-0">
+    <!-- ══════════════════════════════════════
+        TOP NAV
+    ══════════════════════════════════════ -->
+    <header class="sticky top-0 z-20 bg-white border-b border-slate-200 shadow-sm">
+      <div class="max-w-6xl mx-auto px-4 md:px-8 flex flex-wrap items-center justify-between gap-3 py-3 md:h-16 md:py-0">
 
-      <!-- Brand -->
-      <div class="flex items-center gap-2 shrink-0" style="font-family:'Sora',sans-serif;font-weight:800;font-size:1.1rem;color:#1e293b">
-        <span class="text-[#16A34A] text-xl">⬡</span>
-        <span>SwiftEdge</span>
+        <!-- Brand -->
+        <div class="flex items-center gap-2 shrink-0" style="font-family:'Sora',sans-serif;font-weight:800;font-size:1.1rem;color:#1e293b">
+          <i class="fas fa-shipping-fast text-[#16A34A] text-xl"></i>
+          <span>SwiftEdge</span>
+        </div>
+
+        <!-- Step Progress -->
+        <div class="flex items-center gap-1 order-last md:order-none w-full md:w-auto justify-center">
+
+          <!-- Step 1 Done -->
+          <div class="flex flex-col items-center gap-0.5">
+            <div class="w-7 h-7 rounded-full bg-emerald-500 flex items-center justify-center text-white text-[10px] font-bold shadow-sm"><i class="fas fa-check"></i></div>
+            <span class="text-[9px] font-bold tracking-widest text-emerald-600 uppercase">Book</span>
+          </div>
+
+          <div class="w-8 h-0.5 bg-emerald-500 mb-3.5"></div>
+
+          <!-- Step 2 Active -->
+          <div class="flex flex-col items-center gap-0.5">
+            <div class="w-7 h-7 rounded-full bg-[#16A34A] flex items-center justify-center text-white text-[10px] font-bold shadow-sm ring-4 ring-[#DCFCE7]">2</div>
+            <span class="text-[9px] font-bold tracking-widest text-[#16A34A] uppercase">Checkout</span>
+          </div>
+
+          <div class="w-8 h-0.5 bg-slate-200 mb-3.5"></div>
+
+          <!-- Step 3 -->
+          <div class="flex flex-col items-center gap-0.5">
+            <div class="w-7 h-7 rounded-full bg-slate-100 border-2 border-slate-200 flex items-center justify-center text-slate-400 text-[10px] font-bold">3</div>
+            <span class="text-[9px] font-bold tracking-widest text-slate-400 uppercase">Payment</span>
+          </div>
+
+          <div class="w-8 h-0.5 bg-slate-200 mb-3.5"></div>
+
+          <!-- Step 4 -->
+          <div class="flex flex-col items-center gap-0.5">
+            <div class="w-7 h-7 rounded-full bg-slate-100 border-2 border-slate-200 flex items-center justify-center text-slate-400 text-[10px] font-bold">4</div>
+            <span class="text-[9px] font-bold tracking-widest text-slate-400 uppercase">Confirm</span>
+          </div>
+
+        </div>
+
+        <!-- Secure badge -->
+        <div class="hidden md:flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-full shrink-0">
+          <i class="fas fa-lock"></i><span class="font-medium">Secure Checkout</span>
+        </div>
+
       </div>
+    </header>
 
-      <!-- Step Progress -->
-      <div class="flex items-center gap-1 order-last md:order-none w-full md:w-auto justify-center">
-
-        <!-- Step 1 Done -->
-        <div class="flex flex-col items-center gap-0.5">
-          <div class="w-7 h-7 rounded-full bg-emerald-500 flex items-center justify-center text-white text-[10px] font-bold shadow-sm">✓</div>
-          <span class="text-[9px] font-bold tracking-widest text-emerald-600 uppercase">Book</span>
-        </div>
-
-        <div class="w-8 h-0.5 bg-emerald-500 mb-3.5"></div>
-
-        <!-- Step 2 Active -->
-        <div class="flex flex-col items-center gap-0.5">
-          <div class="w-7 h-7 rounded-full bg-[#16A34A] flex items-center justify-center text-white text-[10px] font-bold shadow-sm ring-4 ring-[#DCFCE7]">2</div>
-          <span class="text-[9px] font-bold tracking-widest text-[#16A34A] uppercase">Checkout</span>
-        </div>
-
-        <div class="w-8 h-0.5 bg-slate-200 mb-3.5"></div>
-
-        <!-- Step 3 -->
-        <div class="flex flex-col items-center gap-0.5">
-          <div class="w-7 h-7 rounded-full bg-slate-100 border-2 border-slate-200 flex items-center justify-center text-slate-400 text-[10px] font-bold">3</div>
-          <span class="text-[9px] font-bold tracking-widest text-slate-400 uppercase">Payment</span>
-        </div>
-
-        <div class="w-8 h-0.5 bg-slate-200 mb-3.5"></div>
-
-        <!-- Step 4 -->
-        <div class="flex flex-col items-center gap-0.5">
-          <div class="w-7 h-7 rounded-full bg-slate-100 border-2 border-slate-200 flex items-center justify-center text-slate-400 text-[10px] font-bold">4</div>
-          <span class="text-[9px] font-bold tracking-widest text-slate-400 uppercase">Confirm</span>
-        </div>
-
-      </div>
-
-      <!-- Secure badge -->
-      <div class="hidden md:flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-full shrink-0">
-        <span>🔒</span><span class="font-medium">Secure Checkout</span>
-      </div>
-
+    <!-- ══════════════════════════════════════
+        LOADING
+    ══════════════════════════════════════ -->
+    <div *ngIf="isLoading"
+        class="flex flex-col items-center justify-center gap-4"
+        style="min-height:calc(100vh - 64px)">
+      <div class="w-12 h-12 rounded-full border-4 border-slate-200 border-t-[#16A34A] animate-spin"></div>
+      <p class="text-sm font-semibold text-slate-500" style="font-family:'Sora',sans-serif">Calculating your charges...</p>
     </div>
-  </header>
 
-  <!-- ══════════════════════════════════════
-       LOADING
-  ══════════════════════════════════════ -->
-  <div *ngIf="isLoading"
-       class="flex flex-col items-center justify-center gap-4"
-       style="min-height:calc(100vh - 64px)">
-    <div class="w-12 h-12 rounded-full border-4 border-slate-200 border-t-[#16A34A] animate-spin"></div>
-    <p class="text-sm font-semibold text-slate-500" style="font-family:'Sora',sans-serif">Calculating your charges...</p>
-  </div>
+    <!-- ══════════════════════════════════════
+        PAYING — shown while Razorpay order
+        is being created on the backend
+    ══════════════════════════════════════ -->
+    <div *ngIf="isPaying"
+        class="flex flex-col items-center justify-center gap-4"
+        style="min-height:calc(100vh - 64px)">
+      <div class="w-12 h-12 rounded-full border-4 border-blue-100 border-t-[#16A34A] border-r-[#16A34A] animate-spin"></div>
+      <p class="text-sm font-semibold text-slate-600" style="font-family:'Sora',sans-serif">Redirecting to payment gateway...</p>
+      <p class="text-xs text-slate-400">Please do not close this window</p>
+    </div>
 
-  <!-- ══════════════════════════════════════
-       PAYING — shown while Razorpay order
-       is being created on the backend
-  ══════════════════════════════════════ -->
-  <div *ngIf="isPaying"
-       class="flex flex-col items-center justify-center gap-4"
-       style="min-height:calc(100vh - 64px)">
-    <div class="w-12 h-12 rounded-full border-4 border-blue-100 border-t-[#16A34A] border-r-[#16A34A] animate-spin"></div>
-    <p class="text-sm font-semibold text-slate-600" style="font-family:'Sora',sans-serif">Redirecting to payment gateway...</p>
-    <p class="text-xs text-slate-400">Please do not close this window</p>
-  </div>
+    <!-- ══════════════════════════════════════
+        MAIN CONTENT
+    ══════════════════════════════════════ -->
+    <main *ngIf="!isLoading && !isPaying && booking"
+          class="max-w-6xl mx-auto px-4 md:px-8 py-8 md:py-10 grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-6 items-start">
 
-  <!-- ══════════════════════════════════════
-       MAIN CONTENT
-  ══════════════════════════════════════ -->
-  <main *ngIf="!isLoading && !isPaying && booking"
-        class="max-w-6xl mx-auto px-4 md:px-8 py-8 md:py-10 grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-6 items-start">
+      <!-- ════════════════════════════════
+          LEFT — ORDER SUMMARY
+      ════════════════════════════════ -->
+      <section class="flex flex-col gap-5">
 
-    <!-- ════════════════════════════════
-         LEFT — ORDER SUMMARY
-    ════════════════════════════════ -->
-    <section class="flex flex-col gap-5">
+        <!-- ── PARCEL INFO CARD ── -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
 
-      <!-- ── PARCEL INFO CARD ── -->
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-
-        <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
-          <div>
-            <p class="text-[10px] font-bold uppercase tracking-widest text-[#16A34A]">Parcel Information</p>
-            <p class="text-base font-bold text-slate-800 mt-0.5" style="font-family:'Sora',sans-serif">Shipment Details</p>
+          <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-widest text-[#16A34A]">Parcel Information</p>
+              <p class="text-base font-bold text-slate-800 mt-0.5" style="font-family:'Sora',sans-serif">Shipment Details</p>
+            </div>
+            <i class="fas fa-box text-2xl text-[#16A34A]"></i>
           </div>
-          <span class="text-2xl">📦</span>
-        </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+          <div class="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
 
-          <!-- Sender -->
-          <div class="px-5 py-4">
-            <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-2">From</p>
-            <div class="flex flex-col gap-1.5">
-              <div class="flex items-center gap-2">
-                <span class="text-base">👤</span>
-                <span class="text-sm font-semibold text-slate-700">{{ booking.sender_name }}</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <span class="text-base">📞</span>
-                <span class="text-sm text-slate-500">{{ booking.sender_phone }}</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <span class="text-base">📍</span>
-                <span class="text-sm text-slate-500">{{ booking.sender_city }}, {{ booking.sender_state }}</span>
-              </div>
-              <div class="flex items-start gap-2 mt-0.5">
-                <span class="text-base mt-0.5">🏠</span>
-                <span class="text-xs text-slate-400 leading-relaxed">{{ booking.pickup_address }}</span>
+            <!-- Sender -->
+            <div class="px-5 py-4">
+              <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-2">From</p>
+              <div class="flex flex-col gap-1.5">
+                <div class="flex items-center gap-2">
+                  <i class="fas fa-user text-slate-400 w-4 text-center"></i>
+                  <span class="text-sm font-semibold text-slate-700">{{ booking.sender_name }}</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <i class="fas fa-phone text-slate-400 w-4 text-center"></i>
+                  <span class="text-sm text-slate-500">{{ booking.sender_phone }}</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <i class="fas fa-map-marker-alt text-slate-400 w-4 text-center"></i>
+                  <span class="text-sm text-slate-500">{{ booking.sender_city }}, {{ booking.sender_state }}</span>
+                </div>
+                <div class="flex items-start gap-2 mt-0.5">
+                  <i class="fas fa-home text-slate-400 w-4 text-center mt-0.5"></i>
+                  <span class="text-xs text-slate-400 leading-relaxed">{{ booking.pickup_address }}</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Receiver -->
-          <div class="px-5 py-4">
-            <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-2">To</p>
-            <div class="flex flex-col gap-1.5">
-              <div class="flex items-center gap-2">
-                <span class="text-base">👤</span>
-                <span class="text-sm font-semibold text-slate-700">{{ booking.receiver_name }}</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <span class="text-base">📞</span>
-                <span class="text-sm text-slate-500">{{ booking.receiver_phone }}</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <span class="text-base">📍</span>
-                <span class="text-sm text-slate-500">{{ booking.receiver_city }}, {{ booking.receiver_state }}</span>
-              </div>
-              <div class="flex items-start gap-2 mt-0.5">
-                <span class="text-base mt-0.5">🏠</span>
-                <span class="text-xs text-slate-400 leading-relaxed">{{ booking.drop_address }}</span>
+            <!-- Receiver -->
+            <div class="px-5 py-4">
+              <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-2">To</p>
+              <div class="flex flex-col gap-1.5">
+                <div class="flex items-center gap-2">
+                  <i class="fas fa-user text-slate-400 w-4 text-center"></i>
+                  <span class="text-sm font-semibold text-slate-700">{{ booking.receiver_name }}</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <i class="fas fa-phone text-slate-400 w-4 text-center"></i>
+                  <span class="text-sm text-slate-500">{{ booking.receiver_phone }}</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <i class="fas fa-map-marker-alt text-slate-400 w-4 text-center"></i>
+                  <span class="text-sm text-slate-500">{{ booking.receiver_city }}, {{ booking.receiver_state }}</span>
+                </div>
+                <div class="flex items-start gap-2 mt-0.5">
+                  <i class="fas fa-home text-slate-400 w-4 text-center mt-0.5"></i>
+                  <span class="text-xs text-slate-400 leading-relaxed">{{ booking.drop_address }}</span>
+                </div>
               </div>
             </div>
+
+          </div>
+
+          <!-- Parcel Specs Row -->
+          <div class="border-t border-slate-100 px-5 py-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
+
+            <div class="flex flex-col gap-0.5">
+              <span class="text-[9px] font-bold uppercase tracking-widest text-slate-400">Parcel Type</span>
+              <span class="text-sm font-semibold text-slate-700">{{ booking.parcel_type }}</span>
+            </div>
+
+            <div class="flex flex-col gap-0.5">
+              <span class="text-[9px] font-bold uppercase tracking-widest text-slate-400">Weight</span>
+              <span class="text-sm font-semibold text-slate-700">{{ booking.parcel_weight }} kg</span>
+            </div>
+
+            <div class="flex flex-col gap-0.5">
+              <span class="text-[9px] font-bold uppercase tracking-widest text-slate-400">Distance</span>
+              <span class="text-sm font-semibold text-slate-700">{{ booking.distance_category }}</span>
+            </div>
+
+            <div class="flex flex-col gap-0.5">
+              <span class="text-[9px] font-bold uppercase tracking-widest text-slate-400">Delivery</span>
+              <div class="flex items-center gap-1.5">
+                <span class="text-sm font-semibold text-slate-700">{{ booking.delivery_type }}</span>
+                <span *ngIf="booking.delivery_type === 'Express Delivery'"
+                      class="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-amber-100 border border-amber-200 text-amber-700 tracking-wide">
+                  EXPRESS
+                </span>
+              </div>
+            </div>
+
           </div>
 
         </div>
 
-        <!-- Parcel Specs Row -->
-        <div class="border-t border-slate-100 px-5 py-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <!-- ── PRICE BREAKDOWN CARD ── -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
 
-          <div class="flex flex-col gap-0.5">
-            <span class="text-[9px] font-bold uppercase tracking-widest text-slate-400">Parcel Type</span>
-            <span class="text-sm font-semibold text-slate-700">{{ booking.parcel_type }}</span>
+          <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-widests text-[#16A34A]">Charges Applied</p>
+              <p class="text-base font-bold text-slate-800 mt-0.5" style="font-family:'Sora',sans-serif">Price Breakdown</p>
+            </div>
+            <i class="fas fa-receipt text-2xl text-[#16A34A]"></i>
           </div>
 
-          <div class="flex flex-col gap-0.5">
-            <span class="text-[9px] font-bold uppercase tracking-widest text-slate-400">Weight</span>
-            <span class="text-sm font-semibold text-slate-700">{{ booking.parcel_weight }} kg</span>
-          </div>
+          <!-- Dynamic Line Items -->
+          <div class="divide-y divide-slate-100">
 
-          <div class="flex flex-col gap-0.5">
-            <span class="text-[9px] font-bold uppercase tracking-widest text-slate-400">Distance</span>
-            <span class="text-sm font-semibold text-slate-700">{{ booking.distance_category }}</span>
-          </div>
+            <div *ngFor="let item of lineItems"
+                class="flex items-center justify-between gap-3 px-5 py-4 hover:bg-slate-50 transition-colors">
 
-          <div class="flex flex-col gap-0.5">
-            <span class="text-[9px] font-bold uppercase tracking-widest text-slate-400">Delivery</span>
-            <div class="flex items-center gap-1.5">
-              <span class="text-sm font-semibold text-slate-700">{{ booking.delivery_type }}</span>
-              <span *ngIf="booking.delivery_type === 'Express Delivery'"
-                    class="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-amber-100 border border-amber-200 text-amber-700 tracking-wide">
-                EXPRESS
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 shrink-0">
+                  <i [class]="item.icon"></i>
+                </div>
+                <div class="min-w-0">
+                  <p class="text-sm font-semibold text-slate-700">{{ item.label }}</p>
+                  <p class="text-xs text-slate-400 mt-0.5">{{ item.desc }}</p>
+                </div>
+              </div>
+
+              <!-- Amount — express -->
+              <span *ngIf="item.highlight === 'express'"
+                    class="font-bold text-sm text-amber-600 shrink-0 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-lg"
+                    style="font-family:'Sora',sans-serif">
+                +Rs. {{ item.amount | number:'1.2-2' }}
               </span>
-            </div>
-          </div>
 
-        </div>
+              <!-- Amount — free (no express) -->
+              <span *ngIf="item.highlight === 'free'"
+                    class="font-bold text-xs text-emerald-600 shrink-0 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg tracking-widest">
+                FREE
+              </span>
 
-      </div>
+              <!-- Amount — normal -->
+              <span *ngIf="!item.highlight"
+                    class="font-semibold text-sm text-slate-700 shrink-0"
+                    style="font-family:'Sora',sans-serif">
+                Rs. {{ item.amount | number:'1.2-2' }}
+              </span>
 
-      <!-- ── PRICE BREAKDOWN CARD ── -->
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-
-        <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
-          <div>
-            <p class="text-[10px] font-bold uppercase tracking-widests text-[#16A34A]">Charges Applied</p>
-            <p class="text-base font-bold text-slate-800 mt-0.5" style="font-family:'Sora',sans-serif">Price Breakdown</p>
-          </div>
-          <span class="text-2xl">🧾</span>
-        </div>
-
-        <!-- Dynamic Line Items -->
-        <div class="divide-y divide-slate-100">
-
-          <div *ngFor="let item of lineItems"
-               class="flex items-center justify-between gap-3 px-5 py-4 hover:bg-slate-50 transition-colors">
-
-            <div class="flex items-center gap-3 min-w-0">
-              <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-lg shrink-0">
-                {{ item.icon }}
-              </div>
-              <div class="min-w-0">
-                <p class="text-sm font-semibold text-slate-700">{{ item.label }}</p>
-                <p class="text-xs text-slate-400 mt-0.5">{{ item.desc }}</p>
-              </div>
             </div>
 
-            <!-- Amount — express -->
-            <span *ngIf="item.highlight === 'express'"
-                  class="font-bold text-sm text-amber-600 shrink-0 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-lg"
-                  style="font-family:'Sora',sans-serif">
-              +${{ item.amount | number:'1.2-2' }}
+          </div>
+
+          <!-- Subtotal divider -->
+          <div class="mx-5 border-t-2 border-dashed border-slate-200 my-1"></div>
+
+          <!-- TOTAL ROW -->
+          <div class="flex items-center justify-between px-5 py-4 bg-[#DCFCE7]">
+            <div>
+              <p class="text-[10px] font-bold uppercase tracking-widest text-blue-500">Total Payable</p>
+              <p class="text-xs text-slate-400 mt-0.5">All charges included</p>
+            </div>
+            <span class="font-extrabold text-2xl text-[#16A34A]" style="font-family:'Sora',sans-serif">
+              Rs. {{ totalPayable | number:'1.2-2' }}
             </span>
+          </div>
 
-            <!-- Amount — free (no express) -->
-            <span *ngIf="item.highlight === 'free'"
-                  class="font-bold text-xs text-emerald-600 shrink-0 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg tracking-widest">
-              FREE
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="flex flex-wrap gap-2">
+          <span class="flex items-center gap-1.5 text-[10px] font-medium text-slate-500 bg-white border border-slate-200 px-3 py-1.5 rounded-full shadow-sm"><i class="fas fa-lock"></i> SSL Encrypted</span>
+          <span class="flex items-center gap-1.5 text-[10px] font-medium text-slate-500 bg-white border border-slate-200 px-3 py-1.5 rounded-full shadow-sm"><i class="fas fa-shield-alt"></i> Secure Payment</span>
+          <span class="flex items-center gap-1.5 text-[10px] font-medium text-slate-500 bg-white border border-slate-200 px-3 py-1.5 rounded-full shadow-sm"><i class="fas fa-undo"></i> Easy Refund</span>
+        </div>
+
+      </section>
+
+      <!-- ════════════════════════════════
+          RIGHT — PAYMENT PANEL
+      ════════════════════════════════ -->
+      <section class="flex flex-col gap-5 lg:sticky lg:top-20">
+
+        <!-- ACTION CARD -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+
+          <!-- Header -->
+          <div class="text-center mb-6">
+            <div class="w-14 h-14 rounded-2xl bg-[#DCFCE7] border border-blue-100 flex items-center justify-center text-2xl mx-auto mb-3 shadow-sm"><i class="fas fa-credit-card text-[#16A34A]"></i></div>
+            <h3 class="font-bold text-lg text-slate-800" style="font-family:'Sora',sans-serif">Complete Payment</h3>
+            <p class="text-xs text-slate-400 mt-1">Review your order and proceed</p>
+          </div>
+
+          <!-- Amount -->
+          <div class="flex items-center justify-between bg-[#DCFCE7] border border-blue-100 rounded-xl px-5 py-4 mb-5">
+            <div>
+              <p class="text-[9px] font-bold uppercase tracking-widest text-[#16A34A]">Amount Due</p>
+              <p class="text-xs text-slate-400 mt-0.5">{{ booking.distance_category }} · {{ booking.parcel_weight }}kg</p>
+            </div>
+            <span class="font-extrabold text-2xl text-[#16A34A]" style="font-family:'Sora',sans-serif">
+              Rs. {{ totalPayable | number:'1.2-2' }}
             </span>
-
-            <!-- Amount — normal -->
-            <span *ngIf="!item.highlight"
-                  class="font-semibold text-sm text-slate-700 shrink-0"
-                  style="font-family:'Sora',sans-serif">
-              ${{ item.amount | number:'1.2-2' }}
-            </span>
-
           </div>
 
-        </div>
+          <!-- Payment Method -->
+          <!-- <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-3">Payment Method</p>
+          <div class="grid grid-cols-3 gap-2 mb-5">
 
-        <!-- Subtotal divider -->
-        <div class="mx-5 border-t-2 border-dashed border-slate-200 my-1"></div>
+            <div (click)="selectMethod('card')"
+                class="flex flex-col items-center gap-1.5 border-2 rounded-xl py-3 px-2 cursor-pointer transition-all text-xs font-semibold"
+                [ngClass]="selectedMethod === 'card'
+                  ? 'border-blue-500 bg-[#DCFCE7] text-[#16A34A]'
+                  : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:bg-slate-50'">
+              <span class="text-xl">💳</span>
+              <span>Card</span>
+            </div>
 
-        <!-- TOTAL ROW -->
-        <div class="flex items-center justify-between px-5 py-4 bg-[#DCFCE7]">
-          <div>
-            <p class="text-[10px] font-bold uppercase tracking-widest text-blue-500">Total Payable</p>
-            <p class="text-xs text-slate-400 mt-0.5">All charges included</p>
-          </div>
-          <span class="font-extrabold text-2xl text-[#16A34A]" style="font-family:'Sora',sans-serif">
-            ${{ totalPayable | number:'1.2-2' }}
-          </span>
-        </div>
+            <div (click)="selectMethod('upi')"
+                class="flex flex-col items-center gap-1.5 border-2 rounded-xl py-3 px-2 cursor-pointer transition-all text-xs font-semibold"
+                [ngClass]="selectedMethod === 'upi'
+                  ? 'border-blue-500 bg-[#DCFCE7] text-[#16A34A]'
+                  : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:bg-slate-50'">
+              <span class="text-xl">📲</span>
+              <span>UPI</span>
+            </div>
 
-      </div>
+            <div (click)="selectMethod('bank')"
+                class="flex flex-col items-center gap-1.5 border-2 rounded-xl py-3 px-2 cursor-pointer transition-all text-xs font-semibold"
+                [ngClass]="selectedMethod === 'bank'
+                  ? 'border-blue-500 bg-[#DCFCE7] text-[#16A34A]'
+                  : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:bg-slate-50'">
+              <span class="text-xl">🏦</span>
+              <span>Bank</span>
+            </div>
 
-      <!-- Trust Badges -->
-      <div class="flex flex-wrap gap-2">
-        <span class="text-[10px] font-medium text-slate-500 bg-white border border-slate-200 px-3 py-1.5 rounded-full shadow-sm">🔒 SSL Encrypted</span>
-        <span class="text-[10px] font-medium text-slate-500 bg-white border border-slate-200 px-3 py-1.5 rounded-full shadow-sm">🛡️ Secure Payment</span>
-        <span class="text-[10px] font-medium text-slate-500 bg-white border border-slate-200 px-3 py-1.5 rounded-full shadow-sm">↩️ Easy Refund</span>
-      </div>
+          </div> -->
 
-    </section>
-
-    <!-- ════════════════════════════════
-         RIGHT — PAYMENT PANEL
-    ════════════════════════════════ -->
-    <section class="flex flex-col gap-5 lg:sticky lg:top-20">
-
-      <!-- ACTION CARD -->
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-
-        <!-- Header -->
-        <div class="text-center mb-6">
-          <div class="w-14 h-14 rounded-2xl bg-[#DCFCE7] border border-blue-100 flex items-center justify-center text-2xl mx-auto mb-3 shadow-sm">💳</div>
-          <h3 class="font-bold text-lg text-slate-800" style="font-family:'Sora',sans-serif">Complete Payment</h3>
-          <p class="text-xs text-slate-400 mt-1">Review your order and proceed</p>
-        </div>
-
-        <!-- Amount -->
-        <div class="flex items-center justify-between bg-[#DCFCE7] border border-blue-100 rounded-xl px-5 py-4 mb-5">
-          <div>
-            <p class="text-[9px] font-bold uppercase tracking-widest text-[#16A34A]">Amount Due</p>
-            <p class="text-xs text-slate-400 mt-0.5">{{ booking.distance_category }} · {{ booking.parcel_weight }}kg</p>
-          </div>
-          <span class="font-extrabold text-2xl text-[#16A34A]" style="font-family:'Sora',sans-serif">
-            ${{ totalPayable | number:'1.2-2' }}
-          </span>
-        </div>
-
-        <!-- Payment Method -->
-        <!-- <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-3">Payment Method</p>
-        <div class="grid grid-cols-3 gap-2 mb-5">
-
-          <div (click)="selectMethod('card')"
-               class="flex flex-col items-center gap-1.5 border-2 rounded-xl py-3 px-2 cursor-pointer transition-all text-xs font-semibold"
-               [ngClass]="selectedMethod === 'card'
-                 ? 'border-blue-500 bg-[#DCFCE7] text-[#16A34A]'
-                 : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:bg-slate-50'">
-            <span class="text-xl">💳</span>
-            <span>Card</span>
+          <!-- ══════════════════════════════════════
+              PAYMENT ERROR BANNER
+              Shown when:
+              • Razorpay order creation fails
+              • User dismisses the modal
+              • Card/UPI/Bank payment fails
+              • Signature verification fails
+          ══════════════════════════════════════ -->
+          <div *ngIf="paymentError"
+              class="flex items-start gap-2.5 bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-4">
+            <i class="fas fa-exclamation-triangle text-red-500 shrink-0 mt-0.5"></i>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-bold text-red-700 mb-0.5">Payment Failed</p>
+              <p class="text-xs text-red-600 leading-relaxed">{{ paymentError }}</p>
+            </div>
+            <!-- Dismiss -->
+            <button
+              (click)="paymentError = ''"
+              class="shrink-0 text-red-400 hover:text-red-600 transition-colors text-sm font-bold leading-none mt-0.5">
+              ✕
+            </button>
           </div>
 
-          <div (click)="selectMethod('upi')"
-               class="flex flex-col items-center gap-1.5 border-2 rounded-xl py-3 px-2 cursor-pointer transition-all text-xs font-semibold"
-               [ngClass]="selectedMethod === 'upi'
-                 ? 'border-blue-500 bg-[#DCFCE7] text-[#16A34A]'
-                 : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:bg-slate-50'">
-            <span class="text-xl">📲</span>
-            <span>UPI</span>
-          </div>
-
-          <div (click)="selectMethod('bank')"
-               class="flex flex-col items-center gap-1.5 border-2 rounded-xl py-3 px-2 cursor-pointer transition-all text-xs font-semibold"
-               [ngClass]="selectedMethod === 'bank'
-                 ? 'border-blue-500 bg-[#DCFCE7] text-[#16A34A]'
-                 : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:bg-slate-50'">
-            <span class="text-xl">🏦</span>
-            <span>Bank</span>
-          </div>
-
-        </div> -->
-
-        <!-- ══════════════════════════════════════
-             PAYMENT ERROR BANNER
-             Shown when:
-             • Razorpay order creation fails
-             • User dismisses the modal
-             • Card/UPI/Bank payment fails
-             • Signature verification fails
-        ══════════════════════════════════════ -->
-        <div *ngIf="paymentError"
-             class="flex items-start gap-2.5 bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-4">
-          <span class="text-base shrink-0 mt-0.5">⚠️</span>
-          <div class="flex-1 min-w-0">
-            <p class="text-xs font-bold text-red-700 mb-0.5">Payment Failed</p>
-            <p class="text-xs text-red-600 leading-relaxed">{{ paymentError }}</p>
-          </div>
-          <!-- Dismiss -->
+          <!-- PAY BUTTON -->
           <button
-            (click)="paymentError = ''"
-            class="shrink-0 text-red-400 hover:text-red-600 transition-colors text-sm font-bold leading-none mt-0.5">
-            ✕
+            (click)="proceedToPay()"
+            [disabled]="isPaying"
+            class="w-full flex items-center justify-between text-white font-bold text-sm rounded-xl px-5 py-4 mb-4 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:-translate-y-0.5 active:translate-y-0"
+            style="font-family:'Sora',sans-serif;background:#16A34A;box-shadow:0 4px 20px rgba(22,163,74,.35)">
+            <span class="flex-1 text-center">Pay &nbsp; Rs. {{ totalPayable | number:'1.2-2' }}</span>
+            <i class="fas fa-arrow-right ml-2"></i>
           </button>
-        </div>
 
-        <!-- PAY BUTTON -->
-        <button
-          (click)="proceedToPay()"
-          [disabled]="isPaying"
-          class="w-full flex items-center justify-between text-white font-bold text-sm rounded-xl px-5 py-4 mb-4 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:-translate-y-0.5 active:translate-y-0"
-          style="font-family:'Sora',sans-serif;background:#16A34A;box-shadow:0 4px 20px rgba(22,163,74,.35)">
-          <span class="flex-1 text-center">Pay &nbsp; ${{ totalPayable | number:'1.2-2' }}</span>
-          <span class="text-base ml-2">→</span>
-        </button>
-
-        <p class="text-center text-[10px] text-slate-400 leading-relaxed">
-          🔒 256-bit SSL · Your data is always safe
-        </p>
-
-      </div>
-
-      <!-- WHAT HAPPENS NEXT -->
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-
-        <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-4">What happens next?</p>
-
-        <div class="flex flex-col gap-3.5">
-
-          <div class="flex items-start gap-3">
-            <div class="w-6 h-6 rounded-lg bg-emerald-100 flex items-center justify-center text-[10px] font-extrabold text-emerald-600 shrink-0 mt-0.5" style="font-family:'Sora',sans-serif">01</div>
-            <div>
-              <p class="text-sm font-semibold text-slate-700">Payment Confirmed</p>
-              <p class="text-xs text-slate-400 mt-0.5 leading-relaxed">Receipt sent to your account instantly</p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-3">
-            <div class="w-6 h-6 rounded-lg bg-blue-100 flex items-center justify-center text-[10px] font-extrabold text-[#16A34A] shrink-0 mt-0.5" style="font-family:'Sora',sans-serif">02</div>
-            <div>
-              <p class="text-sm font-semibold text-slate-700">Tracking ID Generated</p>
-              <p class="text-xs text-slate-400 mt-0.5 leading-relaxed">Live parcel tracking begins immediately</p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-3">
-            <div class="w-6 h-6 rounded-lg bg-amber-100 flex items-center justify-center text-[10px] font-extrabold text-amber-600 shrink-0 mt-0.5" style="font-family:'Sora',sans-serif">03</div>
-            <div>
-              <p class="text-sm font-semibold text-slate-700">Parcel Picked Up</p>
-              <p class="text-xs text-slate-400 mt-0.5 leading-relaxed">Agent arrives at your pickup address</p>
-            </div>
-          </div>
+          <p class="text-center text-[10px] text-slate-400 leading-relaxed flex items-center justify-center gap-1">
+            <i class="fas fa-lock"></i> 256-bit SSL · Your data is always safe
+          </p>
 
         </div>
-      </div>
 
-    </section>
+        <!-- WHAT HAPPENS NEXT -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
 
-  </main>
+          <p class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-4">What happens next?</p>
 
-</div>
+          <div class="flex flex-col gap-3.5">
+
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 rounded-lg bg-emerald-100 flex items-center justify-center text-[10px] font-extrabold text-emerald-600 shrink-0 mt-0.5" style="font-family:'Sora',sans-serif">01</div>
+              <div>
+                <p class="text-sm font-semibold text-slate-700">Payment Confirmed</p>
+                <p class="text-xs text-slate-400 mt-0.5 leading-relaxed">Receipt sent to your account instantly</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 rounded-lg bg-blue-100 flex items-center justify-center text-[10px] font-extrabold text-[#16A34A] shrink-0 mt-0.5" style="font-family:'Sora',sans-serif">02</div>
+              <div>
+                <p class="text-sm font-semibold text-slate-700">Tracking ID Generated</p>
+                <p class="text-xs text-slate-400 mt-0.5 leading-relaxed">Live parcel tracking begins immediately</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 rounded-lg bg-amber-100 flex items-center justify-center text-[10px] font-extrabold text-amber-600 shrink-0 mt-0.5" style="font-family:'Sora',sans-serif">03</div>
+              <div>
+                <p class="text-sm font-semibold text-slate-700">Parcel Picked Up</p>
+                <p class="text-xs text-slate-400 mt-0.5 leading-relaxed">Agent arrives at your pickup address</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>  

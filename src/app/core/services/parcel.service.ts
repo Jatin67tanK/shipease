@@ -129,8 +129,10 @@ downloadExcel(filters?: any): Observable<Blob> {
 }
 
 // Download PDF for filtered parcels
-downloadPDF(filters?: any): Observable<Blob> {
-  return this.http.post(`${this.API}/api/parcels/download-pdf`, filters || {}, { responseType: 'blob' });
+downloadPDF(filters: any): Observable<Blob> {
+  return this.http.post(`${this.API}/api/parcels/download-pdf`, filters, {
+    responseType: 'blob'
+  });
 }
 
   // ── Admin Cycle ───────────────────────────────────────────

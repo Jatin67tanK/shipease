@@ -129,14 +129,14 @@ export class CheckoutComponent implements OnInit {
       {
         label:     'Weight Charge',
         desc:      `${weight} kg × $${cfg.price_per_kg.toFixed(2)}/kg`,
-        icon:      '⚖️',
+        icon:      'fas fa-weight-hanging',
         amount:    weightCharge,
         highlight: null
       },
       {
         label:     'Express Delivery',
         desc:      isExpress ? 'Priority handling & faster transit' : 'Standard delivery — no surcharge',
-        icon:      isExpress ? '🚀' : '🚚',
+        icon:      isExpress ? 'fas fa-bolt' : 'fas fa-truck',
         amount:    expressCharge,
         highlight: isExpress ? 'express' : 'free'
       }
@@ -157,12 +157,12 @@ export class CheckoutComponent implements OnInit {
 
   private getDistanceIcon(cat: string): string {
     const map: Record<string, string> = {
-      'Local':         '🏙️',
-      'Intercity':     '🌆',
-      'Interstate':    '🗺️',
-      'International': '✈️'
+      'Local':         'fas fa-city',
+      'Intercity':     'fas fa-road',
+      'Interstate':    'fas fa-map',
+      'International': 'fas fa-plane'
     };
-    return map[cat] ?? '📦';
+    return map[cat] ?? 'fas fa-box';
   }
 
   /* ═══════════════════════════════════════════

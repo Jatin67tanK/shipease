@@ -1,19 +1,15 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms'; // ⬅️ Add this
-import { CommonModule } from '@angular/common';
 import { AuthService } from 'src/app/core/services/auth.service';
-   // For ngModel
 
 @Component({
   selector: 'app-login',
-  standalone: true,           // ⬅️ This must be true
-  imports: [CommonModule, FormsModule], // ⬅️ Add these two here
+  // ❌ Remove standalone: true
+  // ❌ Remove imports: [...]
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-
   form = { email: '', password: '' };
   isLoading    = false;
   errorMessage = '';

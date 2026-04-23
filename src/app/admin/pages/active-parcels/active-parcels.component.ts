@@ -251,7 +251,9 @@ isActivestaus():boolean{
           p.delivery_type?.toUpperCase().includes(q)      ||
           p.total_cost?.toString().includes(q)            ||
           p.payment_status?.toUpperCase().includes(q)     ||
-          p.current_status?.toUpperCase().includes(q)
+          p.current_status?.toUpperCase().includes(q)     ||
+          p.assigned_employee?.name?.toUpperCase().includes(q) || 
+          p.assigned_employee?.employee_id?.toString().includes(q)
         );
       } else {
         this.searchResult = null;
@@ -429,15 +431,16 @@ isActivestaus():boolean{
       });
     }
 
-    private buildFilterPayload(): any {
-      return {
-        
-        current_status: this.selectedStatuses.length ? this.selectedStatuses : undefined,
-        payment_status: this.selectedPayments.length ? this.selectedPayments : undefined,
-        month:          this.selectedMonths.length   ? this.selectedMonths   : undefined,
-        year:           this.selectedYears.length    ? this.selectedYears    : undefined,
-        state:          this.selectedStates.length   ? this.selectedStates   : undefined,
-        city:           this.selectedCities.length   ? this.selectedCities   : undefined,
-      };
-    }
+  private buildFilterPayload(): any {
+  return {
+    search:         this.searchQuery || undefined,
+    current_status: this.selectedStatuses.length ? this.selectedStatuses : undefined,
+    payment_status: this.selectedPayments.length ? this.selectedPayments : undefined,
+    month:          this.selectedMonths.length   ? this.selectedMonths   : undefined,
+    year:           this.selectedYears.length    ? this.selectedYears    : undefined,
+    state:          this.selectedStates.length   ? this.selectedStates   : undefined,
+    city:           this.selectedCities.length   ? this.selectedCities   : undefined,
+    routeType:      this.currentRouteStatus,   // 👈 add this
+  };
+}
   }

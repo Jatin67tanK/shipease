@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ParcelService } from 'src/app/core/services/parcel.service';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-track-parcel',
@@ -22,7 +23,9 @@ export class TrackParcelComponent implements OnInit {
 
   constructor(
     private parcelService: ParcelService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -93,17 +96,12 @@ export class TrackParcelComponent implements OnInit {
   ===================================================== */
 
   loadParcelEvents(trackingId: string): void {
-
     this.parcelService.getParcelEvents(trackingId).subscribe({
-
       next: (res: any) => {
-
         this.parcelEvents = res?.data || [];
         this.isLoading = false;
       },
-
       error: () => {
-
         /* Not critical → UI still works */
         this.parcelEvents = [];
         this.isLoading = false;
@@ -132,12 +130,19 @@ export class TrackParcelComponent implements OnInit {
   ===================================================== */
 
   handleError(message: string): void {
-
     this.errorMessage = message;
     this.isLoading = false;
     this.parcel = null;
     this.parcelEvents = [];
     this.progressStep = 1;
     this.progressWidth = 0;
+  }
+
+  bookNow(): void {
+    if (this.authService.isLoggedIn() && this.authService.getRole() === 'Customer') {
+      this.router.navigate(['/customer/book']);
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 }
