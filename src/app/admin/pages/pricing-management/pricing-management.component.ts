@@ -35,7 +35,7 @@ export class PricingManagementComponent implements OnInit {
       next: (res: any) => {
 
         if (!res?.data) {
-          alert("Invalid pricing response 💀");
+          alert("Invalid pricing response.");
           this.isLoading = false;
           return;
         }
@@ -57,7 +57,7 @@ export class PricingManagementComponent implements OnInit {
 
       error: (err) => {
         console.warn("Pricing Load Error:", err);
-        alert("Failed to load pricing 💀");
+        alert("Failed to load pricing.");
         this.isLoading = false;
       }
     });
@@ -88,13 +88,13 @@ export class PricingManagementComponent implements OnInit {
     this.parcelService.updatePricing(payload).subscribe({
 
       next: () => {
-        alert("Pricing updated successfully 😎🔥");
+        alert("Pricing updated successfully.");
         this.loadPricing();   // 🔥 Sync UI with DB
       },
 
       error: (err) => {
         console.warn("Pricing Save Error:", err);
-        alert("Pricing update failed 💀");
+        alert("Pricing update failed.");
       }
     });
   }

@@ -3,7 +3,7 @@
   <!-- Logo -->
   <div class="h-16 flex items-center px-4 border-b">
 
-    <div class="text-2xl">🚚</div>
+    <div class="text-2xl"><i class="fas fa-truck-fast text-[#16A34A]"></i></div>
 
     <div *ngIf="!collapsed" class="ml-2">
       <div class="font-bold">ShipEase</div>
@@ -21,7 +21,7 @@
       routerLinkActive="bg-green-100 text-green-600"
       class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition">
 
-      <span>{{item.icon}}</span>
+      <span><i [class]="item.icon"></i></span>
 
       <span *ngIf="!collapsed" class="ml-3">
         {{item.label}}

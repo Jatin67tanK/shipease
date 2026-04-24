@@ -34,7 +34,7 @@ export class EditProfileComponent implements OnInit {
       next: (res: any) => {
 
         if (!res?.data) {
-          this.errorMessage = 'Profile not found 💀';
+          this.errorMessage = 'Profile not found.';
           this.isLoading = false;
           return;
         }
@@ -48,7 +48,7 @@ export class EditProfileComponent implements OnInit {
         console.warn("Profile Load Error:", err);
 
         this.errorMessage =
-          err?.error?.message || 'Failed to load profile 💀';
+          err?.error?.message || 'Failed to load profile.';
 
         this.isLoading = false;
       }
@@ -58,7 +58,7 @@ export class EditProfileComponent implements OnInit {
   saveChanges(): void {
 
     if (!this.profile) {
-      this.errorMessage = "Profile not loaded 💀";
+      this.errorMessage = "Profile not loaded.";
       return;
     }
 
@@ -69,14 +69,14 @@ export class EditProfileComponent implements OnInit {
       country: this.profile.country?.trim()
     };
 
-    console.log("😈 PAYLOAD:", payload);
+    console.log("PAYLOAD:", payload);
 
     if (!payload.name ||
         !payload.phone_number ||
         !payload.state ||
         !payload.country) {
 
-      this.errorMessage = "Fill required fields 😑";
+      this.errorMessage = "Fill required fields.";
       return;
     }
 
@@ -86,9 +86,9 @@ export class EditProfileComponent implements OnInit {
 
       next: (res) => {
 
-        console.log("😈 RESPONSE:", res);
+        console.log("RESPONSE:", res);
 
-        this.successMessage = "Profile Updated 😎🔥";
+        this.successMessage = "Profile updated successfully.";
         this.isSaving = false;
 
         this.router.navigate(['/customer/profile']);
@@ -99,7 +99,7 @@ export class EditProfileComponent implements OnInit {
         console.warn("Update Error:", err);
 
         this.errorMessage =
-          err?.error?.message || "Update failed 💀";
+          err?.error?.message || "Update failed.";
 
         this.isSaving = false;
       }

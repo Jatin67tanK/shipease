@@ -14,9 +14,9 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
   scrolled = false;
 
   features = [
-    { icon: '⚡', title: 'Fast Booking',       desc: 'Book your shipment in seconds. No paperwork, just digital speed.' },
-    { icon: '📦', title: 'Real-Time Tracking', desc: 'Track your package live with accurate delivery updates at every step.' },
-    { icon: '🔒', title: 'Secure Payments',    desc: 'Safe, encrypted transactions. We protect your data and your cargo.' },
+    { icon: 'fa-bolt', title: 'Fast Booking',       desc: 'Book your shipment in seconds. No paperwork, just digital speed.' },
+    { icon: 'fa-box-open', title: 'Real-Time Tracking', desc: 'Track your package live with accurate delivery updates at every step.' },
+    { icon: 'fa-lock', title: 'Secure Payments',    desc: 'Safe, encrypted transactions. We protect your data and your cargo.' },
   ];
 
   private animFrame = 0;

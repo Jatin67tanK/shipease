@@ -84,7 +84,7 @@ export class BookingSuccessComponent implements OnInit {
 
   trackParcel(): void {
     if (!this.trackingId) {
-      alert('Tracking ID missing 😑');
+      alert('Tracking ID missing.');
       return;
     }
     localStorage.removeItem('trackingId');

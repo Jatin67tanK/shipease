@@ -64,7 +64,7 @@
                 <ng-container *ngIf="!isAdmin">
                   <span *ngIf="profile.isNumVerified"
                         class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-200 flex items-center gap-1">
-                    <i class="fas fa-mobile-alt"></i> Phone ✓
+                    <i class="fas fa-mobile-alt"></i> Phone Verified
                   </span>
                   <span *ngIf="!profile.isNumVerified"
                         class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-amber-50 text-amber-600 border border-amber-200 flex items-center gap-1 cursor-pointer hover:bg-amber-100 transition"
@@ -76,7 +76,7 @@
                 <ng-container *ngIf="!isAdmin">
                   <span *ngIf="profile.isEmailVerified"
                         class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-green-50 text-green-600 border border-green-200 flex items-center gap-1">
-                    <i class="fas fa-envelope-circle-check"></i> Email ✓
+                    <i class="fas fa-envelope-circle-check"></i> Email Verified
                   </span>
                   <span *ngIf="!profile.isEmailVerified"
                         class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-rose-50 text-rose-600 border border-rose-200 flex items-center gap-1 cursor-pointer hover:bg-rose-100 transition"

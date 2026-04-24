@@ -69,7 +69,7 @@
     </div>
 
     <!-- MOBILE HAMBURGER -->
-    <button class="md:hidden text-2xl text-gray-700 p-1" (click)="toggleSidebar()">☰</button>
+    <button class="md:hidden text-2xl text-gray-700 p-1" (click)="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
 
   </div>
 
@@ -87,7 +87,7 @@
     <div class="p-5 border-b flex items-center justify-between">
       <span class="text-lg font-bold text-green-600"
             style="font-family:'Syne',sans-serif">ShipEase</span>
-      <button class="text-gray-400 hover:text-gray-700 text-xl" (click)="closeSidebar()">✕</button>
+      <button class="text-gray-400 hover:text-gray-700 text-xl" (click)="closeSidebar()"><i class="fa-solid fa-xmark"></i></button>
     </div>
 
     <!-- Sidebar nav -->
@@ -96,19 +96,19 @@
       <span (click)="goToHome()"
             class="py-3 px-2 rounded-lg cursor-pointer hover:bg-green-50 hover:text-green-600 transition-colors font-medium"
             [class.text-green-600]="isActive('/')">
-        🏠 Home
+        <i class="fa-solid fa-house w-4 text-center mr-2"></i>Home
       </span>
 
       <span (click)="goToTrack()"
             class="py-3 px-2 rounded-lg cursor-pointer hover:bg-green-50 hover:text-green-600 transition-colors font-medium"
             [class.text-green-600]="isActive('/track')">
-        📦 Track Parcel
+        <i class="fa-solid fa-box-open w-4 text-center mr-2"></i>Track Parcel
       </span>
 
       <span (click)="goToContact()"
             class="py-3 px-2 rounded-lg cursor-pointer hover:bg-green-50 hover:text-green-600 transition-colors font-medium"
             [class.text-green-600]="isActive('/contact')">
-        📞 Contact Us
+        <i class="fa-solid fa-phone w-4 text-center mr-2"></i>Contact Us
       </span>
 
       <div class="border-t border-gray-100 mt-3 pt-4 flex flex-col gap-1">
@@ -118,12 +118,12 @@
           <span (click)="goToLogin()"
                 class="py-3 px-2 rounded-lg cursor-pointer hover:bg-green-50 hover:text-green-600 transition-colors"
                 [class.text-green-600]="isActive('/login')">
-            🔐 Login
+            <i class="fa-solid fa-lock w-4 text-center mr-2"></i>Login
           </span>
           <!-- <span (click)="goToRegister()"
                 class="py-3 px-2 rounded-lg cursor-pointer hover:bg-green-50 hover:text-green-600 transition-colors"
                 [class.text-green-600]="isActive('/register')">
-            📝 Register
+            <i class="fa-solid fa-user-plus w-4 text-center mr-2"></i>Register
           </span> -->
           <button (click)="bookParcel()"
                   class="mt-2 w-full text-center text-white text-sm font-semibold px-4 py-2.5 rounded-lg"
@@ -136,7 +136,7 @@
         <ng-container *ngIf="isLoggedIn">
           <span (click)="goToDashboard()"
                 class="py-3 px-2 rounded-lg cursor-pointer hover:bg-green-50 hover:text-green-600 transition-colors">
-            📊 Dashboard
+            <i class="fa-solid fa-chart-column w-4 text-center mr-2"></i>Dashboard
           </span>
           <button (click)="logout()"
                   class="mt-2 w-full text-center text-white text-sm font-semibold px-4 py-2.5 rounded-lg"

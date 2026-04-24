@@ -151,7 +151,7 @@ export class BookParcelComponent implements OnInit {
 
     // Admin skips phone verification check
     if (this.role !== 'Admin' && !this.isUserVerified()) {
-      alert('Verify your mobile number first 📲');
+      alert('Verify your mobile number first.');
       return;
     }
 
@@ -163,7 +163,7 @@ export class BookParcelComponent implements OnInit {
         !this.booking.receiver_state || !this.booking.receiver_city ||
         !this.booking.distance_category || !this.booking.parcel_type ||
         !this.booking.parcel_weight) {
-      alert('Fill all fields 😑');
+      alert('Fill all fields.');
       return;
     }
 
@@ -200,7 +200,7 @@ export class BookParcelComponent implements OnInit {
       },
       error: (err) => {
         console.error('Booking Error:', err);
-        alert(err?.error?.message || 'Booking failed 💀');
+        alert(err?.error?.message || 'Booking failed.');
         this.isLoading = false;
       }
     });

@@ -27,7 +27,7 @@ export class ProfileComponent implements OnInit {
       error: (err) => {
         console.warn("Profile Load Error:", err);
         this.errorMessage =
-          err?.error?.message || 'Failed to load profile 💀';
+          err?.error?.message || 'Failed to load profile.';
         this.isLoading = false;
       }
     });

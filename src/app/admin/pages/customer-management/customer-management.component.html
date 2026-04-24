@@ -333,7 +333,7 @@
       <p class="font-semibold mb-1.5"
         [class.text-red-700]="confirmTarget?.status === 'Active'"
         [class.text-green-700]="confirmTarget?.status !== 'Active'">
-        {{ confirmTarget?.status === 'Active' ? '⚠️ After deactivating:' : '✅ After activating:' }}
+        {{ confirmTarget?.status === 'Active' ? 'After deactivating:' : 'After activating:' }}
       </p>
       <ul class="space-y-1"
         [class.text-red-600]="confirmTarget?.status === 'Active'"

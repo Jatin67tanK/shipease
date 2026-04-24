@@ -46,7 +46,7 @@
   <div *ngIf="!isLoading && filteredParcels.length === 0"
     class="rounded-2xl shadow-sm py-20 text-center"
     style="background:#FFFFFF; border:1px solid #d1fae5;">
-    <div class="text-5xl mb-4">📭</div>
+    <div class="text-5xl mb-4"><i class="fa-solid fa-inbox"></i></div>
     <p class="text-lg font-medium text-slate-600">No parcels found</p>
     <p class="text-sm mt-1 text-slate-400">Try adjusting your filters</p>
   </div>
@@ -74,7 +74,7 @@
         <!-- Receiver -->
         <div class="flex items-start gap-3">
           <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 text-sm"
-            style="background:#f0fdf4;">📍</div>
+            style="background:#f0fdf4;"><i class="fa-solid fa-location-dot"></i></div>
           <div class="min-w-0">
             <p class="text-xs font-medium" style="color:#16A34A;">DELIVER TO</p>
             <p class="text-sm font-semibold text-slate-800 truncate">{{ parcel.receiver_name }}</p>
@@ -86,7 +86,7 @@
         <!-- Phone -->
         <div class="flex items-center gap-3">
           <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 text-sm"
-            style="background:#f0fdf4;">📞</div>
+            style="background:#f0fdf4;"><i class="fa-solid fa-phone"></i></div>
           <div>
             <p class="text-xs font-medium" style="color:#16A34A;">CONTACT</p>
             <p class="text-sm text-slate-700">{{ parcel.receiver_phone }}</p>
@@ -96,7 +96,7 @@
         <!-- Parcel Info -->
         <div class="flex items-center gap-3">
           <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 text-sm"
-            style="background:#fefce8;">⚖️</div>
+            style="background:#fefce8;"><i class="fa-solid fa-weight-scale"></i></div>
           <div>
             <p class="text-xs font-medium" style="color:#16A34A;">PARCEL</p>
             <p class="text-sm text-slate-700">{{ parcel.parcel_type }} · {{ parcel.parcel_weight }}kg · {{ parcel.delivery_type }}</p>
@@ -108,7 +108,7 @@
           (click)="openImageModal(parcel)"
           class="text-xs font-medium hover:underline"
           style="color:#16A34A;">
-          📷 View {{ parcel.parcel_images.length }} image(s)
+          <i class="fa-regular fa-image mr-1"></i>View {{ parcel.parcel_images.length }} image(s)
         </button>
 
       </div>
@@ -124,7 +124,7 @@
         </button>
         <div *ngIf="!canUpdate(parcel)"
           class="flex-1 text-center text-xs text-slate-400 py-2">
-          ✅ Delivery complete
+          <i class="fa-solid fa-circle-check mr-1"></i>Delivery complete
         </div>
       </div>
     </div>
@@ -203,7 +203,7 @@
       <h3 class="font-bold text-slate-800">Parcel Images</h3>
       <button (click)="closeImageModal()"
         class="text-xl hover:text-slate-600"
-        style="color:#16A34A;">✕</button>
+        style="color:#16A34A;"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="grid grid-cols-3 gap-3">
       <img *ngFor="let img of imageModalParcel?.parcel_images"

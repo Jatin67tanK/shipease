@@ -1,18 +1,11 @@
-<!-- ═══════════════════════════════════════
-     HEADER
-═══════════════════════════════════════ -->
-
-
-<!-- ═══════════════════════════════════════
-     MAIN
-═══════════════════════════════════════ -->
+ 
 <div class="min-h-screen bg-[#F0FDF4] flex items-center justify-center">
   <div class="w-full max-w-md">
 
     <!-- Hero Text -->
     <!-- <div class="text-center mb-8">
       <div class="inline-flex items-center justify-center w-14 h-14 bg-white border border-green-200 rounded-2xl shadow-sm mb-4">
-        <span class="text-2xl">🚚</span>
+        <i class="fa-solid fa-truck-fast text-2xl text-[#16A34A]"></i>
       </div>
       <h1 class="text-2xl font-bold text-green-950">Welcome back</h1>
       <p class="text-green-700 text-sm mt-1">Sign in to your ShipEase account</p>
@@ -29,7 +22,7 @@
         <!-- Error -->
         <div *ngIf="errorMessage"
           class="mb-5 bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3 flex items-center gap-2">
-          <span>⚠️</span>
+          <i class="fa-solid fa-triangle-exclamation"></i>
           <span>{{ errorMessage }}</span>
         </div>
 
@@ -65,7 +58,7 @@
             <button type="button"
               (click)="showPassword = !showPassword"
               class="absolute right-3 top-3 text-green-400 hover:text-green-700 transition text-sm px-1">
-              {{ showPassword ? '🙈' : '👁️' }}
+              <i class="fa-regular" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
             </button>
           </div>
         </div>
@@ -92,9 +85,9 @@
         <div class="mt-6 pt-5 border-t border-green-100">
           <p class="text-xs text-green-600 text-center mb-3 font-medium">Sign in as</p>
           <div class="flex gap-2 justify-center flex-wrap">
-            <span class="text-xs bg-[#F0FDF4] text-green-700 border border-green-200 px-3 py-1.5 rounded-full font-medium">👤 Customer</span>
-            <span class="text-xs bg-[#F0FDF4] text-green-700 border border-green-200 px-3 py-1.5 rounded-full font-medium">🛡️ Admin</span>
-            <span class="text-xs bg-[#F0FDF4] text-green-700 border border-green-200 px-3 py-1.5 rounded-full font-medium">🚚 Staff</span>
+            <span class="text-xs bg-[#F0FDF4] text-green-700 border border-green-200 px-3 py-1.5 rounded-full font-medium inline-flex items-center gap-1.5"><i class="fa-regular fa-user"></i> Customer</span>
+            <span class="text-xs bg-[#F0FDF4] text-green-700 border border-green-200 px-3 py-1.5 rounded-full font-medium inline-flex items-center gap-1.5"><i class="fa-solid fa-shield-halved"></i> Admin</span>
+            <span class="text-xs bg-[#F0FDF4] text-green-700 border border-green-200 px-3 py-1.5 rounded-full font-medium inline-flex items-center gap-1.5"><i class="fa-solid fa-truck-fast"></i> Staff</span>
           </div>
         </div>
 

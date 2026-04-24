@@ -59,7 +59,7 @@ export class DashboardComponent implements OnInit {
       },
 
       error: () => {
-        console.warn("Stats API Failed 😑");
+        console.warn("Stats API Failed");
       }
     });
   }

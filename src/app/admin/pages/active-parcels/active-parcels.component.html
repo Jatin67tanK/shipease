@@ -3,7 +3,7 @@
   <!-- HEADER -->
   <div class="sticky top-0 z-10 h-16 bg-white border-b flex items-center justify-between px-8 shadow-sm">
     <div class="text-lg font-semibold text-gray-800 tracking-tight">
-      🚚 Parcels
+      <i class="fa-solid fa-truck-fast text-[#16A34A] mr-2"></i>Parcels
     </div>
     <div class="text-sm text-gray-400">{{ filteredParcels.length }} record(s) found</div>
   </div>
@@ -25,7 +25,7 @@
           placeholder="Search by Tracking ID (e.g. SE-102587)"
           class="flex-1 text-xs text-gray-700 placeholder-gray-400 outline-none bg-transparent" />
         <button *ngIf="searchQuery" (click)="clearSearch()"
-          class="text-gray-400 hover:text-red-400 transition text-[10px]">✕</button>
+          class="text-gray-400 hover:text-red-400 transition text-[10px]"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <div class="flex flex-wrap items-center gap-2">
@@ -217,19 +217,19 @@
       <!-- ACTIVE FILTER TAGS -->
       <div *ngIf="hasActiveFilters" class="flex flex-wrap gap-2">
         <span *ngFor="let m of selectedMonths" class="text-xs bg-green-50 text-green-600 px-3 py-1 rounded-full">
-          📅 {{ monthList[+m - 1].label }}
+          <i class="fa-regular fa-calendar mr-1"></i>{{ monthList[+m - 1].label }}
         </span>
         <span *ngFor="let y of selectedYears" class="text-xs bg-green-50 text-green-600 px-3 py-1 rounded-full">
-          📅 {{ y }}
+          <i class="fa-regular fa-calendar mr-1"></i>{{ y }}
         </span>
         <span *ngFor="let s of selectedStatuses" class="text-xs bg-green-50 text-green-600 px-3 py-1 rounded-full">
-          📦 {{ s }}
+          <i class="fa-solid fa-box mr-1"></i>{{ s }}
         </span>
         <span *ngFor="let st of selectedStates" class="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full">
-          📍 {{ st }}
+          <i class="fa-solid fa-location-dot mr-1"></i>{{ st }}
         </span>
         <span *ngFor="let c of selectedCities" class="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full">
-          🏙 {{ c }}
+          <i class="fa-solid fa-city mr-1"></i>{{ c }}
         </span>
       </div>
 
@@ -237,7 +237,7 @@
       <div *ngIf="searchResult" class="bg-white rounded-2xl border border-green-100 shadow-md p-6">
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-base font-bold text-gray-800">
-            📦 Parcel Details — <span class="text-green-600">{{ searchResult.tracking_id }}</span>
+            <i class="fa-solid fa-box-open mr-2 text-[#16A34A]"></i>Parcel Details - <span class="text-green-600">{{ searchResult.tracking_id }}</span>
           </h2>
           <span class="text-xs font-semibold px-3 py-1 rounded-full" [ngClass]="{
             'bg-blue-50 text-blue-600': searchResult.current_status === 'Booked',
@@ -505,14 +505,14 @@
       (click)="$event.stopPropagation()">
       <div class="flex items-center justify-between px-6 py-4 border-b">
         <div>
-          <div class="font-bold text-gray-800 text-base">📸 Parcel Images</div>
+          <div class="font-bold text-gray-800 text-base"><i class="fa-regular fa-images mr-2 text-violet-500"></i>Parcel Images</div>
           <div class="text-xs text-gray-400 mt-0.5">
             {{ imageModalParcel?.tracking_id }} · {{ imageModalParcel?.parcel_images?.length }} image(s)
           </div>
         </div>
         <button (click)="closeImageModal()"
           class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-100 hover:text-red-500 transition text-gray-500 text-lg font-bold">
-          ✕
+          <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <div class="p-6">
@@ -538,7 +538,7 @@
         </div>
         <ng-template #noImages>
           <div class="text-center py-12 text-gray-400 text-sm">
-            <div class="text-4xl mb-3">📭</div>
+            <div class="text-4xl mb-3"><i class="fa-solid fa-inbox"></i></div>
             No images uploaded for this parcel.
           </div>
         </ng-template>
@@ -551,7 +551,7 @@
     (click)="closeFullImage()">
     <button (click)="closeFullImage()"
       class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 text-white text-xl font-bold transition">
-      ✕
+      <i class="fa-solid fa-xmark"></i>
     </button>
     <img [src]="fullImageUrl" class="max-w-full max-h-[90vh] rounded-xl object-contain shadow-2xl"
       (click)="$event.stopPropagation()" />
@@ -579,7 +579,7 @@
         </div>
         <button (click)="closeInvoiceModal()"
           class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-red-100 hover:text-red-500 transition text-gray-500 font-bold">
-          ✕
+          <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
